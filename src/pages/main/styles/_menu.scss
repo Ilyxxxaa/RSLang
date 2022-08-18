@@ -1,0 +1,132 @@
+.menu {
+  position: sticky;
+  min-width: 95px;
+  width: 95px;
+  background-color: #fff;
+  height: 100vh;
+  white-space: nowrap;
+  transition: width 195ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
+
+  &--enabled {
+    animation-name: menu--enabled;
+    animation-duration: 195ms;
+    min-width: 290px;
+    width: 290px;
+  }
+
+  &__title {
+    padding: 30px 20px 0;
+    align-items: center;
+    margin-bottom: 30px;
+    display: grid;
+    grid-template-columns: 100px 150px;
+    cursor: pointer;
+    border-left: 5px solid white;
+
+    &-img {
+      height: 50px;
+      width: 50px;
+    }
+    &-name {
+      color: #b03fd8;
+      font-size: 20px;
+      display: inline-block;
+      align-items: center;
+    }
+  }
+  &__list {
+    &-item {
+      padding: 10px 20px;
+      display: grid;
+      grid-template-columns: 100px 150px;
+      align-items: center;
+      cursor: pointer;
+      margin-bottom: 20px;
+      border-left: 5px solid white;
+
+      &-img {
+        width: 50px;
+        height: 50px;
+        display: inline-block;
+      }
+
+      &-name {
+        font-size: 20px;
+        color: #b03fd8;
+        display: inline-block;
+      }
+      &:hover {
+        background-color: #f7f7f7;
+      }
+      &--active {
+        border-left: 5px solid #b03fd8;
+        background-color: #f2e0fc;
+      }
+    }
+  }
+}
+
+@keyframes menu--enabled {
+  from {
+    min-width: 95px;
+    width: 95px;
+  }
+
+  to {
+    min-width: 290px;
+    width: 290px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .menu {
+    min-width: 90px;
+    width: 90px;
+    transition: width 120ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
+
+    &--enabled {
+      animation-duration: 120ms;
+      min-width: 230px;
+      width: 230px;
+    }
+
+    &__title {
+      padding: 20px 20px 0;
+      margin-bottom: 20px;
+      grid-template-columns: 80px 100px;
+      &-img {
+        height: 40px;
+        width: 40px;
+      }
+      &-name {
+        font-size: 18px;
+      }
+    }
+    &__list {
+      &-item {
+        padding: 10px 20px;
+        grid-template-columns: 80px 100px;
+        margin-bottom: 20px;
+        &-img {
+          height: 40px;
+          width: 40px;
+        }
+        &-name {
+          font-size: 18px;
+        }
+      }
+    }
+  }
+
+  @keyframes menu--enabled {
+    from {
+      min-width: 90px;
+      width: 90px;
+    }
+
+    to {
+      min-width: 230px;
+      width: 230px;
+    }
+  }
+}
