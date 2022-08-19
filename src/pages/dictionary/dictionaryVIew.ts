@@ -1,7 +1,11 @@
 import { Server } from './dictionaryRequests';
-import { IWord } from './dictionaryTypes';
+import { IWord } from '../../types/dictionaryTypes';
+import '../dictionary/styles/main.scss'
+import { playSounds } from './audio';
 
-const main = document.querySelector('.content'); // куда её вставлять
+
+const main = document.querySelector('main'); // куда её вставлять
+if (main) main.innerHTML = '';
 
 const dictionaryContainer = document.createElement('div');
 dictionaryContainer.classList.add('dictionary_container');
@@ -95,8 +99,8 @@ function drawCard(card: IWord) {
   const audioExample = document.createElement('audio');
   audioExample.src = `https://serverforrslang.herokuapp.com/${cardData.audioExample}`
   cardAudioContainer.append(audio, audioMeaning, audioExample);
-  // cardAudioContainer.addEventListener('click', (e) => playSounds(e.target));
-  cardAudioContainer.addEventListener('click', playSounds);
+
+  cardAudioContainer.addEventListener('click', (e) => playSounds(e, cardAudioContainer));
 
   return cardContainer;
 }
@@ -107,17 +111,4 @@ function createElement(elem: string, className: string) {
   return htmlElem;
 }
 
-function playSounds() {
-  console.log('ggg');
-}
-// const audio = new Audio(
-//   "https://serverforrslang.herokuapp.com/files/02_0622_meaning.mp3"
-// );
 
-// function playAudio() {
-//   audio.play()
-// }
-
-
-var audio = new Audio('https://serverforrslang.herokuapp.com/files/02_0622_meaning.mp3');
-audio.play();

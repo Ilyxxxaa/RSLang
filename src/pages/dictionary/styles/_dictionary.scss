@@ -31,10 +31,25 @@
   width: 32px;
   height: 32px;
   background-image: url(../../../assets/images/audio-icon.svg);
-
+  background-position: center;
+  background-repeat: no-repeat;
   cursor: pointer;
+  transition: 0.5s;
 }
 
+.card-audio-container:hover {
+  filter: drop-shadow(1.2);
+  filter: invert(0.5);
+}
+
+.card-audio-container:active {
+  filter: drop-shadow(2);
+  filter: invert(1);
+}
+
+.playing {
+  background-image: url(../../../assets/images/stop_audio.svg);
+}
 
 .pagination-container {
   display: flex;
