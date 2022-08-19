@@ -49,8 +49,52 @@
 
 .playing {
   background-image: url(../../../assets/images/stop_audio.svg);
+  background-position: center;
 }
 
 .pagination-container {
   display: flex;
+  font-size: 30px;
+}
+
+.pagination-page-counter {
+  width: 100px;
+  text-align: center;
+  transition: 0.3;
+}
+
+.paginationButton {
+  border: none;
+  background: none;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.paginationButton:hover {
+  filter: drop-shadow(1.2);
+  filter: invert(0.5);
+}
+
+.paginationButton:active {
+  filter: drop-shadow(2);
+  filter: invert(1);
+}
+
+.paginationButton_doubleLeft {
+  background-image: url(../../../assets/images/pagination/doubleLeft.svg);
+}
+
+.paginationButton_left {
+  background-image: url(../../../assets/images/pagination/left.svg);
+}
+
+.paginationButton_right {
+  background-image: url(../../../assets/images/pagination/right.svg);
+}
+
+.paginationButton_doubleRight {
+  background-image: url(../../../assets/images/pagination/doubleRight.svg);
 }

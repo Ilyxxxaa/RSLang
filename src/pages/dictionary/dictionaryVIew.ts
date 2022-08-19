@@ -1,7 +1,8 @@
-import { Server } from './dictionaryRequests';
 import { IWord } from '../../types/dictionaryTypes';
 import '../dictionary/styles/main.scss'
 import { playSounds } from './audio';
+import { drawPagination } from './pagination';
+import { getWords } from './dictionaryRequests';
 
 
 const main = document.querySelector('main'); // куда её вставлять
@@ -12,41 +13,26 @@ dictionaryContainer.classList.add('dictionary_container');
 main?.append(dictionaryContainer);
 
 
-const test = new Server();
+
 
 (async function () {
-  const arrayWords = await test.getWords(1, 1);
-  await drawPagination();
+  const arrayWords = await getWords(0, 0);
+  dictionaryContainer.append(drawPagination());
   await drawCards(arrayWords);
-
 })();
 
-
-
-
-function drawPagination() {
-  const paginationContainer = createElement('div', 'pagination-container');
-  const doubleLeft = createElement('button', 'paginationButton');
-  const left = createElement('button', 'paginationButton');
-  const doubleRight = createElement('button', 'paginationButton');
-  const right = createElement('button', 'paginationButton');
-  const paginationPageCounter = createElement('div', 'pagination_page_counter');
-
-  doubleLeft.innerHTML = "<<";
-  left.innerHTML = "<";
-  doubleRight.innerHTML = ">>";
-  right.innerHTML = ">";
-  paginationPageCounter.innerHTML = `<span>1 / 30 </span>`;
-  doubleLeft.classList.add('paginationButton_doubleLeft');
-  doubleRight.classList.add('paginationButton_doubleRight');
-  right.classList.add('paginationButton_right');
-  left.classList.add('paginationButton_left');
-
-  paginationContainer.append(doubleLeft, left, paginationPageCounter, doubleRight, right);
-  dictionaryContainer.append(paginationContainer);
+export async function updateCards(group: number, page: number) {
+  const arrayWords = await getWords(group, page);
+  await drawCards(arrayWords);
 }
 
+
+
+
+
+
 function drawCards(array: IWord[]) {
+  if (document.querySelector('.cards-container')) document.querySelector('.cards-container')?.remove();
   const cardsContainer = createElement('div', 'cards-container');
   dictionaryContainer.append(cardsContainer);
 
@@ -105,7 +91,7 @@ function drawCard(card: IWord) {
   return cardContainer;
 }
 
-function createElement(elem: string, className: string) {
+export function createElement(elem: string, className: string) {
   const htmlElem: HTMLElement = document.createElement(elem);
   htmlElem.classList.add(className);
   return htmlElem;

@@ -1,19 +1,11 @@
-export class Server {
-  words: string;
-  serverAdress: string;
+const serverAdress = 'https://serverforrslang.herokuapp.com';
+const wordsPath = `${serverAdress}/words`;
 
-  constructor() {
-    this.serverAdress = 'https://serverforrslang.herokuapp.com';
-    this.words = `${this.serverAdress}/words`;
-  }
-
-  public async getWords(group: number, page: number) {
-    const response = await fetch(`${this.words}/?group=${group}&page=${page}`);
-    const words = await response.json();
-    return words;
-  }
+export async function getWords(group: number, page: number) {
+  const response = await fetch(`${wordsPath}/?group=${group}&page=${page}`);
+  const words = await response.json();
+  return words;
 }
-
 
 
 
