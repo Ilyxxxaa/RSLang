@@ -1,0 +1,41 @@
+.dictionary_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.cards-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.card-container {
+  width: 450px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  background-color: #4610693e;
+
+  box-shadow: rgb(0 0 0 / 20%) 0px 0px 10px;
+  border-radius: 10px;
+  margin: 20px;
+  padding: 24px;
+}
+
+.card-audio-container {
+  width: 32px;
+  height: 32px;
+  background-image: url(../../../assets/images/audio-icon.svg);
+
+  cursor: pointer;
+}
+
+
+.pagination-container {
+  display: flex;
+}
