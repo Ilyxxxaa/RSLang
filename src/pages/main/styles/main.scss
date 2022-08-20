@@ -1,12 +1,14 @@
 @import '../../../common/reset.scss';
+@import 'menu';
 
 body {
+  position: relative;
   display: flex;
   font-family: 'Montserrat', sans-serif;
 }
 .content {
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   background-image: url('../../../assets/images/header-bg.png');
   background-position: top center;
 }
@@ -18,4 +20,5 @@ body {
 
 @import 'header';
 @import 'about';
-@import 'menu';
+@import 'example';
+@import 'adv';
