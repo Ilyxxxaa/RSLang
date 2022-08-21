@@ -2,8 +2,14 @@ import { IWord } from '../../types/dictionaryTypes';
 import '../dictionary/styles/main.scss'
 import { playSounds } from './audio';
 import { drawPagination } from './pagination';
+import { drawGroupsBlock } from './groups';
 import { getWords } from './dictionaryRequests';
 
+
+export const currentWords = {
+  currentPage: 0,
+  currentGroup: 0
+}
 
 const main = document.querySelector('main'); // куда её вставлять
 if (main) main.innerHTML = '';
@@ -16,10 +22,15 @@ main?.append(dictionaryContainer);
 
 
 (async function () {
-  const arrayWords = await getWords(0, 0);
+  const arrayWords = await getWords(currentWords.currentGroup, currentWords.currentPage);
   dictionaryContainer.append(drawPagination());
-  await drawCards(arrayWords);
+  dictionaryContainer.append(drawGroupsBlock());
+  console.log(dictionaryContainer, `.group-${currentWords.currentGroup}-button`);
+  document.querySelector(`.group-${currentWords.currentGroup + 1}-button`)?.classList.add('active-group'); // выделяем активную группу
+  await updateCards(currentWords.currentGroup, currentWords.currentPage);
 })();
+
+
 
 export async function updateCards(group: number, page: number) {
   const arrayWords = await getWords(group, page);
@@ -28,19 +39,15 @@ export async function updateCards(group: number, page: number) {
 
 
 
-
-
-
 function drawCards(array: IWord[]) {
   if (document.querySelector('.cards-container')) document.querySelector('.cards-container')?.remove();
   const cardsContainer = createElement('div', 'cards-container');
   dictionaryContainer.append(cardsContainer);
 
-  array.forEach(card => cardsContainer.append(drawCard(card)));
-
+  array.forEach(card => cardsContainer.append(createCard(card)));
 }
 
-function drawCard(card: IWord) {
+function createCard(card: IWord) {
   const cardData = card;
   const cardContainer = createElement('div', 'card-container');
   const cardContent = createElement('div', 'card-content');

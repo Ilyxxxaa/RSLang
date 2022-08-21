@@ -1,8 +1,7 @@
 import { createElement } from "./dictionaryVIew";
 import { updateCards } from './dictionaryVIew';
 
-let currentPage = 0;
-let currentLevel = 0;
+import { currentWords } from "./dictionaryVIew";
 
 export function drawPagination() {
   const paginationContainer = createElement('div', 'pagination-container');
@@ -13,7 +12,7 @@ export function drawPagination() {
   const paginationPageCounter = createElement('div', 'pagination-page-counter');
   const page = createElement('span', 'current-page');
 
-  page.innerText = String(currentPage + 1);
+  page.innerText = String(currentWords.currentPage + 1);
 
   doubleLeft.classList.add('paginationButton_doubleLeft');
   doubleRight.classList.add('paginationButton_doubleRight');
@@ -33,34 +32,34 @@ export function drawPagination() {
 }
 
 function toStartPagination() {
-  if (currentPage === 0) return;
+  if (currentWords.currentPage === 0) return;
   const currentPageSpan = document.querySelector('.current-page');
   if (currentPageSpan) currentPageSpan.innerHTML = '1';
-  currentPage = 0;
-  updateCards(currentLevel, currentPage);
+  currentWords.currentPage = 0;
+  updateCards(currentWords.currentGroup, currentWords.currentPage);
 }
 
 function toEndPagination() {
-  if (currentPage === 29) return;
+  if (currentWords.currentPage === 29) return;
   const currentPageSpan = document.querySelector('.current-page');
   if (currentPageSpan) currentPageSpan.innerHTML = '30';
-  currentPage = 29;
-  updateCards(currentLevel, currentPage);
+  currentWords.currentPage = 29;
+  updateCards(currentWords.currentGroup, currentWords.currentPage);
 }
 
 function toNextPage() {
-  if (currentPage === 29) return;
-  currentPage = currentPage + 1;
+  if (currentWords.currentPage === 29) return;
+  currentWords.currentPage = currentWords.currentPage + 1;
   const currentPageSpan = document.querySelector('.current-page');
-  if (currentPageSpan) currentPageSpan.innerHTML = String(currentPage + 1);
-  updateCards(currentLevel, currentPage);
+  if (currentPageSpan) currentPageSpan.innerHTML = String(currentWords.currentPage + 1);
+  updateCards(currentWords.currentGroup, currentWords.currentPage);
 }
 
 function toPrevPage() {
-  if (currentPage === 0) return;
-  currentPage = currentPage - 1;
+  if (currentWords.currentPage === 0) return;
+  currentWords.currentPage = currentWords.currentPage - 1;
   const currentPageSpan = document.querySelector('.current-page');
-  if (currentPageSpan) currentPageSpan.innerHTML = String(currentPage + 1);
-  updateCards(currentLevel, currentPage);
+  if (currentPageSpan) currentPageSpan.innerHTML = String(currentWords.currentPage + 1);
+  updateCards(currentWords.currentGroup, currentWords.currentPage);
 }
 

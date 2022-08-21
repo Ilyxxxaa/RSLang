@@ -55,6 +55,14 @@
 .pagination-container {
   display: flex;
   font-size: 30px;
+
+  position: fixed;
+  bottom: 0;
+  background: #5b4770c1;
+  color: #FFFFFF;
+  width: 80%;
+  justify-content: center;
+  border-radius: 10px;
 }
 
 .pagination-page-counter {
@@ -97,4 +105,30 @@
 
 .paginationButton_doubleRight {
   background-image: url(../../../assets/images/pagination/doubleRight.svg);
+}
+
+
+.groups-container {
+  position: fixed;
+  bottom: 20%;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.group-button {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  margin: 10px;
+  border: 1px solid #ffffff;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #ffffff;
+}
+
+.active-group {
+  background-color: rgb(48, 233, 118);
+  transform: scale(1.3);
 }
