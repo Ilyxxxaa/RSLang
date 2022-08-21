@@ -5,9 +5,12 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const isDev = process.env.NODE_ENV === 'development';
 
+const pages = ["main", "dictionary"];
+
 const baseConfig = {
   entry: {
     main: path.resolve(__dirname, './src/pages/main/main.ts'),
+    dictionary: path.resolve(__dirname, './src/pages/dictionary/dictionary.ts'),
   },
   mode: 'development',
   devServer: {
@@ -47,15 +50,24 @@ const baseConfig = {
     extensions: ['.js', '.ts', '.tsx'],
   },
   output: {
-    filename: 'index.js',
-    path: path.resolve(__dirname, 'dist'),
+    filename: "pages/[name]/[name].js",
+    path: path.resolve(__dirname, "dist"),
   },
-
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, './src/pages/main/main.html'),
-      filename: 'index.html',
-    }),
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+    },
+  },
+  plugins: [].concat(
+    pages.map(
+      (page) =>
+        new HtmlWebpackPlugin({
+          inject: true,
+          template: path.resolve(__dirname, `./src/pages/${page}/${page}.html`),
+          filename: `pages/${page}/${page}.html`,
+          chunks: [page],
+        })
+    ),
     new CleanWebpackPlugin(),
     new CopyPlugin({
       patterns: [
@@ -65,7 +77,8 @@ const baseConfig = {
         },
       ],
     }),
-  ],
+
+  ),
 };
 
 module.exports = ({ mode }) => {
