@@ -66,8 +66,10 @@
             </ul>
           </nav>
           <div class="header__auth">
-            <button class="auth__btn auth__btn-login" id='login'>Войти</button>
-            <button class="auth__btn auth__btn-registration" id='password'>Регистрация</button>
+            <button class="auth__btn auth__btn-login" id='login' data-auth="signin">Войти</button>
+            <button class="auth__btn auth__btn-registration" id='password' data-auth="signup">Регистрация</button>
+            <img class="user user__avatar hidden" src="../../assets/images/user.png" alt="avatar">
+            <span class="user user__name hidden"></span>
           </div>
         </div>
       </div>

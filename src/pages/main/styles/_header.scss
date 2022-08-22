@@ -167,3 +167,16 @@ header {
     }
   }
 } ;
+
+.user {
+  display: flex;
+  margin: 5px;
+
+  &__name {
+    color: white;
+  }
+}
+
+.hidden {
+  display: none;
+}
