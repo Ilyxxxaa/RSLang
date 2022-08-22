@@ -4,7 +4,8 @@ import { playSounds } from './audio';
 import { drawPagination } from './pagination';
 import { drawGroupsBlock } from './groups';
 import { getWords } from './dictionaryRequests';
-
+import { startLoader } from './loader';
+import { stopLoader } from './loader';
 
 
 export const currentWords = {
@@ -20,8 +21,6 @@ dictionaryContainer.classList.add('dictionary_container');
 main?.append(dictionaryContainer);
 
 
-
-
 (async function () {
   dictionaryContainer.append(drawPagination());
   dictionaryContainer.append(drawGroupsBlock());
@@ -32,10 +31,12 @@ main?.append(dictionaryContainer);
 
 
 export async function updateCards(group: number, page: number) {
+  startLoader();
   localStorage.setItem('currentPage', `${page}`);
   localStorage.setItem('currentGroup', `${group}`);
   const arrayWords = await getWords(group, page);
   await drawCards(arrayWords, group);
+  stopLoader();
 }
 
 const cardsContainerBackgrounds = ['pattern-attention-drops', 'pattern-bubbles-up-down', 'pattern-dashed-waves', 'pattern-geometric-chaos', 'pattern-hash-stars-2', 'pattern-micro-rhomb-grid', 'pattern-millennium-wicker'];
@@ -50,6 +51,7 @@ function drawCards(array: IWord[], group: number) {
 
   dictionaryContainer.append(cardsContainer);
   array.forEach(card => cardsContainer.append(createCard(card, group)));
+
 }
 
 function createCard(card: IWord, group: number) {
