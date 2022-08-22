@@ -10,6 +10,8 @@
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+
+  // background-image: url(../../../assets/images/dictionary/dictionaryBackgrounds/pattern-attention-drops.png);
 }
 
 .card-container {
@@ -19,12 +21,14 @@
   justify-content: flex-start;
   align-items: center;
   gap: 10px;
-  background-color: #4610693e;
+  background-color: rgb(146 91 181 / 71%);
 
   box-shadow: rgb(0 0 0 / 20%) 0px 0px 10px;
   border-radius: 10px;
   margin: 20px;
   padding: 24px;
+
+  color: #FFFFFF;
 }
 
 .card-audio-container {
@@ -92,19 +96,19 @@
 }
 
 .paginationButton_doubleLeft {
-  background-image: url(../../../assets/images/pagination/doubleLeft.svg);
+  background-image: url(../../../assets/images/dictionary/pagination/doubleLeft.svg);
 }
 
 .paginationButton_left {
-  background-image: url(../../../assets/images/pagination/left.svg);
+  background-image: url(../../../assets/images/dictionary/pagination/left.svg);
 }
 
 .paginationButton_right {
-  background-image: url(../../../assets/images/pagination/right.svg);
+  background-image: url(../../../assets/images/dictionary/pagination/right.svg);
 }
 
 .paginationButton_doubleRight {
-  background-image: url(../../../assets/images/pagination/doubleRight.svg);
+  background-image: url(../../../assets/images/dictionary/pagination/doubleRight.svg);
 }
 
 

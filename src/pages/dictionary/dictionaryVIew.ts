@@ -23,10 +23,8 @@ main?.append(dictionaryContainer);
 
 
 (async function () {
-  // const arrayWords = await getWords(currentWords.currentGroup, currentWords.currentPage);
   dictionaryContainer.append(drawPagination());
   dictionaryContainer.append(drawGroupsBlock());
-  console.log(dictionaryContainer, `.group-${currentWords.currentGroup}-button`);
   document.querySelector(`.group-${+currentWords.currentGroup + 1}-button`)?.classList.add('active-group'); // выделяем активную группу
   await updateCards(+currentWords.currentGroup, +currentWords.currentPage);
 })();
@@ -37,22 +35,27 @@ export async function updateCards(group: number, page: number) {
   localStorage.setItem('currentPage', `${page}`);
   localStorage.setItem('currentGroup', `${group}`);
   const arrayWords = await getWords(group, page);
-  await drawCards(arrayWords);
+  await drawCards(arrayWords, group);
 }
 
+const cardsContainerBackgrounds = ['pattern-attention-drops', 'pattern-bubbles-up-down', 'pattern-dashed-waves', 'pattern-geometric-chaos', 'pattern-hash-stars-2', 'pattern-micro-rhomb-grid', 'pattern-millennium-wicker'];
 
+const cardContainerBackgrounds = ['#BF2ED1', '#985CE4', '#6E8BF8', '#00E5E5', '#7682F4', '#0BFF96'];
 
-function drawCards(array: IWord[]) {
+function drawCards(array: IWord[], group: number) {
   if (document.querySelector('.cards-container')) document.querySelector('.cards-container')?.remove();
   const cardsContainer = createElement('div', 'cards-container');
-  dictionaryContainer.append(cardsContainer);
 
-  array.forEach(card => cardsContainer.append(createCard(card)));
+  cardsContainer.style.background = `url('../assets/images/dictionary/dictionaryBackgrounds/${cardsContainerBackgrounds[group]}.png')`;
+
+  dictionaryContainer.append(cardsContainer);
+  array.forEach(card => cardsContainer.append(createCard(card, group)));
 }
 
-function createCard(card: IWord) {
+function createCard(card: IWord, group: number) {
   const cardData = card;
   const cardContainer = createElement('div', 'card-container');
+  cardContainer.style.background = `${cardContainerBackgrounds[group]}`;
   const cardContent = createElement('div', 'card-content');
   const cardImg = document.createElement('img');
   const wordContainer = createElement('div', 'word-container');
