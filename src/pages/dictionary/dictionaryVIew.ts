@@ -6,12 +6,13 @@ import { drawGroupsBlock } from './groups';
 import { getWords } from './dictionaryRequests';
 
 
+
 export const currentWords = {
-  currentPage: 0,
-  currentGroup: 0
+  currentPage: localStorage.getItem('currentPage') || 1,
+  currentGroup: localStorage.getItem('currentGroup') || 1
 }
 
-const main = document.querySelector('main'); // куда её вставлять
+const main = document.querySelector('.content'); // куда её вставлять
 if (main) main.innerHTML = '';
 
 const dictionaryContainer = document.createElement('div');
@@ -22,17 +23,19 @@ main?.append(dictionaryContainer);
 
 
 (async function () {
-  const arrayWords = await getWords(currentWords.currentGroup, currentWords.currentPage);
+  // const arrayWords = await getWords(currentWords.currentGroup, currentWords.currentPage);
   dictionaryContainer.append(drawPagination());
   dictionaryContainer.append(drawGroupsBlock());
   console.log(dictionaryContainer, `.group-${currentWords.currentGroup}-button`);
-  document.querySelector(`.group-${currentWords.currentGroup + 1}-button`)?.classList.add('active-group'); // выделяем активную группу
-  await updateCards(currentWords.currentGroup, currentWords.currentPage);
+  document.querySelector(`.group-${+currentWords.currentGroup + 1}-button`)?.classList.add('active-group'); // выделяем активную группу
+  await updateCards(+currentWords.currentGroup, +currentWords.currentPage);
 })();
 
 
 
 export async function updateCards(group: number, page: number) {
+  localStorage.setItem('currentPage', `${page}`);
+  localStorage.setItem('currentGroup', `${group}`);
   const arrayWords = await getWords(group, page);
   await drawCards(arrayWords);
 }

@@ -30,21 +30,5 @@ function choseWordGroup(e: MouseEvent, element: HTMLElement) {
 
   const group = +buttonGroup.innerText - 1;
 
-  updateCards(group, currentWords.currentPage);
+  updateCards(group, +currentWords.currentPage);
 }
-
-// export function playSounds(e: MouseEvent, element: HTMLElement) {
-//   const buttonGroup = <HTMLElement>e.target;
-
-//   if (buttonGroup.classList.contains('playing')) {
-//     stopAudio();
-//     buttonGroup.classList.remove('playing')
-//     return
-//   }
-//   if (isPlay) {
-//     stopAudio();
-//     document.querySelectorAll('.playing').forEach(el => el.classList.remove('playing'))
-//   }
-//   if (!element.classList.contains('playing')) {
-//     element.classList.add('playing');
-//   }
