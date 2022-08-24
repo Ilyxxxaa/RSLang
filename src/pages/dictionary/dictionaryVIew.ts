@@ -1,33 +1,9 @@
 import { IWord } from '../../types/dictionaryTypes';
 import '../dictionary/styles/main.scss'
 import { playSounds } from './audio';
-import { drawPagination } from './pagination';
-import { drawGroupsBlock } from './groups';
 import { getWords } from './dictionaryRequests';
 import { startLoader } from './loader';
 import { stopLoader } from './loader';
-
-
-export const currentWords = {
-  currentPage: localStorage.getItem('currentPage') || 1,
-  currentGroup: localStorage.getItem('currentGroup') || 1
-}
-
-// const main = document.querySelector('.content'); // куда её вставлять
-// if (main) main.innerHTML = '';
-
-// const dictionaryContainer = document.createElement('div');
-// dictionaryContainer.classList.add('dictionary_container');
-// main?.append(dictionaryContainer);
-
-
-// (async function () {
-//   dictionaryContainer.append(drawPagination());
-//   dictionaryContainer.append(drawGroupsBlock());
-//   document.querySelector(`.group-${+currentWords.currentGroup + 1}-button`)?.classList.add('active-group'); // выделяем активную группу
-//   await updateCards(+currentWords.currentGroup, +currentWords.currentPage);
-// })();
-
 
 
 export async function updateCards(group: number, page: number) {
@@ -35,7 +11,8 @@ export async function updateCards(group: number, page: number) {
   localStorage.setItem('currentPage', `${page}`);
   localStorage.setItem('currentGroup', `${group}`);
   const arrayWords = await getWords(group, page);
-  await drawCards(arrayWords, group);
+  const dictionaryContainer = document.querySelector('.dictionary_container');
+  dictionaryContainer?.append(await drawCards(arrayWords, group));
   stopLoader();
 }
 
@@ -43,16 +20,14 @@ const cardsContainerBackgrounds = ['pattern-attention-drops', 'pattern-bubbles-u
 
 const cardContainerBackgrounds = ['#BF2ED1', '#985CE4', '#6E8BF8', '#00E5E5', '#7682F4', '#0BFF96'];
 
-function drawCards(array: IWord[], group: number, container?: HTMLDivElement) {
+function drawCards(array: IWord[], group: number) {
   if (document.querySelector('.cards-container')) document.querySelector('.cards-container')?.remove();
   const cardsContainer = createElement('div', 'cards-container');
 
   cardsContainer.style.background = `url('../assets/images/dictionary/dictionaryBackgrounds/${cardsContainerBackgrounds[group]}.png')`;
 
-  const dictionaryContainer = container;
-  if (dictionaryContainer) dictionaryContainer.append(cardsContainer);
   array.forEach(card => cardsContainer.append(createCard(card, group)));
-
+  return cardsContainer;
 }
 
 function createCard(card: IWord, group: number) {

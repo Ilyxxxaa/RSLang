@@ -1,8 +1,12 @@
 import './dictionaryVIew'
-import { currentWords, updateCards } from './dictionaryVIew';
+import { updateCards } from './dictionaryVIew';
 import { drawGroupsBlock } from './groups';
 import { drawPagination } from './pagination';
 
+export const currentWords = {
+  currentPage: localStorage.getItem('currentPage') || 1,
+  currentGroup: localStorage.getItem('currentGroup') || 1
+}
 
 export class Dictionary {
   public async drawDictionary(state: string) {
@@ -19,3 +23,4 @@ export class Dictionary {
     await updateCards(+currentWords.currentGroup, +currentWords.currentPage);
   }
 }
+
