@@ -8,31 +8,32 @@ class AuthModalView {
     const modalOverlay = document.createElement('div');
     modalOverlay.className = 'modal__overlay';
 
-    const authModal = document.createElement('div');
-    authModal.className = 'modal__auth';
+    const signInModal = document.createElement('div');
+    signInModal.className = 'modal__auth';
 
     const cancel = document.createElement('img');
     cancel.className = 'cancel';
     cancel.alt = 'cancel';
     cancel.src = '../../assets/images/cancel.png';
 
-    const authTitle = document.createElement('h2');
-    authTitle.className = 'auth-title';
-    authTitle.textContent = 'Войти';
+    const signInTitle = document.createElement('h2');
+    signInTitle.className = 'auth-title';
+    signInTitle.textContent = 'Войти';
 
-    const singInForm = document.createElement('form');
-    singInForm.className = 'form singin-form';
+    const signInForm = document.createElement('form');
+    signInForm.className = 'form form_signin';
+    signInForm.setAttribute('data-form', 'signin');
 
     const authEmail = document.createElement('div');
     authEmail.className = 'input-container';
 
-    const inputEmail = document.createElement('input');
-    inputEmail.className = 'auth-input';
-    inputEmail.id = 'signin-email';
-    inputEmail.type = 'email';
-    inputEmail.placeholder = ' ';
-    inputEmail.autofocus = true;
-    inputEmail.required = true;
+    const signInEmail = document.createElement('input');
+    signInEmail.className = 'auth-input';
+    signInEmail.id = 'signin-email';
+    signInEmail.type = 'email';
+    signInEmail.placeholder = ' ';
+    signInEmail.autofocus = true;
+    signInEmail.required = true;
 
     const labelEmail = document.createElement('label');
     labelEmail.className = 'label';
@@ -45,13 +46,14 @@ class AuthModalView {
     const authPassword = document.createElement('div');
     authPassword.className = 'input-container';
 
-    const inputPassword = document.createElement('input');
-    inputPassword.className = 'auth-input';
-    inputPassword.id = 'signin-password';
-    inputPassword.type = 'password';
-    inputPassword.required = true;
-    inputPassword.placeholder = ' ';
-    inputPassword.autocomplete = 'off';
+    const signInPassword = document.createElement('input');
+    signInPassword.className = 'auth-input';
+    signInPassword.id = 'signin-password';
+    signInPassword.type = 'password';
+    signInPassword.minLength = 8;
+    signInPassword.required = true;
+    signInPassword.placeholder = ' ';
+    signInPassword.autocomplete = 'off';
 
     const labelPassword = document.createElement('label');
     labelPassword.className = 'label';
@@ -75,23 +77,22 @@ class AuthModalView {
     checkBoxLabel.setAttribute('for', checkBox.id);
     checkBoxLabel.textContent = 'Показать пароль';
 
-    const authButton = document.createElement('input');
-    authButton.className = 'auth-button';
-    authButton.id = 'signin-button';
-    authButton.name = 'submit';
-    authButton.type = 'button';
-    authButton.value = 'Войти на сайт';
+    const signInButton = document.createElement('button');
+    signInButton.className = 'auth-button';
+    signInButton.id = 'signin-button';
+    signInButton.type = 'submit';
+    signInButton.textContent = 'Войти на сайт';
 
     const signUp = document.createElement('div');
     signUp.className = 'auth-add';
     signUp.innerHTML = '<p>Нет аккаунта? <span class="auth-button_add" data-auth="signup">Зарегистрироваться</span></p>';
 
-    authEmail.append(inputEmail, labelEmail, labelEmailPocket);
-    authPassword.append(inputPassword, labelPassword, labelPasswordPocket);
+    authEmail.append(signInEmail, labelEmail, labelEmailPocket);
+    authPassword.append(signInPassword, labelPassword, labelPasswordPocket);
     authCheckBox.append(checkBox, checkBoxLabel);
-    singInForm.append(authEmail, authPassword, authCheckBox, authButton);
-    authModal.append(cancel, authTitle, singInForm, signUp);
-    modalWindow.append(modalOverlay, authModal);
+    signInForm.append(authEmail, authPassword, authCheckBox, signInButton);
+    signInModal.append(cancel, signInTitle, signInForm, signUp);
+    modalWindow.append(modalOverlay, signInModal);
     document.querySelector('body')?.append(modalWindow);
   }
 
@@ -115,7 +116,8 @@ class AuthModalView {
     signUpTitle.textContent = 'Зарегистрироваться';
 
     const signUpForm = document.createElement('form');
-    signUpForm.className = 'form singup-form';
+    signUpForm.className = 'form form_signup';
+    signUpForm.setAttribute('data-form', 'signup');
 
     const authName = document.createElement('div');
     authName.className = 'input-container';
@@ -125,9 +127,8 @@ class AuthModalView {
     signUpName.id = 'signup-name';
     signUpName.placeholder = ' ';
     signUpName.type = 'text';
-    signUpName.placeholder = ' ';
     signUpName.autofocus = true;
-    signUpName.autocomplete = 'off';
+    signUpName.required = true;
 
     const labelName = document.createElement('label');
     labelName.className = 'label';
@@ -146,6 +147,7 @@ class AuthModalView {
     signUpEmail.type = 'email';
     signUpEmail.autocomplete = 'off';
     signUpEmail.placeholder = ' ';
+    signUpEmail.required = true;
 
     const labelEmail = document.createElement('label');
     labelEmail.className = 'label';
@@ -155,6 +157,9 @@ class AuthModalView {
     const labelEmailPocket = document.createElement('div');
     labelEmailPocket.className = 'label-pocket';
 
+    // const errorMessage = document.createElement('div');
+    // errorMessage.textContent = 'user with this email exist';
+
     const authPassword = document.createElement('div');
     authPassword.className = 'input-container';
 
@@ -162,9 +167,10 @@ class AuthModalView {
     signUpPassword.className = 'auth-input';
     signUpPassword.id = 'signup-password';
     signUpPassword.type = 'password';
+    signUpPassword.minLength = 8;
     signUpPassword.placeholder = ' ';
-    signUpPassword.required = true;
     signUpPassword.autocomplete = 'off';
+    signUpPassword.required = true;
 
     const labelPassword = document.createElement('label');
     labelPassword.className = 'label';
@@ -188,12 +194,11 @@ class AuthModalView {
     checkBoxLabel.setAttribute('for', checkBox.id);
     checkBoxLabel.textContent = 'Показать пароль';
 
-    const authButton = document.createElement('input');
+    const authButton = document.createElement('button');
     authButton.className = 'auth-button';
     authButton.id = 'signup-button';
-    authButton.name = 'submit';
-    authButton.type = 'button';
-    authButton.value = 'Зарегистрироваться';
+    authButton.type = 'submit';
+    authButton.textContent = 'Зарегистрироваться';
 
     const signIn = document.createElement('div');
     signIn.className = 'auth-add';

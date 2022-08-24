@@ -1,5 +1,5 @@
 import AuthModalView from './authview';
-import { showAuthModal, closeAuthModal, showPassword, signIn, signUp } from './authFunc';
+import { showAuthModal, closeAuthModal, showPassword, signIn, signUp, showAuthorizedUser, clearLocalStorage } from './authFunc';
 
 class Authorization {
   signUpModal = AuthModalView.drawSignUpModal();
@@ -11,8 +11,9 @@ class Authorization {
     this.addHandlerToShowModalAdd();
     this.addHandlerToCloseModal();
     this.addHandlerToShowPassword();
-    this.addHandlerToSignIn();
-    this.addHandlerToSignUp();
+    this.addHandlerToAuth();
+    this.addHandlerToLoadWindow();
+    this.addHandlerToUnAuth();
   }
 
   static addHandlerToShowModal() {
@@ -34,15 +35,34 @@ class Authorization {
     document.querySelectorAll('.checkbox')?.forEach((elem) => elem.addEventListener('input', showPassword));
   }
 
-  static addHandlerToSignUp() {
-    document.querySelector('#signup-button')?.addEventListener('click', () => {
-      signUp();
-      console.log('hello');
+  static addHandlerToAuth() {
+    document.querySelectorAll('.form').forEach((form) => form.addEventListener('submit', (event: Event) => {
+      const target = event.target as HTMLFormElement;
+      event.preventDefault();
+      const email = (target.querySelector(`#${target.dataset.form}-email`) as HTMLInputElement).value;
+      const password = (target.querySelector(`#${target.dataset.form}-password`) as HTMLInputElement).value;
+      (document.querySelector(`#${target.dataset.form}-button`) as HTMLInputElement).disabled = true;
+      if (target.classList.contains('form_signin')) {
+        signIn(email, password);
+      }
+      if (target.classList.contains('form_signup')) {
+        const name = (target.querySelector(`#${target.dataset.form}-name`) as HTMLInputElement).value;
+        signUp(name, email, password);
+      }
+    }));
+  }
+
+  static addHandlerToUnAuth() {
+    document.querySelector('.user__avatar')?.addEventListener('click', () => {
+      clearLocalStorage('user');
+      showAuthorizedUser('user');
     });
   }
 
-  static addHandlerToSignIn() {
-    document.querySelector('#signin-button')?.addEventListener('click', signIn);
+  static addHandlerToLoadWindow() {
+    window.addEventListener('load', () => {
+      showAuthorizedUser('user');
+    });
   }
 }
 

@@ -9,7 +9,6 @@
   right: 0;
   bottom: 0;
   background-color: rgba(41, 41, 41, 0.8);
-
   &:not(.modal__auth) {
     cursor: pointer;
   }
@@ -17,7 +16,7 @@
 
 .modal__auth {
   box-sizing: border-box;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);

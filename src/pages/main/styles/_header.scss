@@ -170,9 +170,14 @@ header {
 
 .user {
   display: flex;
-  margin: 5px;
+  margin: 5px auto;
+
+  &__avatar {
+    width: 50px;
+  }
 
   &__name {
+    font-size: 12px;
     color: white;
   }
 }
