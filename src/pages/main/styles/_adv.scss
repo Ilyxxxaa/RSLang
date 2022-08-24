@@ -3,7 +3,6 @@
   background-color: white;
   &__title {
     color: #9461e6;
-    // background-color: #9461e6;
     margin: 0 0 50px 0;
     text-align: center;
     font-size: 36px;
@@ -22,9 +21,7 @@
     padding: 10px;
     justify-self: center;
     transition: all 0.3s;
-    // background-color: #f7f7f7;
     border-radius: 10px;
-    // box-shadow: 1px 3px 4px rgb(0 0 0 / 10%);
     cursor: pointer;
     &:hover {
       box-shadow: 1px 3px 4px rgb(0 0 0 / 20%);
@@ -45,13 +42,3 @@
     }
   }
 }
-
-// @media (max-width: 1300px) {
-//   .adv {
-//     &__inner {
-//       grid-template-columns: 1fr 1fr;
-//       grid-template-rows: 1fr;
-//
-//     }
-//   }
-// }
