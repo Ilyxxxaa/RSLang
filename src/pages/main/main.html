@@ -12,7 +12,7 @@
 </head>
 
 <body>
-  <aside class="menu ">
+  <div class="menu">
     <div class="menu__title">
       <div class="menu__title-img"><img src="./assets/images/menu-icon.svg" alt="menu-icon"></div>
       <div class="menu__title-name">Меню</div>
@@ -35,7 +35,7 @@
         <div class="menu__list-item-name">Статистика</div>
       </div>
     </div>
-  </aside>
+  </div>
 
   <div class="content">
 
@@ -66,8 +66,10 @@
             </ul>
           </nav>
           <div class="header__auth">
-            <button class="auth__btn auth__btn-login" id='login'>Войти</button>
-            <button class="auth__btn auth__btn-registration" id='password'>Регистрация</button>
+            <button class="auth__btn auth__btn-login" id='login' data-auth="signin">Войти</button>
+            <button class="auth__btn auth__btn-registration" id='password' data-auth="signup">Регистрация</button>
+            <img class="user user__avatar hidden" src="../../assets/images/user.png" alt="avatar">
+            <span class="user user__name hidden"></span>
           </div>
         </div>
       </div>
@@ -85,8 +87,43 @@
           </div>
         </div>
       </section>
+
+
+      <section class="adv">
+        <div class="container">
+          <h1 class="adv__title">Оцените преимущества приложения</h1>
+          <div class="adv__inner">
+            <div class="adv__card">
+              <div class="card__img"><img src="../../assets/images/book.png" alt=""></div>
+              <div class="card__title">Учебник</div>
+              <div class="card__info">Более 3500 тысяч слов для изучения, разбитых на разделы по уровню твоей подготовки
+                с
+                удобной навигацией.</div>
+            </div>
+            <div class="adv__card">
+              <div class="card__img"><img src="../../assets/images/games.png" alt=""></div>
+              <div class="card__title">Игры</div>
+              <div class="card__info">Чтобы обучениe не было скучным, мы подготовили 2 увлекательных
+                игры на развитие запоминания слов, восприятия на слух и письма
+              </div>
+            </div>
+            <div class="adv__card">
+              <div class="card__img"><img src="../../assets/images/statistic.png" alt=""></div>
+              <div class="card__title">Статистика</div>
+              <div class="card__info">Отслеживай свой прогресс в индивидуальной статистике, ставь цели и вдохновляйся на
+                и достижение новых результатов каждый день!</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- <section class="example"></section> -->
+
+
     </main>
   </div>
+
+
 </body>
 
 </html>
