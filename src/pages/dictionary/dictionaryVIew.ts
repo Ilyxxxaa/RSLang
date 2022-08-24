@@ -13,20 +13,20 @@ export const currentWords = {
   currentGroup: localStorage.getItem('currentGroup') || 1
 }
 
-const main = document.querySelector('.content'); // куда её вставлять
-if (main) main.innerHTML = '';
+// const main = document.querySelector('.content'); // куда её вставлять
+// if (main) main.innerHTML = '';
 
-const dictionaryContainer = document.createElement('div');
-dictionaryContainer.classList.add('dictionary_container');
-main?.append(dictionaryContainer);
+// const dictionaryContainer = document.createElement('div');
+// dictionaryContainer.classList.add('dictionary_container');
+// main?.append(dictionaryContainer);
 
 
-(async function () {
-  dictionaryContainer.append(drawPagination());
-  dictionaryContainer.append(drawGroupsBlock());
-  document.querySelector(`.group-${+currentWords.currentGroup + 1}-button`)?.classList.add('active-group'); // выделяем активную группу
-  await updateCards(+currentWords.currentGroup, +currentWords.currentPage);
-})();
+// (async function () {
+//   dictionaryContainer.append(drawPagination());
+//   dictionaryContainer.append(drawGroupsBlock());
+//   document.querySelector(`.group-${+currentWords.currentGroup + 1}-button`)?.classList.add('active-group'); // выделяем активную группу
+//   await updateCards(+currentWords.currentGroup, +currentWords.currentPage);
+// })();
 
 
 
@@ -43,13 +43,14 @@ const cardsContainerBackgrounds = ['pattern-attention-drops', 'pattern-bubbles-u
 
 const cardContainerBackgrounds = ['#BF2ED1', '#985CE4', '#6E8BF8', '#00E5E5', '#7682F4', '#0BFF96'];
 
-function drawCards(array: IWord[], group: number) {
+function drawCards(array: IWord[], group: number, container?: HTMLDivElement) {
   if (document.querySelector('.cards-container')) document.querySelector('.cards-container')?.remove();
   const cardsContainer = createElement('div', 'cards-container');
 
   cardsContainer.style.background = `url('../assets/images/dictionary/dictionaryBackgrounds/${cardsContainerBackgrounds[group]}.png')`;
 
-  dictionaryContainer.append(cardsContainer);
+  const dictionaryContainer = container;
+  if (dictionaryContainer) dictionaryContainer.append(cardsContainer);
   array.forEach(card => cardsContainer.append(createCard(card, group)));
 
 }
