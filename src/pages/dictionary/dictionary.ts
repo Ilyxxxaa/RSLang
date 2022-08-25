@@ -10,7 +10,7 @@ export const currentWords = {
 
 export class Dictionary {
   public async drawDictionary() {
-    const content = document.querySelector('.content'); // куда её вставлять
+    const content = document.querySelector('.page__content'); // куда её вставлять
     if (content) content.innerHTML = '';
 
     const dictionaryContainer = document.createElement('div');

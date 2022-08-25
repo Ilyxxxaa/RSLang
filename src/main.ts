@@ -5,6 +5,7 @@ import Header from './pages/main/header';
 import MainPage from './pages/main/mainPage';
 import Games from './pages/games/games';
 import Statistics from './pages/stats/statistics';
+import { Dictionary } from './pages/dictionary/dictionary';
 
 import './pages/main/styles/main.scss';
 // import './pages/games/styles/games.scss';
@@ -24,6 +25,8 @@ class App {
 
   statistics: Statistics;
 
+  dictionary: Dictionary;
+
   constructor() {
     this.state = {
       name: 'Ilya',
@@ -35,6 +38,7 @@ class App {
     this.mainPage = new MainPage();
     this.games = new Games();
     this.statistics = new Statistics();
+    this.dictionary = new Dictionary();
   }
 
   start() {
@@ -84,6 +88,18 @@ class App {
         console.log(this.state);
       }
     });
+
+    this.menu.menuItemBook.addEventListener('click', () => {
+      if (this.state.view !== 'book') {
+        this.state.view = 'book';
+
+        this.menu.clearAllActiveButtons();
+        this.menu.menuItemBook.classList.add('menu__list-item--active');
+
+        this.header.drawHeader(this.state);
+        this.dictionary.drawDictionary();
+      }
+    })
   }
 }
 
