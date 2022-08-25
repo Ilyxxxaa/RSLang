@@ -24,7 +24,7 @@ function drawCards(array: IWord[], group: number) {
   if (document.querySelector('.cards-container')) document.querySelector('.cards-container')?.remove();
   const cardsContainer = createElement('div', 'cards-container');
 
-  cardsContainer.style.background = `url('../assets/images/dictionary/dictionaryBackgrounds/${cardsContainerBackgrounds[group]}.png')`;
+  // cardsContainer.style.background = `url('../assets/images/dictionary/dictionaryBackgrounds/${cardsContainerBackgrounds[group]}.png')`;
 
   array.forEach(card => cardsContainer.append(createCard(card, group)));
   return cardsContainer;

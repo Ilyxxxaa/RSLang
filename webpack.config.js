@@ -7,7 +7,7 @@ const isDev = process.env.NODE_ENV === 'development';
 
 const baseConfig = {
   entry: {
-    main: path.resolve(__dirname, './src/pages/main/main.ts'),
+    main: path.resolve(__dirname, './src/main.ts'),
   },
   mode: 'development',
   devServer: {
@@ -53,7 +53,7 @@ const baseConfig = {
 
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, './src/pages/main/main.html'),
+      template: path.resolve(__dirname, './src/main.html'),
       filename: 'index.html',
     }),
     new CleanWebpackPlugin(),
