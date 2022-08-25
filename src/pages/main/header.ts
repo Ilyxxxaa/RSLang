@@ -1,18 +1,15 @@
-import State from '../../types/state';
-
 export default class Header {
   header: HTMLElement = document.createElement('div');
 
-  drawHeader(state: State) {
+  drawHeader() {
     const headerContent = document.querySelector('.header__content');
-    this.createHeader(state);
+    this.createHeader();
     headerContent?.append(this.header);
   }
 
-  createHeader(state: State) {
+  createHeader() {
     this.header.classList.add('header');
-    if (state.view === 'main') {
-      this.header.innerHTML = ` <div class=" container">
+    this.header.innerHTML = ` <div class=" container">
       <div class="header__inner">
         <div class="header__logo"><a href="#">RSLang<div class="header__logo-text">Учить английский - легко</div>
           </a>
@@ -45,20 +42,5 @@ export default class Header {
         </div>
       </div>
     </div>`;
-    } else {
-      this.header.innerHTML = ` <div class=" container">
-      <div class="header__inner">
-        <div class="header__logo"><a href="#">RSLang<div class="header__logo-text">Учить английский - легко</div>
-          </a>
-        </div>
-        <div class="header__auth">
-          <button class="auth__btn auth__btn-login" id='login' data-auth="signin">Войти</button>
-          <button class="auth__btn auth__btn-registration" id='password' data-auth="signup">Регистрация</button>
-          <img class="user user__avatar hidden" src="../../assets/images/user.png" alt="avatar">
-          <span class="user user__name hidden"></span>
-        </div>
-      </div>
-    </div>`;
-    }
   }
 }

@@ -44,7 +44,7 @@ class App {
   start() {
     this.menu.drawMenu();
     this.addListenersToMenuButtons();
-    this.header.drawHeader(this.state);
+    this.header.drawHeader();
     Authorization.addAuthHandlers();
     this.mainPage.drawMainPage();
   }
@@ -57,9 +57,11 @@ class App {
         this.menu.clearAllActiveButtons();
         this.menu.menuItemMain.classList.add('menu__list-item--active');
 
-        this.header.drawHeader(this.state);
+        const nav = document.querySelector('.nav');
+        if (nav) {
+          nav.classList.remove('hide');
+        }
         this.mainPage.drawMainPage();
-        console.log(this.state);
       }
     });
 
@@ -70,9 +72,11 @@ class App {
         this.menu.clearAllActiveButtons();
         this.menu.menuItemGames.classList.add('menu__list-item--active');
 
-        this.header.drawHeader(this.state);
+        const nav = document.querySelector('.nav');
+        if (nav) {
+          nav.classList.add('hide');
+        }
         this.games.drawGames();
-        console.log(this.state);
       }
     });
 
@@ -83,9 +87,11 @@ class App {
         this.menu.clearAllActiveButtons();
         this.menu.menuItemStats.classList.add('menu__list-item--active');
 
-        this.header.drawHeader(this.state);
+        const nav = document.querySelector('.nav');
+        if (nav) {
+          nav.classList.add('hide');
+        }
         this.statistics.drawStatistics();
-        console.log(this.state);
       }
     });
 
@@ -96,10 +102,13 @@ class App {
         this.menu.clearAllActiveButtons();
         this.menu.menuItemBook.classList.add('menu__list-item--active');
 
-        this.header.drawHeader(this.state);
+        const nav = document.querySelector('.nav');
+        if (nav) {
+          nav.classList.add('hide');
+        }
         this.dictionary.drawDictionary();
       }
-    })
+    });
   }
 }
 

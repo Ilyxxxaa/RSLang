@@ -3,10 +3,8 @@ export default class MainPage {
 
   drawMainPage() {
     const pageContent = document.querySelector('.page__content');
-    console.log(pageContent);
     this.createMainPage();
     if (pageContent) {
-      console.log('try to draw pageContent');
       pageContent.innerHTML = '';
       pageContent.append(this.mainPage);
     }
