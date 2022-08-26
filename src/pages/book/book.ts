@@ -1,6 +1,6 @@
 import './bookVIew';
 import { updateCards } from './bookVIew';
-import { drawGroupsBlock } from './groups';
+import { drawLevelsBlock } from './levels';
 import { drawPagination } from './pagination';
 
 export const currentWords = {
@@ -18,10 +18,10 @@ export class Book {
     content?.append(bookContainer);
 
     bookContainer.append(drawPagination());
-    bookContainer.append(drawGroupsBlock());
+    bookContainer.append(drawLevelsBlock());
     document
-      .querySelector(`.group-${+currentWords.currentGroup + 1}-button`)
-      ?.classList.add('active-group'); // выделяем активную группу
+      .querySelector(`.level-${+currentWords.currentGroup + 1}-button`)
+      ?.classList.remove('unactive-level'); // выделяем активную группу
     await updateCards(+currentWords.currentGroup, +currentWords.currentPage);
   }
 }
