@@ -1,5 +1,5 @@
-import './dictionaryVIew';
-import { updateCards } from './dictionaryVIew';
+import './bookVIew';
+import { updateCards } from './bookVIew';
 import { drawGroupsBlock } from './groups';
 import { drawPagination } from './pagination';
 
@@ -8,17 +8,17 @@ export const currentWords = {
   currentGroup: localStorage.getItem('currentGroup') || 1,
 };
 
-export class Dictionary {
-  public async drawDictionary() {
+export class Book {
+  public async drawBook() {
     const content = document.querySelector('.page__content'); // куда её вставлять
     if (content) content.innerHTML = '';
 
-    const dictionaryContainer = document.createElement('div');
-    dictionaryContainer.classList.add('dictionary_container');
-    content?.append(dictionaryContainer);
+    const bookContainer = document.createElement('div');
+    bookContainer.classList.add('book_container');
+    content?.append(bookContainer);
 
-    dictionaryContainer.append(drawPagination());
-    dictionaryContainer.append(drawGroupsBlock());
+    bookContainer.append(drawPagination());
+    bookContainer.append(drawGroupsBlock());
     document
       .querySelector(`.group-${+currentWords.currentGroup + 1}-button`)
       ?.classList.add('active-group'); // выделяем активную группу

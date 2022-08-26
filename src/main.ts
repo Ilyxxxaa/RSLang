@@ -5,7 +5,7 @@ import Header from './pages/main/header';
 import MainPage from './pages/main/mainPage';
 import Games from './pages/games/games';
 import Statistics from './pages/stats/statistics';
-import { Dictionary } from './pages/dictionary/dictionary';
+import { Book } from './pages/book/book';
 
 import './pages/main/styles/main.scss';
 // import './pages/games/styles/games.scss';
@@ -25,7 +25,7 @@ class App {
 
   statistics: Statistics;
 
-  dictionary: Dictionary;
+  book: Book;
 
   constructor() {
     this.state = {
@@ -38,7 +38,7 @@ class App {
     this.mainPage = new MainPage();
     this.games = new Games();
     this.statistics = new Statistics();
-    this.dictionary = new Dictionary();
+    this.book = new Book();
   }
 
   start() {
@@ -106,7 +106,7 @@ class App {
         if (nav) {
           nav.classList.add('hide');
         }
-        this.dictionary.drawDictionary();
+        this.book.drawBook();
       }
     });
   }

@@ -1,19 +1,25 @@
-import { IWord } from '../../types/dictionaryTypes';
-import '../dictionary/styles/main.scss'
+import { IWord } from '../../types/bookTypes';
+import './styles/main.scss'
 import { playSounds } from './audio';
-import { getWords } from './dictionaryRequests';
-import { startLoader } from './loader';
-import { stopLoader } from './loader';
+import { getWords } from './bookRequests';
+import { Loader } from './loader';
 
+// loader: Loader; 
+// constructor () {
+//   this.loader = new Loader();
+// }
+
+export const loader = new Loader();
+loader.loaderInit();
 
 export async function updateCards(group: number, page: number) {
-  startLoader();
+  loader.startLoader();
   localStorage.setItem('currentPage', `${page}`);
   localStorage.setItem('currentGroup', `${group}`);
   const arrayWords = await getWords(group, page);
-  const dictionaryContainer = document.querySelector('.dictionary_container');
-  dictionaryContainer?.append(await drawCards(arrayWords, group));
-  stopLoader();
+  const bookContainer = document.querySelector('.book_container');
+  bookContainer?.append(await drawCards(arrayWords, group));
+  loader.stopLoader();
 }
 
 const cardsContainerBackgrounds = ['pattern-attention-drops', 'pattern-bubbles-up-down', 'pattern-dashed-waves', 'pattern-geometric-chaos', 'pattern-hash-stars-2', 'pattern-micro-rhomb-grid', 'pattern-millennium-wicker'];
@@ -24,7 +30,7 @@ function drawCards(array: IWord[], group: number) {
   if (document.querySelector('.cards-container')) document.querySelector('.cards-container')?.remove();
   const cardsContainer = createElement('div', 'cards-container');
 
-  // cardsContainer.style.background = `url('../assets/images/dictionary/dictionaryBackgrounds/${cardsContainerBackgrounds[group]}.png')`;
+  // cardsContainer.style.background = `url('../assets/images/book/bookBackgrounds/${cardsContainerBackgrounds[group]}.png')`;
 
   array.forEach(card => cardsContainer.append(createCard(card, group)));
   return cardsContainer;

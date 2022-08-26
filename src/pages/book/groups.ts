@@ -1,7 +1,7 @@
-import { createElement } from "./dictionaryVIew";
-import { updateCards } from "./dictionaryVIew";
+import { createElement } from "./bookVIew";
+import { updateCards } from "./bookVIew";
 
-import { currentWords } from "./dictionary";
+import { currentWords } from "./book";
 
 const groupColors = ['#30e976', '#e6e930', '#e97e30', '#e93030', '#0095ff', '#0012ff', '#ff00aa'];
 

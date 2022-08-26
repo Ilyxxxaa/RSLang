@@ -1,7 +1,7 @@
-import { createElement } from "./dictionaryVIew";
-import { updateCards } from './dictionaryVIew';
+import { createElement } from "./bookVIew";
+import { updateCards } from './bookVIew';
 
-import { currentWords } from "./dictionary";
+import { currentWords } from "./book";
 
 export function drawPagination() {
   const paginationContainer = createElement('div', 'pagination-container');
