@@ -9,6 +9,7 @@
   right: 0;
   bottom: 0;
   background-color: rgba(41, 41, 41, 0.8);
+  z-index: 100;
   &:not(.modal__auth) {
     cursor: pointer;
   }
@@ -24,6 +25,7 @@
   padding: 60px 20px 40px;
   background-color:white;
   border-radius: 5px;
+  z-index: 101;
 }
 
 .cancel {
@@ -133,8 +135,6 @@
 .auth-button {
   width: 90%;
   height: 50px;
-  // background: linear-gradient(#985CE4 0.92%, #BF2ED1 99.92%);
-  // background-color: #7644b7;
   background: #c341eb;
   border-radius: 5px;
   border: none;
