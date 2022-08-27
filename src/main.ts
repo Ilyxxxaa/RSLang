@@ -1,6 +1,6 @@
 import Menu from './pages/main/menu';
 import Authorization from './pages/main/authorization/authApp';
-import State from './types/state';
+import State, { Game } from './types/state';
 import Header from './pages/main/header';
 import MainPage from './pages/main/mainPage';
 import Games from './pages/games/games';
@@ -31,6 +31,8 @@ class App {
     this.state = {
       name: 'Ilya',
       view: 'main',
+      game: Game.sprint,
+      level: 'A1',
     };
     this.menu = new Menu();
     this.header = new Header();
@@ -77,6 +79,7 @@ class App {
           nav.classList.add('hide');
         }
         this.games.drawGames();
+        (document.querySelector('.content') as HTMLElement).style.background = '#a198db';
       }
     });
 
