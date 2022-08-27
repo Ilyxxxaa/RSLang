@@ -3,11 +3,7 @@ import './styles/main.scss'
 import { playSounds } from './audio';
 import { getWords } from './bookRequests';
 import { Loader } from './loader';
-
-// loader: Loader; 
-// constructor () {
-//   this.loader = new Loader();
-// }
+import { levelColors } from './levels';
 
 export const loader = new Loader();
 loader.loaderInit();
@@ -22,59 +18,58 @@ export async function updateCards(group: number, page: number) {
   loader.stopLoader();
 }
 
-const cardsContainerBackgrounds = ['pattern-attention-drops', 'pattern-bubbles-up-down', 'pattern-dashed-waves', 'pattern-geometric-chaos', 'pattern-hash-stars-2', 'pattern-micro-rhomb-grid', 'pattern-millennium-wicker'];
-
-const cardContainerBackgrounds = ['#BF2ED1', '#985CE4', '#6E8BF8', '#00E5E5', '#7682F4', '#0BFF96'];
+const cardsContainerBackgrounds = ['bg1', 'bg2', 'bg3', 'bg4', 'bg5', 'bg6'];
 
 function drawCards(array: IWord[], group: number) {
+  // if (document.querySelector('.cards-container')) document.querySelector('.cards-container')?.remove();
   if (document.querySelector('.cards-container')) document.querySelector('.cards-container')?.remove();
   const cardsContainer = createElement('div', 'cards-container');
 
-  // cardsContainer.style.background = `url('../assets/images/book/bookBackgrounds/${cardsContainerBackgrounds[group]}.png')`;
+  const content: HTMLDivElement | null = document.querySelector('.content');
+  if (content) {
+    content.style.background = `url('../assets/images/book/bookBackgrounds/${cardsContainerBackgrounds[group]}.jpg')`;
+  }
 
-  array.forEach(card => cardsContainer.append(createCard(card, group)));
+  const wordsContainer = createElement('div', 'words-container');
+  cardsContainer.append(wordsContainer);
+  array.forEach((card, index) => wordsContainer.append(createCardWord(card, group, index, wordsContainer)));
+
+  cardsContainer.append(createCard(array[0]));
+
   return cardsContainer;
 }
 
-function createCard(card: IWord, group: number) {
-  const cardData = card;
-  const cardContainer = createElement('div', 'card-container');
-  cardContainer.style.background = `${cardContainerBackgrounds[group]}`;
+function createCardWord(card: IWord, group: number, index: number, wordsContainer: HTMLElement) {
+  const cardWord = createElement('button', 'card-word');
+  (index == 0) ? (cardWord.classList.add('active-word'), cardWord.style.background = `${levelColors[group]}`) : null;
+  cardWord.innerHTML = `<h2 class="">${card.word}</h2>
+  <p class="">${card.wordTranslate}</p>
+  </button>`;
+
+  cardWord.addEventListener('click', () => {
+    const prevActive: HTMLButtonElement | null = document.querySelector('.active-word');
+    if (prevActive) prevActive.style.background = `#FFFFFF`;
+    wordsContainer.querySelectorAll('.active-word').forEach(el => {
+      el.classList.remove('active-word');
+
+    });
+    cardWord.classList.add('active-word');
+    cardWord.style.background = `${levelColors[group]} `;
+    updateCard(card);
+  });
+  return cardWord;
+}
+
+function createCard(cardData: IWord) {
+  const cardContainer = createElement('div', 'card');
   const cardContent = createElement('div', 'card-content');
-  const cardImg = document.createElement('img');
+  const cardImgContainer = createElement('div', 'card-img-container');
   const wordContainer = createElement('div', 'word-container');
-
   const wordDescriptionContainer = createElement('div', 'word-description-container');
-  const wordMeaningContainer = createElement('div', 'word-meaning-container');
-  const wordExampleContainer = createElement('div', 'word-example-container');
-  const textMeaning = createElement('p', 'text-meaning');
-  const textMeaningTranslate = createElement('p', 'text-meaning-translate');
-  const textExample = createElement('p', 'text-example');
-  const textExampleTranslate = createElement('p', 'text-example-translate');
-  textMeaning.innerHTML = `${card.textMeaning}`;
-  textMeaningTranslate.innerHTML = `${card.textMeaningTranslate}`;
-  textExample.innerHTML = `${card.textExample}`;
-  textExampleTranslate.innerHTML = `${card.textExampleTranslate}`;
 
-  wordDescriptionContainer.append(wordMeaningContainer, wordExampleContainer);
-  wordMeaningContainer.append(textMeaning, textMeaningTranslate);
-  wordExampleContainer.append(textExample, textExampleTranslate);
+  cardImgContainer.style.background = `url('https://serverforrslang.herokuapp.com/${cardData.image}')`;
 
-  const wordTitle = createElement('h4', 'word-title');
-  const wordTranslator = createElement('p', 'word-translation');
   const cardAudioContainer = createElement('div', 'card-audio-container');
-
-  wordTitle.innerHTML = `<span class="english-word">${card.word[0].toUpperCase() + card.word.slice(1)} </span>`
-  wordTitle.innerHTML += `<span class="transcript">${card.transcription}</span>`
-
-  cardImg.classList.add('card__img');
-  cardImg.src = `https://serverforrslang.herokuapp.com/${cardData.image}`;
-
-  cardContainer.append(cardImg);
-  cardContainer.append(cardContent);
-  cardContent.append(wordContainer, cardAudioContainer, wordDescriptionContainer);
-  wordContainer.append(wordTitle, wordTranslator);
-
   const audio = document.createElement('audio');
   audio.src = `https://serverforrslang.herokuapp.com/${cardData.audio}`
   const audioMeaning = document.createElement('audio');
@@ -82,10 +77,42 @@ function createCard(card: IWord, group: number) {
   const audioExample = document.createElement('audio');
   audioExample.src = `https://serverforrslang.herokuapp.com/${cardData.audioExample}`
   cardAudioContainer.append(audio, audioMeaning, audioExample);
-
   cardAudioContainer.addEventListener('click', (e) => playSounds(e, cardAudioContainer));
 
+  wordContainer.innerHTML = `
+    <h2 class="word-word">${cardData.word}</h2>
+    <h3 class="word-translate">${cardData.wordTranslate}</h3>
+    <span class="word-transcription">${cardData.transcription}</span>
+  `;
+  wordContainer.append(cardAudioContainer);
+
+  const wordMeaningContainer = createElement('div', 'word-meaning-container');
+  const wordExampleContainer = createElement('div', 'word-example-container');
+  const textMeaning = createElement('p', 'text-meaning');
+  const textMeaningTranslate = createElement('p', 'text-meaning-translate');
+  const textExample = createElement('p', 'text-example');
+  const textExampleTranslate = createElement('p', 'text-example-translate');
+  textMeaning.innerHTML = `${cardData.textMeaning}`;
+  textMeaningTranslate.innerHTML = `${cardData.textMeaningTranslate}`;
+  textExample.innerHTML = `${cardData.textExample}`;
+  textExampleTranslate.innerHTML = `${cardData.textExampleTranslate}`;
+
+  wordDescriptionContainer.append(wordMeaningContainer, wordExampleContainer);
+  wordMeaningContainer.append(textMeaning, textMeaningTranslate);
+  wordExampleContainer.append(textExample, textExampleTranslate);
+
+  cardContent.append(wordContainer, wordDescriptionContainer);
+  cardContainer.append(cardImgContainer, cardContent);
   return cardContainer;
+}
+
+function updateCard(cardData: IWord) {
+  const cardContainer = document.querySelector('.card');
+  const cardsContainer = document.querySelector('.cards-container');
+  if (cardContainer) {
+    cardContainer.remove();
+    cardsContainer?.append(createCard(cardData));
+  }
 }
 
 export function createElement(elem: string, className: string) {
@@ -93,5 +120,7 @@ export function createElement(elem: string, className: string) {
   htmlElem.classList.add(className);
   return htmlElem;
 }
+
+
 
 

@@ -1,3 +1,5 @@
+// $wordActiveColor: #2cba92;
+
 .book_container {
   display: flex;
   flex-direction: column;
@@ -5,15 +7,58 @@
   align-items: center;
   max-width: 1200px;
   margin: 0 auto;
-  // width: 100%;
+  padding: 1.5rem;
 }
 
 .cards-container {
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-
+  justify-content: space-between;
   // background-image: url(../../../assets/images/dictionary/dictionaryBackgrounds/pattern-attention-drops.png);
+}
+
+.words-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.card {
+  min-width: 400px;
+  height: 532px;
+
+  color: #2c2647;
+  background-color: #FFFFFF;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.card-img-container {
+  height: 200px;
+}
+
+.card-content {
+  padding: 1rem;
+}
+
+.card-word {
+  position: relative;
+  width: 180px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 0.5rem;
+  background-color: #FFFFFF;
+  border-radius: 5px;
+  border: none;
+  overflow: hidden;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.card-word:hover {
+  background-color: #ffffff82;
 }
 
 .card-container {
@@ -31,4 +76,11 @@
   padding: 24px;
 
   color: #FFFFFF;
+}
+
+.word-container,
+.word-description-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }

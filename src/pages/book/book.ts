@@ -17,11 +17,9 @@ export class Book {
     bookContainer.classList.add('book_container');
     content?.append(bookContainer);
 
-    bookContainer.append(drawPagination());
+
     bookContainer.append(drawLevelsBlock());
-    document
-      .querySelector(`.level-${+currentWords.currentGroup + 1}-button`)
-      ?.classList.remove('unactive-level'); // выделяем активную группу
     await updateCards(+currentWords.currentGroup, +currentWords.currentPage);
+    // bookContainer.append(drawPagination());
   }
 }

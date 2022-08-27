@@ -51,6 +51,10 @@ class App {
 
   addListenersToMenuButtons() {
     this.menu.menuItemMain.addEventListener('click', () => {
+
+      const content: HTMLDivElement | null = document.querySelector('.content');  // нужно возвращать фон заново
+      if (content) content.style.background = `url('../assets/images/header-bg.png')`; // не знаю как лучше реализовать
+
       if (this.state.view !== 'main') {
         this.state.view = 'main';
 
