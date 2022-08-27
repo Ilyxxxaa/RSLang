@@ -8,6 +8,7 @@ import Statistics from './pages/stats/statistics';
 import { Dictionary } from './pages/dictionary/dictionary';
 
 import './pages/main/styles/main.scss';
+import Footer from './pages/main/footer';
 // import './pages/games/styles/games.scss';
 
 class App {
@@ -27,6 +28,8 @@ class App {
 
   dictionary: Dictionary;
 
+  footer: Footer;
+
   constructor() {
     this.state = {
       name: 'Ilya',
@@ -39,6 +42,7 @@ class App {
     this.games = new Games();
     this.statistics = new Statistics();
     this.dictionary = new Dictionary();
+    this.footer = new Footer();
   }
 
   start() {
@@ -47,6 +51,7 @@ class App {
     this.header.drawHeader();
     Authorization.addAuthHandlers();
     this.mainPage.drawMainPage();
+    this.footer.drawFooter();
   }
 
   addListenersToMenuButtons() {
@@ -62,6 +67,7 @@ class App {
           nav.classList.remove('hide');
         }
         this.mainPage.drawMainPage();
+        this.footer.drawFooter();
       }
     });
 
@@ -92,6 +98,7 @@ class App {
           nav.classList.add('hide');
         }
         this.statistics.drawStatistics();
+        this.footer.drawFooter();
       }
     });
 
@@ -107,6 +114,7 @@ class App {
           nav.classList.add('hide');
         }
         this.dictionary.drawDictionary();
+        this.footer.drawFooter();
       }
     });
   }

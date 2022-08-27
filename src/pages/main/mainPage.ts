@@ -51,6 +51,84 @@ export default class MainPage {
         </div>
       </div>
     </div>
+  </section>
+
+  <section class="team">
+   
+      <div class="team__title">Наша команда</div>
+      <div class="team__inner">
+
+      <div class="team__card">
+      <div class="card__content">
+        <div class="card__img">
+          <img src="./assets/images/ilya-avatar.jpg" alt="">
+        </div>
+        <div class="card__name">
+          <div class="card__name-name">Ilya</div>
+        </div>
+        <a class="card__icons" href="https://github.com/ilyxxxaa" target="_blank">
+          <img src="./assets/images/github-icon.svg" alt="">
+          <div class="card__icons-name">Ilyxxxaa</div>
+        </a>
+        <div class="card__text">
+          <ol class="team__card-info">
+            <li class="team__card-info-item">Вёрстка главной страницы</щl>
+            <li class="team__card-info-item">Боковое меню</li>
+            <li class="team__card-info-item">Игра аудиовызов</li>
+            <li class="team__card-info-item">Статистика</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="team__card">
+    <div class="card__content">
+      <div class="card__img">
+        <img src="./assets/images/ilya-avatar.jpg" alt="">
+      </div>
+      <div class="card__name">
+        <div class="card__name-name">Olya</div>
+      </div>
+      <a class="card__icons" href="https://github.com/aminkka" target="_blank">
+        <img src="./assets/images/github-icon.svg" alt="">
+        <div class="card__icons-name">aminkka</div>
+      </a>
+      <div class="card__text">
+        <ol class="team__card-info">
+          <li class="team__card-info-item">Дизайн приложения</li>
+          <li class="team__card-info-item">Авторизация</li>
+          <li class="team__card-info-item">Игра спринт</li>
+          <li class="team__card-info-item">Статистика</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="team__card">
+      <div class="card__content">
+        <div class="card__img">
+          <img src="./assets/images/max-avatar.jpg" alt="">
+        </div>
+        <div class="card__name">
+          <div class="card__name-name">Max</div>
+        </div>
+        <a class="card__icons" href="https://github.com/maxkovalenko97" target="_blank">
+          <img src="./assets/images/github-icon.svg" alt="">
+          <div class="card__icons-name">maxkovalenko97</div>
+        </a>
+        <div class="card__text">
+          <ol class="team__card-info">
+            <li class="team__card-info-item">Дизайн словаря</щl>
+            <li class="team__card-info-item">Вёрстка словаря</li>
+            <li class="team__card-info-item">Работа с сервером</li>
+            <li class="team__card-info-item">Статистика</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    
+    </div>
   </section>`;
   }
 }
