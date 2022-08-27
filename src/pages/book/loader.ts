@@ -1,5 +1,3 @@
-
-
 export class Loader {
   content = document.querySelector('.page__content');
   loaderDiv = document.createElement('div');

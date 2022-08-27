@@ -2,20 +2,16 @@ import { IWord } from '../../types/bookTypes';
 import './styles/main.scss'
 import { playSounds } from './audio';
 import { getWords } from './bookRequests';
-import { Loader } from './loader';
 import { levelColors } from './levels';
 
-export const loader = new Loader();
-loader.loaderInit();
+
 
 export async function updateCards(group: number, page: number) {
-  loader.startLoader();
   localStorage.setItem('currentPage', `${page}`);
   localStorage.setItem('currentGroup', `${group}`);
   const arrayWords = await getWords(group, page);
   const bookContainer = document.querySelector('.book_container');
   bookContainer?.append(await drawCards(arrayWords, group));
-  loader.stopLoader();
 }
 
 const cardsContainerBackgrounds = ['bg1', 'bg2', 'bg3', 'bg4', 'bg5', 'bg6'];
