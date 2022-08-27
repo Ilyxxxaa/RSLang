@@ -25,7 +25,7 @@ export default class MainPage {
   </section>
 
 
-  <section class="adv">
+  <section class="adv" id='adv'>
     <div class="container">
       <h1 class="adv__title">Оцените преимущества приложения</h1>
       <div class="adv__inner">
@@ -53,7 +53,7 @@ export default class MainPage {
     </div>
   </section>
 
-  <section class="team">
+  <section class="team" id='team'>
    
       <div class="team__title">Наша команда</div>
       <div class="team__inner">
@@ -84,7 +84,7 @@ export default class MainPage {
     <div class="team__card">
     <div class="card__content">
       <div class="card__img">
-        <img src="./assets/images/ilya-avatar.jpg" alt="">
+        <img src="./assets/images/olya-avatar.jpg" alt="">
       </div>
       <div class="card__name">
         <div class="card__name-name">Olya</div>
