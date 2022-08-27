@@ -1,5 +1,5 @@
 import Menu from './pages/main/menu';
-import Authorization from './pages/main/authorization/authApp';
+import AuthorizationHandlers from './pages/main/authorization/authApp';
 import State from './types/state';
 import Header from './pages/main/header';
 import MainPage from './pages/main/mainPage';
@@ -15,7 +15,7 @@ class App {
 
   menu: Menu;
 
-  authorization: Authorization;
+  authorization: AuthorizationHandlers;
 
   header: Header;
 
@@ -29,12 +29,16 @@ class App {
 
   constructor() {
     this.state = {
-      name: 'Ilya',
+      isAuthorized: false,
+      name: '',
+      userId: '',
+      token: '',
+      refreshToken: '',
       view: 'main',
     };
     this.menu = new Menu();
     this.header = new Header();
-    this.authorization = new Authorization();
+    this.authorization = new AuthorizationHandlers(this.state);
     this.mainPage = new MainPage();
     this.games = new Games();
     this.statistics = new Statistics();
@@ -45,7 +49,7 @@ class App {
     this.menu.drawMenu();
     this.addListenersToMenuButtons();
     this.header.drawHeader();
-    Authorization.addAuthHandlers();
+    this.authorization.addAuthHandlers();
     this.mainPage.drawMainPage();
   }
 
