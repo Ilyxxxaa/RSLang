@@ -3,7 +3,7 @@ let audio: HTMLAudioElement | null = null;
 let audioMeaning: HTMLAudioElement | null = null;
 let audioExample: HTMLAudioElement | null = null;
 
-function stopAudio() {
+export function stopAudio() {
   if (isPlay && audio && audioMeaning && audioExample) {
     audio.pause();
     audio.currentTime = 0;
@@ -14,7 +14,7 @@ function stopAudio() {
   }
 }
 
-export default function playSounds(e: MouseEvent, element: HTMLElement) {
+export function playSounds(e: MouseEvent, element: HTMLElement) {
   const buttonPlay = <HTMLElement>e.target;
 
   if (buttonPlay.classList.contains('playing')) {

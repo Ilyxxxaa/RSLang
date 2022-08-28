@@ -2,14 +2,21 @@ import updateCards from './bookVIew';
 import drawLevelsBlock from './levels';
 import drawPagination from './pagination';
 import currentWords from './bookState';
+import State from '../../types/state';
 
 export default class Book {
+  state: State;
+
+  constructor(state: State) {
+    this.state = state;
+  }
+
   public async drawBook() {
+    console.log(this.state);
     const content: HTMLDivElement | null = document.querySelector('.content');
     if (content) {
       content.style.background = 'url("../assets/images/book/bookBackgrounds/bg2.png")';
     }
-    console.log(currentWords.currentLevel, currentWords.currentPage);
     const pageContent = document.querySelector('.page__content');
     if (pageContent) pageContent.innerHTML = '';
 

@@ -1,8 +1,8 @@
 import { IWord } from '../../types/bookTypes';
 import './styles/main.scss';
-import playSounds from './audio';
 import getWords from './bookRequests';
 import { levelColors, createElement } from './utils';
+import { playSounds, stopAudio } from './audio';
 
 const noBgColor = '#FFFFFF';
 
@@ -75,6 +75,7 @@ function createCard(cardData: IWord) {
 }
 
 function updateCard(cardData: IWord) {
+  stopAudio();
   const cardContainer = document.querySelector('.card');
   const cardsContainer = document.querySelector('.cards-container');
   if (cardContainer) {
