@@ -23,12 +23,12 @@ export default class Header {
               </a>
             </li>
             <li class="nav__list-item">
-              <a class="nav__list-link" href="#">
+              <a class="nav__list-link" href="#adv">
                 Преимущества
               </a>
             </li>
             <li class="nav__list-item">
-              <a class="nav__list-link" href="#">
+              <a class="nav__list-link" href="#team">
                 Наша команда
               </a>
             </li>

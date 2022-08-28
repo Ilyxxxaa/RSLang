@@ -13,6 +13,8 @@ export default class Menu {
 
   menuItemStats: HTMLButtonElement = document.createElement('button');
 
+  menuItemLogout: HTMLButtonElement = document.createElement('button');
+
   content: HTMLElement = document.createElement('div');
 
   pageContent: HTMLElement = document.createElement('div');
@@ -57,6 +59,7 @@ export default class Menu {
       this.menuItemBook,
       this.menuItemGames,
       this.menuItemStats,
+      this.menuItemLogout,
     );
   }
 
@@ -65,6 +68,7 @@ export default class Menu {
     this.createMenuItemBookBtn();
     this.createMenuItemGamesBtn();
     this.createMenuItemStatsBtn();
+    this.createMenuItemLogoutBtn();
   }
 
   createMenuItemMainBtn() {
@@ -89,6 +93,12 @@ export default class Menu {
     this.menuItemStats.classList.add('menu__list-item', 'menuItemStats');
     this.menuItemStats.innerHTML = `<div class="menu__list-item-img"><img src="./assets/images/stats-icon.svg" alt="stats-icon"></div>
     <div class="menu__list-item-name">Статистика</div>`;
+  }
+
+  createMenuItemLogoutBtn() {
+    this.menuItemLogout.classList.add('menu__list-item', 'menuItemLogout');
+    this.menuItemLogout.innerHTML = `<div class="menu__list-item-img"><img src="./assets/images/logout-icon.svg" alt="logout-icon"></div>
+    <div class="menu__list-item-name">Выйти</div>`;
   }
 
   menuStart() {
