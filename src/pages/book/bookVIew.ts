@@ -6,13 +6,13 @@ import { levelColors, createElement, backgrounds } from './utils';
 
 const noBgColor = '#FFFFFF';
 
-function createCardWord(card: IWord, group: number, index: number, wordsContainer: HTMLElement) {
+function createCardWord(card: IWord, level: number, index: number, wordsContainer: HTMLElement) {
   const cardWord = createElement('button', 'card-word');
   if (index === 0) {
     cardWord.classList.add('active-word');
-    cardWord.style.background = `${levelColors[group]}`;
+    cardWord.style.background = `${levelColors[level]}`;
   }
-  cardWord.innerHTML = `<h2 class="">${card.word}</h2>
+  cardWord.innerHTML = `<h4 class="">${card.word}</h4>
   <p class="">${card.wordTranslate}</p>
   </button>`;
 
@@ -21,7 +21,7 @@ function createCardWord(card: IWord, group: number, index: number, wordsContaine
     if (prevActive) prevActive.style.background = noBgColor;
     wordsContainer.querySelectorAll('.active-word').forEach((el) => el.classList.remove('active-word'));
     cardWord.classList.add('active-word');
-    cardWord.style.background = `${levelColors[group]} `;
+    cardWord.style.background = `${levelColors[level]} `;
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     updateCard(card);
   });
@@ -48,8 +48,8 @@ function createCard(cardData: IWord) {
   cardAudioContainer.addEventListener('click', (e) => playSounds(e, cardAudioContainer));
 
   wordContainer.innerHTML = `
-    <h2 class="word-word">${cardData.word}</h2>
-    <h3 class="word-translate">${cardData.wordTranslate}</h3>
+    <h4 class="word-word">${cardData.word}</h4>
+    <h4 class="word-translate">${cardData.wordTranslate}</h4>
     <span class="word-transcription">${cardData.transcription}</span>
   `;
   wordContainer.append(cardAudioContainer);
@@ -83,7 +83,7 @@ function updateCard(cardData: IWord) {
   }
 }
 
-function drawCards(array: IWord[], group: number) {
+function drawCards(array: IWord[], level: number) {
   let cardsContainer = document.querySelector('.cards-container');
   if (cardsContainer) {
     cardsContainer.innerHTML = '';
@@ -95,22 +95,22 @@ function drawCards(array: IWord[], group: number) {
 
   const content: HTMLDivElement | null = document.querySelector('.content');
   if (content) {
-    content.style.background = `url('../assets/images/book/bookBackgrounds/${backgrounds[group]}.png')`;
+    content.style.background = `url('../assets/images/book/bookBackgrounds/${backgrounds[level]}.png')`;
   }
 
   const wordsContainer = createElement('div', 'words-container');
   cardsContainer.append(wordsContainer);
 
   array.forEach(
-    (card, index) => wordsContainer.append(createCardWord(card, group, index, wordsContainer)),
+    (card, index) => wordsContainer.append(createCardWord(card, level, index, wordsContainer)),
   );
 
   cardsContainer.append(createCard(array[0]));
 }
 
-export default async function updateCards(group: number, page: number) {
+export default async function updateCards(level: number, page: number) {
   localStorage.setItem('currentPage', `${page}`);
-  localStorage.setItem('currentGroup', `${group}`);
-  const arrayWords = await getWords(group, page);
-  await drawCards(arrayWords, group);
+  localStorage.setItem('currentLevel', `${level}`);
+  const arrayWords = await getWords(level, page);
+  await drawCards(arrayWords, level);
 }

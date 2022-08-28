@@ -10,26 +10,35 @@
   padding: 1.5rem;
 }
 
+.words-title,
+.book-title {
+  color: #FFFFFF;
+  text-align: left;
+}
+
 .cards-container {
   display: flex;
   justify-content: space-between;
-  // background-image: url(../../../assets/images/dictionary/dictionaryBackgrounds/pattern-attention-drops.png);
+  margin: 1rem auto;
 }
 
 .words-container {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  // margin: 1rem auto;
 }
 
 .card {
   min-width: 400px;
-  height: 532px;
+  min-height: 532px;
 
   color: #2c2647;
   background-color: #FFFFFF;
   border-radius: 5px;
   overflow: hidden;
+
+  position: relative;
 }
 
 .card-img-container {
@@ -83,4 +92,32 @@
   display: flex;
   flex-direction: column;
   gap: 3px;
+}
+
+.difficult-card-word::after {
+  content: "";
+  background: #ef0a0a;
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  position: absolute;
+  right: -30px;
+  top: -30px;
+}
+
+.difficult-card::after {
+  display: block;
+  margin: 5px;
+
+  position: absolute;
+  left: 5px;
+  top: 5px;
+
+  background-color: #ef0a0a;
+  color: #FFFFFF;
+  font-weight: 500;
+  border: 5px solid transparent;
+  border-radius: 5px;
+  content: 'Сложное';
+  cursor: pointer;
 }

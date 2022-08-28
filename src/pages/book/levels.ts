@@ -1,17 +1,18 @@
 import updateCards from './bookVIew';
 import currentWords from './bookState';
 import { levelsName, levelColors, createElement } from './utils';
+import { updatePaginationColor } from './pagination';
 
 function choseWordLevel(element: HTMLElement, i: number) {
   currentWords.currentLevel = i;
   const buttonLevel = <HTMLElement>element;
-  console.log(buttonLevel);
 
   document.querySelectorAll('.level-button').forEach((el) => el.classList.add('unactive-level'));
 
   buttonLevel.classList.remove('unactive-level');
 
   const level = i;
+  updatePaginationColor();
   updateCards(level, currentWords.currentPage);
 }
 
@@ -37,10 +38,10 @@ export default function drawLevelsBlock() {
     levelButton.type = 'button';
     levelButton.innerHTML = `
       <div class="level-button-left">
-        <h2>${difficulty}</h2>
+        <h3>${difficulty}</h3>
       </div>
       <div class="level-button-right">
-        <h2>${levelsName[i]}</h2>
+        <h3>${levelsName[i]}</h3>
       </div>
       <div class="level-circle" style=" background : ${levelColors[i]}"></div>`;
 

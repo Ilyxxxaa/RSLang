@@ -1,4 +1,4 @@
-import { createElement } from './utils';
+import { createElement, levelColors } from './utils';
 import updateCards from './bookVIew';
 import currentWords from './bookState';
 
@@ -48,7 +48,7 @@ export default function drawPagination() {
   const page = createElement('span', 'current-page');
 
   page.innerText = String(currentWords.currentPage + 1);
-
+  paginationPageCounter.style.background = `${levelColors[currentWords.currentLevel]}`;
   doubleLeft.classList.add('paginationButton_doubleLeft');
   doubleRight.classList.add('paginationButton_doubleRight');
   right.classList.add('paginationButton_right');
@@ -64,4 +64,11 @@ export default function drawPagination() {
   paginationContainer.append(doubleLeft, left, paginationPageCounter, right, doubleRight);
 
   return paginationContainer;
+}
+
+export function updatePaginationColor() {
+  const paginationPageCounter: HTMLDivElement | null = document.querySelector('.pagination-page-counter');
+  if (paginationPageCounter) {
+    paginationPageCounter.style.background = `${levelColors[currentWords.currentLevel]}`;
+  }
 }
