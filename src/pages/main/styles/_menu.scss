@@ -76,6 +76,11 @@
   }
 }
 
+.menuItemLogout {
+  position: absolute;
+  bottom: 0;
+}
+
 @keyframes menu--enabled {
   from {
     min-width: 95px;
