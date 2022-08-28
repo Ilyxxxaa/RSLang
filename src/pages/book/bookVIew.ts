@@ -1,56 +1,28 @@
 import { IWord } from '../../types/bookTypes';
-import './styles/main.scss'
-import { playSounds } from './audio';
-import { getWords } from './bookRequests';
-import { levelColors } from './levels';
+import './styles/main.scss';
+import playSounds from './audio';
+import getWords from './bookRequests';
+import { levelColors, createElement, backgrounds } from './utils';
 
-
-
-export async function updateCards(group: number, page: number) {
-  localStorage.setItem('currentPage', `${page}`);
-  localStorage.setItem('currentGroup', `${group}`);
-  const arrayWords = await getWords(group, page);
-  const bookContainer = document.querySelector('.book_container');
-  bookContainer?.append(await drawCards(arrayWords, group));
-}
-
-const cardsContainerBackgrounds = ['bg1', 'bg2', 'bg3', 'bg4', 'bg5', 'bg6'];
-
-function drawCards(array: IWord[], group: number) {
-  // if (document.querySelector('.cards-container')) document.querySelector('.cards-container')?.remove();
-  if (document.querySelector('.cards-container')) document.querySelector('.cards-container')?.remove();
-  const cardsContainer = createElement('div', 'cards-container');
-
-  const content: HTMLDivElement | null = document.querySelector('.content');
-  if (content) {
-    content.style.background = `url('../assets/images/book/bookBackgrounds/${cardsContainerBackgrounds[group]}.jpg')`;
-  }
-
-  const wordsContainer = createElement('div', 'words-container');
-  cardsContainer.append(wordsContainer);
-  array.forEach((card, index) => wordsContainer.append(createCardWord(card, group, index, wordsContainer)));
-
-  cardsContainer.append(createCard(array[0]));
-
-  return cardsContainer;
-}
+const noBgColor = '#FFFFFF';
 
 function createCardWord(card: IWord, group: number, index: number, wordsContainer: HTMLElement) {
   const cardWord = createElement('button', 'card-word');
-  (index == 0) ? (cardWord.classList.add('active-word'), cardWord.style.background = `${levelColors[group]}`) : null;
+  if (index === 0) {
+    cardWord.classList.add('active-word');
+    cardWord.style.background = `${levelColors[group]}`;
+  }
   cardWord.innerHTML = `<h2 class="">${card.word}</h2>
   <p class="">${card.wordTranslate}</p>
   </button>`;
 
   cardWord.addEventListener('click', () => {
     const prevActive: HTMLButtonElement | null = document.querySelector('.active-word');
-    if (prevActive) prevActive.style.background = `#FFFFFF`;
-    wordsContainer.querySelectorAll('.active-word').forEach(el => {
-      el.classList.remove('active-word');
-
-    });
+    if (prevActive) prevActive.style.background = noBgColor;
+    wordsContainer.querySelectorAll('.active-word').forEach((el) => el.classList.remove('active-word'));
     cardWord.classList.add('active-word');
     cardWord.style.background = `${levelColors[group]} `;
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
     updateCard(card);
   });
   return cardWord;
@@ -67,11 +39,11 @@ function createCard(cardData: IWord) {
 
   const cardAudioContainer = createElement('div', 'card-audio-container');
   const audio = document.createElement('audio');
-  audio.src = `https://serverforrslang.herokuapp.com/${cardData.audio}`
+  audio.src = `https://serverforrslang.herokuapp.com/${cardData.audio}`;
   const audioMeaning = document.createElement('audio');
-  audioMeaning.src = `https://serverforrslang.herokuapp.com/${cardData.audioMeaning}`
+  audioMeaning.src = `https://serverforrslang.herokuapp.com/${cardData.audioMeaning}`;
   const audioExample = document.createElement('audio');
-  audioExample.src = `https://serverforrslang.herokuapp.com/${cardData.audioExample}`
+  audioExample.src = `https://serverforrslang.herokuapp.com/${cardData.audioExample}`;
   cardAudioContainer.append(audio, audioMeaning, audioExample);
   cardAudioContainer.addEventListener('click', (e) => playSounds(e, cardAudioContainer));
 
@@ -111,12 +83,31 @@ function updateCard(cardData: IWord) {
   }
 }
 
-export function createElement(elem: string, className: string) {
-  const htmlElem: HTMLElement = document.createElement(elem);
-  htmlElem.classList.add(className);
-  return htmlElem;
+function drawCards(array: IWord[], group: number) {
+  if (document.querySelector('.cards-container')) document.querySelector('.cards-container')?.remove();
+  const cardsContainer = createElement('div', 'cards-container');
+
+  const content: HTMLDivElement | null = document.querySelector('.content');
+  if (content) {
+    content.style.background = `url('../assets/images/book/bookBackgrounds/${backgrounds[group]}.png')`;
+  }
+
+  const wordsContainer = createElement('div', 'words-container');
+  cardsContainer.append(wordsContainer);
+
+  array.forEach(
+    (card, index) => wordsContainer.append(createCardWord(card, group, index, wordsContainer)),
+  );
+
+  cardsContainer.append(createCard(array[0]));
+
+  return cardsContainer;
 }
 
-
-
-
+export default async function updateCards(group: number, page: number) {
+  localStorage.setItem('currentPage', `${page}`);
+  localStorage.setItem('currentGroup', `${group}`);
+  const arrayWords = await getWords(group, page);
+  const bookContainer = document.querySelector('.book_container');
+  bookContainer?.append(await drawCards(arrayWords, group));
+}

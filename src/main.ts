@@ -5,7 +5,7 @@ import Header from './pages/main/header';
 import MainPage from './pages/main/mainPage';
 import Games from './pages/games/games';
 import Statistics from './pages/stats/statistics';
-import { Book } from './pages/book/book';
+import Book from './pages/book/book';
 
 import './pages/main/styles/main.scss';
 // import './pages/games/styles/games.scss';

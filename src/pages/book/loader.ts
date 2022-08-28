@@ -1,5 +1,6 @@
-export class Loader {
+export default class Loader {
   content = document.querySelector('.page__content');
+
   loaderDiv = document.createElement('div');
 
   loaderInit() {
@@ -13,8 +14,11 @@ export class Loader {
 
   stopLoader() {
     const img: HTMLImageElement | null = document.querySelector('.card__img');
-    if (img) img.onload = function () {
-      const div = document.querySelector('.lds-ring');
+    if (img) {
+      img.onload = () => {
+        const div = document.querySelector('.lds-ring');
+        div?.remove();
+      };
     }
   }
 }
