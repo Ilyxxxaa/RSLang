@@ -2,7 +2,7 @@ import updateCards from './bookVIew';
 import currentWords from './bookState';
 import { levelsName, levelColors, createElement } from './utils';
 
-function choseWordlevel(element: HTMLElement, i: number) {
+function choseWordLevel(element: HTMLElement, i: number) {
   currentWords.currentLevel = i;
   const buttonLevel = <HTMLElement>element;
   console.log(buttonLevel);
@@ -12,7 +12,7 @@ function choseWordlevel(element: HTMLElement, i: number) {
   buttonLevel.classList.remove('unactive-level');
 
   const level = i;
-  updateCards(level, +currentWords.currentPage);
+  updateCards(level, currentWords.currentPage);
 }
 
 export default function drawLevelsBlock() {
@@ -46,7 +46,7 @@ export default function drawLevelsBlock() {
 
     levelButton.classList.add(`level-${i}-button`);
     levelsContainer.append(levelButton);
-    levelButton.addEventListener('click', () => choseWordlevel(levelButton, i));
+    levelButton.addEventListener('click', () => choseWordLevel(levelButton, i));
   }
 
   return levelsContainer;

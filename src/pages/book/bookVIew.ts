@@ -84,8 +84,14 @@ function updateCard(cardData: IWord) {
 }
 
 function drawCards(array: IWord[], group: number) {
-  if (document.querySelector('.cards-container')) document.querySelector('.cards-container')?.remove();
-  const cardsContainer = createElement('div', 'cards-container');
+  let cardsContainer = document.querySelector('.cards-container');
+  if (cardsContainer) {
+    cardsContainer.innerHTML = '';
+  } else {
+    cardsContainer = createElement('div', 'cards-container');
+    const bookContainer = document.querySelector('.book_container');
+    bookContainer?.append(cardsContainer);
+  }
 
   const content: HTMLDivElement | null = document.querySelector('.content');
   if (content) {
@@ -100,14 +106,11 @@ function drawCards(array: IWord[], group: number) {
   );
 
   cardsContainer.append(createCard(array[0]));
-
-  return cardsContainer;
 }
 
 export default async function updateCards(group: number, page: number) {
   localStorage.setItem('currentPage', `${page}`);
   localStorage.setItem('currentGroup', `${group}`);
   const arrayWords = await getWords(group, page);
-  const bookContainer = document.querySelector('.book_container');
-  bookContainer?.append(await drawCards(arrayWords, group));
+  await drawCards(arrayWords, group);
 }

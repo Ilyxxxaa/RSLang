@@ -15,25 +15,27 @@ function toEndPagination() {
   const currentPageSpan = document.querySelector('.current-page');
   if (currentPageSpan) currentPageSpan.innerHTML = '30';
   currentWords.currentPage = 29;
-  updateCards(+currentWords.currentLevel, currentWords.currentPage);
+  updateCards(currentWords.currentLevel, currentWords.currentPage);
 }
 
 function toNextPage() {
   if (currentWords.currentPage === 29) return;
-  currentWords.currentPage = +currentWords.currentPage + 1;
+
   const currentPageSpan = document.querySelector('.current-page');
+  currentWords.currentPage += 1;
   if (currentPageSpan) currentPageSpan.innerHTML = String(currentWords.currentPage + 1);
-  console.log(currentWords.currentLevel, currentWords.currentPage);
-  updateCards(+currentWords.currentLevel, currentWords.currentPage);
+
+  updateCards(currentWords.currentLevel, currentWords.currentPage);
 }
 
 function toPrevPage() {
   if (currentWords.currentPage === 0) return;
-  currentWords.currentPage = +currentWords.currentPage - 1;
+
   const currentPageSpan = document.querySelector('.current-page');
-  if (currentPageSpan) currentPageSpan.innerHTML = String(currentWords.currentPage - 1);
-  console.log(currentWords.currentLevel, currentWords.currentPage);
-  updateCards(+currentWords.currentLevel, currentWords.currentPage);
+  currentWords.currentPage -= 1;
+  if (currentPageSpan) currentPageSpan.innerHTML = String(currentWords.currentPage + 1);
+
+  updateCards(currentWords.currentLevel, currentWords.currentPage);
 }
 
 export default function drawPagination() {
@@ -45,7 +47,7 @@ export default function drawPagination() {
   const paginationPageCounter = createElement('div', 'pagination-page-counter');
   const page = createElement('span', 'current-page');
 
-  page.innerText = String(+currentWords.currentPage + 1);
+  page.innerText = String(currentWords.currentPage + 1);
 
   doubleLeft.classList.add('paginationButton_doubleLeft');
   doubleRight.classList.add('paginationButton_doubleRight');
