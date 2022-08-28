@@ -8,9 +8,10 @@ body {
 }
 .content {
   width: 100%;
-  min-height: 100vh;
+  // min-height: 100vh;
   background-image: url('../../../assets/images/header-bg.png');
   background-position: top center;
+  background-repeat: no-repeat;
 }
 
 .container {
@@ -26,3 +27,5 @@ body {
 @import 'about';
 @import 'example';
 @import 'adv';
+@import 'team';
+@import 'footer';

@@ -1,5 +1,5 @@
 import Menu from './pages/main/menu';
-import Authorization from './pages/main/authorization/authApp';
+import AuthorizationHandlers from './pages/main/authorization/authApp';
 import State from './types/state';
 import Header from './pages/main/header';
 import MainPage from './pages/main/mainPage';
@@ -8,6 +8,7 @@ import Statistics from './pages/stats/statistics';
 import Book from './pages/book/book';
 
 import './pages/main/styles/main.scss';
+import Footer from './pages/main/footer';
 // import './pages/games/styles/games.scss';
 
 class App {
@@ -15,7 +16,7 @@ class App {
 
   menu: Menu;
 
-  authorization: Authorization;
+  authorization: AuthorizationHandlers;
 
   header: Header;
 
@@ -27,26 +28,34 @@ class App {
 
   book: Book;
 
+  footer: Footer;
+
   constructor() {
     this.state = {
-      name: 'Ilya',
+      isAuthorized: false,
+      name: '',
+      userId: '',
+      token: '',
+      refreshToken: '',
       view: 'main',
     };
     this.menu = new Menu();
     this.header = new Header();
-    this.authorization = new Authorization();
+    this.authorization = new AuthorizationHandlers(this.state);
     this.mainPage = new MainPage();
     this.games = new Games();
     this.statistics = new Statistics();
     this.book = new Book();
+    this.footer = new Footer();
   }
 
   start() {
     this.menu.drawMenu();
     this.addListenersToMenuButtons();
     this.header.drawHeader();
-    Authorization.addAuthHandlers();
+    this.authorization.addAuthHandlers();
     this.mainPage.drawMainPage();
+    this.footer.drawFooter();
   }
 
   addListenersToMenuButtons() {
@@ -65,6 +74,7 @@ class App {
           nav.classList.remove('hide');
         }
         this.mainPage.drawMainPage();
+        this.footer.drawFooter();
       }
     });
 
@@ -95,6 +105,7 @@ class App {
           nav.classList.add('hide');
         }
         this.statistics.drawStatistics();
+        this.footer.drawFooter();
       }
     });
 
@@ -110,6 +121,7 @@ class App {
           nav.classList.add('hide');
         }
         this.book.drawBook();
+        this.footer.drawFooter();
       }
     });
   }
