@@ -5,7 +5,7 @@ import Header from './pages/main/header';
 import MainPage from './pages/main/mainPage';
 import Games from './pages/games/games';
 import Statistics from './pages/stats/statistics';
-import { Dictionary } from './pages/dictionary/dictionary';
+import Book from './pages/book/book';
 
 import './pages/main/styles/main.scss';
 import Footer from './pages/main/footer';
@@ -26,7 +26,7 @@ class App {
 
   statistics: Statistics;
 
-  dictionary: Dictionary;
+  book: Book;
 
   footer: Footer;
 
@@ -45,7 +45,7 @@ class App {
     this.mainPage = new MainPage();
     this.games = new Games();
     this.statistics = new Statistics();
-    this.dictionary = new Dictionary();
+    this.book = new Book();
     this.footer = new Footer();
   }
 
@@ -60,6 +60,9 @@ class App {
 
   addListenersToMenuButtons() {
     this.menu.menuItemMain.addEventListener('click', () => {
+      const content: HTMLDivElement | null = document.querySelector('.content'); // нужно возвращать фон заново
+      if (content) content.style.background = 'url("../assets/images/header-bg.png")'; // не знаю как лучше реализовать
+
       if (this.state.view !== 'main') {
         this.state.view = 'main';
 
@@ -117,7 +120,7 @@ class App {
         if (nav) {
           nav.classList.add('hide');
         }
-        this.dictionary.drawDictionary();
+        this.book.drawBook();
         this.footer.drawFooter();
       }
     });
