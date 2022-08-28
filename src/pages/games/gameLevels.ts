@@ -1,17 +1,14 @@
-import { Level } from '../../types/state';
-import Games from './games';
+import State, { Level } from '../../types/state';
 import './styles/games.scss';
 
 class GameLevels {
-  // state: State;
+  state: State;
 
-  // constructor(state: State) {
-  //   this.state = state;
-  // }
+  constructor(state: State) {
+    this.state = state;
+  }
 
-  static drawGameLevels(event: Event) {
-    const target = event.target as HTMLElement;
-
+  drawGameLevels() {
     const pageContent = document.querySelector('.page__content') as HTMLElement;
     pageContent.innerHTML = '';
 
@@ -20,7 +17,7 @@ class GameLevels {
 
     const gameName = document.createElement('h1');
     gameName.className = 'game__name';
-    gameName.textContent = `${target.id}`;
+    gameName.textContent = `${this.state.game}`;
 
     const gameLevelsContainer = document.createElement('div');
     gameLevelsContainer.className = 'levels';
@@ -33,17 +30,21 @@ class GameLevels {
       gameLevelsContainer.append(levelItem);
     });
 
+    const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'level__buttons';
+
     const buttonBack = document.createElement('button');
     buttonBack.className = 'game__button game__button_back';
     buttonBack.textContent = 'назад';
 
-    container.append(gameName, gameLevelsContainer, buttonBack);
-    pageContent.append(container);
+    const buttonStart = document.createElement('button');
+    buttonStart.className = 'game__button game__button_start';
+    buttonStart.id = `${this.state.game}`;
+    buttonStart.textContent = 'начать';
 
-    buttonBack.addEventListener('click', () => {
-      const games = new Games();
-      games.drawGames();
-    });
+    buttonContainer.append(buttonBack, buttonStart);
+    container.append(gameName, gameLevelsContainer, buttonContainer);
+    pageContent.append(container);
   }
 }
 

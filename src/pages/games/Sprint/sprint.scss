@@ -1,0 +1,62 @@
+.sprint__game {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 600px;
+  height: 400px;
+  margin: 100px auto 0;
+  border: 5px solid white;
+  border-radius: 10px;
+  box-shadow: 0px 2px 10px 3px rgb(0 0 0 / 50%);
+  background: white;
+}
+
+.sprint__checkbox {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 120px;
+  margin: 30px 0;
+}
+
+.checkbox__item {
+  width: 25px;
+  height: 25px;
+  border: 2px solid black;
+  border-radius: 50%;
+}
+
+.word {
+  font-size: 30px;
+  color:black;
+}
+
+.word_en {
+  font-size: 38px;
+}
+
+.button__container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 40px 0;
+}
+
+.button {
+  width: 190px;
+  height: 55px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.button_true {
+  background-color: rgb(229, 151, 50);
+}
+
+.button_false {
+  background-color: rgb(120, 173, 217);
+}

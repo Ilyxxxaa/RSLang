@@ -1,11 +1,11 @@
 import Menu from './pages/main/menu';
 import Authorization from './pages/main/authorization/authApp';
-import State, { Game } from './types/state';
 import Header from './pages/main/header';
 import MainPage from './pages/main/mainPage';
-import Games from './pages/games/games';
+import GamesController from './pages/games/gamesController';
 import Statistics from './pages/stats/statistics';
 import { Dictionary } from './pages/dictionary/dictionary';
+import State from './types/state';
 
 import './pages/main/styles/main.scss';
 // import './pages/games/styles/games.scss';
@@ -21,7 +21,7 @@ class App {
 
   mainPage: MainPage;
 
-  games: Games;
+  games: GamesController;
 
   statistics: Statistics;
 
@@ -31,14 +31,14 @@ class App {
     this.state = {
       name: 'Ilya',
       view: 'main',
-      game: Game.sprint,
-      level: 'A1',
+      game: '',
+      level: '',
     };
     this.menu = new Menu();
     this.header = new Header();
     this.authorization = new Authorization();
     this.mainPage = new MainPage();
-    this.games = new Games();
+    this.games = new GamesController(this.state);
     this.statistics = new Statistics();
     this.dictionary = new Dictionary();
   }
@@ -78,7 +78,9 @@ class App {
         if (nav) {
           nav.classList.add('hide');
         }
-        this.games.drawGames();
+        this.games.clearPageContent();
+        this.games.drawGamesCards();
+        this.games.addHandlersToChooseGame();
         (document.querySelector('.content') as HTMLElement).style.background = '#a198db';
       }
     });
