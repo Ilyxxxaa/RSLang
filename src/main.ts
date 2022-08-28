@@ -1,13 +1,14 @@
 import Menu from './pages/main/menu';
-import Authorization from './pages/main/authorization/authApp';
+import AuthorizationHandlers from './pages/main/authorization/authApp';
+import State from './types/state';
 import Header from './pages/main/header';
 import MainPage from './pages/main/mainPage';
 import GamesController from './pages/games/gamesController';
 import Statistics from './pages/stats/statistics';
-import { Dictionary } from './pages/dictionary/dictionary';
-import State from './types/state';
+import Book from './pages/book/book';
 
 import './pages/main/styles/main.scss';
+import Footer from './pages/main/footer';
 // import './pages/games/styles/games.scss';
 
 class App {
@@ -15,7 +16,7 @@ class App {
 
   menu: Menu;
 
-  authorization: Authorization;
+  authorization: AuthorizationHandlers;
 
   header: Header;
 
@@ -25,34 +26,45 @@ class App {
 
   statistics: Statistics;
 
-  dictionary: Dictionary;
+  book: Book;
+
+  footer: Footer;
 
   constructor() {
     this.state = {
-      name: 'Ilya',
+      isAuthorized: false,
+      name: '',
+      userId: '',
+      token: '',
+      refreshToken: '',
       view: 'main',
       game: '',
       level: '',
     };
     this.menu = new Menu();
     this.header = new Header();
-    this.authorization = new Authorization();
+    this.authorization = new AuthorizationHandlers(this.state);
     this.mainPage = new MainPage();
     this.games = new GamesController(this.state);
     this.statistics = new Statistics();
-    this.dictionary = new Dictionary();
+    this.book = new Book();
+    this.footer = new Footer();
   }
 
   start() {
     this.menu.drawMenu();
     this.addListenersToMenuButtons();
     this.header.drawHeader();
-    Authorization.addAuthHandlers();
+    this.authorization.addAuthHandlers();
     this.mainPage.drawMainPage();
+    this.footer.drawFooter();
   }
 
   addListenersToMenuButtons() {
     this.menu.menuItemMain.addEventListener('click', () => {
+      const content: HTMLDivElement | null = document.querySelector('.content'); // нужно возвращать фон заново
+      if (content) content.style.background = 'url("../assets/images/header-bg.png")'; // не знаю как лучше реализовать
+
       if (this.state.view !== 'main') {
         this.state.view = 'main';
 
@@ -64,6 +76,7 @@ class App {
           nav.classList.remove('hide');
         }
         this.mainPage.drawMainPage();
+        this.footer.drawFooter();
       }
     });
 
@@ -97,6 +110,7 @@ class App {
           nav.classList.add('hide');
         }
         this.statistics.drawStatistics();
+        this.footer.drawFooter();
       }
     });
 
@@ -111,7 +125,8 @@ class App {
         if (nav) {
           nav.classList.add('hide');
         }
-        this.dictionary.drawDictionary();
+        this.book.drawBook();
+        this.footer.drawFooter();
       }
     });
   }

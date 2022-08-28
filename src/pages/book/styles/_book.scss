@@ -1,0 +1,123 @@
+// $wordActiveColor: #2cba92;
+
+.book_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.words-title,
+.book-title {
+  color: #FFFFFF;
+  text-align: left;
+}
+
+.cards-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem auto;
+}
+
+.words-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  // margin: 1rem auto;
+}
+
+.card {
+  min-width: 400px;
+  min-height: 532px;
+
+  color: #2c2647;
+  background-color: #FFFFFF;
+  border-radius: 5px;
+  overflow: hidden;
+
+  position: relative;
+}
+
+.card-img-container {
+  height: 200px;
+}
+
+.card-content {
+  padding: 1rem;
+}
+
+.card-word {
+  position: relative;
+  width: 180px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 0.5rem;
+  background-color: #FFFFFF;
+  border-radius: 5px;
+  border: none;
+  overflow: hidden;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.card-word:hover {
+  background-color: #ffffff82;
+}
+
+.card-container {
+  width: 450px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  background-color: rgb(146 91 181 / 71%);
+
+  box-shadow: rgb(0 0 0 / 20%) 0px 0px 10px;
+  border-radius: 10px;
+  margin: 20px;
+  padding: 24px;
+
+  color: #FFFFFF;
+}
+
+.word-container,
+.word-description-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.difficult-card-word::after {
+  content: "";
+  background: #ef0a0a;
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  position: absolute;
+  right: -30px;
+  top: -30px;
+}
+
+.difficult-card::after {
+  display: block;
+  margin: 5px;
+
+  position: absolute;
+  left: 5px;
+  top: 5px;
+
+  background-color: #ef0a0a;
+  color: #FFFFFF;
+  font-weight: 500;
+  border: 5px solid transparent;
+  border-radius: 5px;
+  content: 'Сложное';
+  cursor: pointer;
+}
