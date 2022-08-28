@@ -5,6 +5,10 @@ import currentWords from './bookState';
 
 export default class Book {
   public async drawBook() {
+    const content: HTMLDivElement | null = document.querySelector('.content');
+    if (content) {
+      content.style.background = 'url("../assets/images/book/bookBackgrounds/bg2.png")';
+    }
     console.log(currentWords.currentLevel, currentWords.currentPage);
     const pageContent = document.querySelector('.page__content');
     if (pageContent) pageContent.innerHTML = '';

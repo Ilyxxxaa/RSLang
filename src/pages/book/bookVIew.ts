@@ -2,7 +2,7 @@ import { IWord } from '../../types/bookTypes';
 import './styles/main.scss';
 import playSounds from './audio';
 import getWords from './bookRequests';
-import { levelColors, createElement, backgrounds } from './utils';
+import { levelColors, createElement } from './utils';
 
 const noBgColor = '#FFFFFF';
 
@@ -91,11 +91,6 @@ function drawCards(array: IWord[], level: number) {
     cardsContainer = createElement('div', 'cards-container');
     const bookContainer = document.querySelector('.book_container');
     bookContainer?.append(cardsContainer);
-  }
-
-  const content: HTMLDivElement | null = document.querySelector('.content');
-  if (content) {
-    content.style.background = `url('../assets/images/book/bookBackgrounds/${backgrounds[level]}.png')`;
   }
 
   const wordsContainer = createElement('div', 'words-container');
