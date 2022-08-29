@@ -169,16 +169,16 @@ header {
 } ;
 
 .user {
-  display: flex;
   margin: 5px auto;
 
   &__avatar {
-    width: 50px;
+    width: 60px;
   }
 
   &__name {
-    font-size: 12px;
+    font-size: 14px;
     color: white;
+    text-align: center;
   }
 }
 

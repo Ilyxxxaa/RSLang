@@ -1,5 +1,9 @@
 export default interface State {
+  isAuthorized: boolean;
+  userId: string;
   name: string;
+  token: string;
+  refreshToken: string;
   view: View;
   game: string;
   level: Level;
@@ -12,4 +16,11 @@ export type Level = '' | 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 export enum Game {
   audiocall = 'Аудиовызов',
   sprint = 'Спринт',
+}
+
+export interface AudioCallState {
+  name: string;
+  arrayOfIndexes: Number[];
+  arrayOfRestIndexes: Number[];
+  wordsArray: Number[];
 }

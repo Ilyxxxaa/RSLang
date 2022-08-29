@@ -1,57 +1,79 @@
 import './audioCall.scss';
-import { IWord } from '../../../types/dictionaryTypes';
+import Utils from '../../../common/utils';
+import AudioCallCreator from './audioCallCreator';
+import { AudioCallState } from '../../../types/state';
 
 export default class AudioCall {
-  audioCallContainer: HTMLElement = document.createElement('div');
+  audioCallCreator: AudioCallCreator;
 
-  audioButton: HTMLButtonElement = document.createElement('button');
+  state: AudioCallState;
 
-  audioCallWordsContainer: HTMLElement = document.createElement('div');
-
-  drawAudioCall() {
-    this.createGameContainer();
-    const pageContent = document.querySelector('.page__content');
-    if (pageContent) {
-      pageContent.innerHTML = '';
-      pageContent.append(this.audioCallContainer);
-    }
-    this.getWords();
+  constructor() {
+    this.state = {
+      name: 'Ilya',
+      arrayOfIndexes: [],
+      arrayOfRestIndexes: [],
+      wordsArray: [],
+    };
+    this.audioCallCreator = new AudioCallCreator();
   }
 
-  group: number = 1;
+  drawAudioCall() {
+    this.audioCallCreator.createAudioCallContainer();
+    this.createArray();
+    this.getWords();
+    this.addListeners();
+  }
 
-  serverAdress = 'https://serverforrslang.herokuapp.com';
+  group: number = 0;
 
-  wordsPath = `${this.serverAdress}/words`;
+  createArray() {
+    const array = Array.from({ length: 20 }, (v, i) => i).sort(() => 0.5 - Math.random());
+    this.state.arrayOfIndexes = [...array];
+    this.state.arrayOfRestIndexes = [...array];
+  }
+
+  createSetOfIndexes() {
+    const set: Set<Number> = new Set();
+    const lastNumber = this.state.arrayOfRestIndexes[this.state.arrayOfRestIndexes.length - 1];
+    set.add(lastNumber);
+    this.state.arrayOfRestIndexes.pop();
+    while (set.size < 5) {
+      set.add(this.state.arrayOfIndexes[Utils.randomInteger(0, 19)]);
+    }
+    this.state.wordsArray = Array.from(set);
+    console.log(this.state);
+  }
 
   getWords = async () => {
-    const response = await fetch(`${this.wordsPath}/?group=${this.group}`);
-    const words = await response.json();
-    console.log(words);
-    const audio: HTMLAudioElement = document.createElement('audio');
-    const src = `${this.serverAdress}/${words[3].audio}`;
-    audio.src = src;
-    const pageContent = document.querySelector('.page__content');
-    words.forEach((item: IWord) => {
-      const word = document.createElement('div');
-      word.classList.add('audioCall__words-item');
-      word.textContent = `${item.word}`;
-      this.audioCallWordsContainer.append(word);
-    });
-    if (pageContent) {
-      pageContent.addEventListener('click', () => {
-        console.log('click');
-        audio.play();
+    const words = await Utils.getWords(this.group);
+    this.createSetOfIndexes();
+    const rigthWord = this.state.wordsArray[0];
+    this.audioCallCreator.audioCallWordsContainer.innerHTML = '';
+    this.state.wordsArray
+      .sort(() => 0.5 - Math.random())
+      .forEach((item) => {
+        const word = document.createElement('div');
+        if (item === rigthWord) {
+          word.setAttribute('data-answer', 'true');
+        }
+        word.classList.add('audioCall__words-item');
+        word.textContent = `${words[+item].word}`;
+        this.audioCallCreator.audioCallWordsContainer.append(word);
       });
-    }
+
+    // words.forEach((item: IWord) => {
+    //   const word = document.createElement('div');
+    //   word.classList.add('audioCall__words-item');
+    //   word.textContent = `${item.word}`;
+    //   this.audioCallCreator.audioCallWordsContainer.append(word);
+    // });
+    this.audioCallCreator.audioButton.addEventListener('click', () => {});
   };
 
-  createGameContainer() {
-    this.audioCallContainer.classList.add('audioCall__container');
-    this.audioButton.classList.add('audioCall__audio-btn');
-    this.audioButton.innerHTML = ' <img src="./assets/images/audio-icon.svg" alt="audio">';
-    this.audioCallContainer.append(this.audioButton);
-    this.audioCallWordsContainer.classList.add('audioCall__words');
-    this.audioCallContainer.append(this.audioCallWordsContainer);
+  addListeners() {
+    this.audioCallCreator.acceptButton.addEventListener('click', () => {
+      this.getWords();
+    });
   }
 }

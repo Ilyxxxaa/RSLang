@@ -1,20 +1,17 @@
-import AuthModalView from './authview';
-import {
-  showAuthModal,
-  closeAuthModal,
-  showPassword,
-  signIn,
-  signUp,
-  showAuthorizedUser,
-  clearLocalStorage,
-} from './authFunc';
+import Authorization from './authFunc';
+import State from '../../../types/state';
 
-class Authorization {
-  signUpModal = AuthModalView.drawSignUpModal();
+class AuthorizationHandlers {
+  state: State;
 
-  signInModal = AuthModalView.drawSignInModal();
+  authorization: Authorization;
 
-  static addAuthHandlers() {
+  constructor(state: State) {
+    this.state = state;
+    this.authorization = new Authorization(state);
+  }
+
+  addAuthHandlers() {
     this.addHandlerToShowModal();
     this.addHandlerToShowModalAdd();
     this.addHandlerToCloseModal();
@@ -24,64 +21,75 @@ class Authorization {
     this.addHandlerToUnAuth();
   }
 
-  static addHandlerToShowModal() {
-    document.querySelector('.header__auth')?.addEventListener('click', showAuthModal);
+  addHandlerToShowModal() {
+    document
+      .querySelector('.header__auth')
+      ?.addEventListener('click', this.authorization.showAuthModal);
   }
 
-  static addHandlerToCloseModal() {
+  addHandlerToCloseModal() {
     document
       .querySelectorAll('.modal')
-      ?.forEach((modal) => modal.addEventListener('click', closeAuthModal));
+      ?.forEach((modal) => modal.addEventListener('click', this.authorization.closeAuthModal));
   }
 
-  static addHandlerToShowModalAdd() {
-    document.querySelectorAll('.auth-button_add')?.forEach((button) => button.addEventListener('click', (event: Event) => {
-      closeAuthModal(event);
-      showAuthModal(event);
-    }));
+  addHandlerToShowModalAdd() {
+    document.querySelectorAll('.auth-button_add')?.forEach((button) =>
+      button.addEventListener('click', (event: Event) => {
+        this.authorization.closeAuthModal(event);
+        this.authorization.showAuthModal(event);
+      }),
+    );
   }
 
-  static addHandlerToShowPassword() {
+  addHandlerToShowPassword() {
     document
       .querySelectorAll('.checkbox')
-      ?.forEach((elem) => elem.addEventListener('input', showPassword));
+      ?.forEach((elem) => elem.addEventListener('input', this.authorization.showPassword));
   }
 
-  static addHandlerToAuth() {
-    document.querySelectorAll('.form').forEach((form) => form.addEventListener('submit', (event: Event) => {
-      const target = event.target as HTMLFormElement;
-      event.preventDefault();
-      const email = (target.querySelector(`#${target.dataset.form}-email`) as HTMLInputElement)
-        .value;
-      const password = (target.querySelector(
-        `#${target.dataset.form}-password`,
-      ) as HTMLInputElement).value;
-      (document.querySelector(
-        `#${target.dataset.form}-button`,
-      ) as HTMLInputElement).disabled = true;
-      if (target.classList.contains('form_signin')) {
-        signIn(email, password);
-      }
-      if (target.classList.contains('form_signup')) {
-        const name = (target.querySelector(`#${target.dataset.form}-name`) as HTMLInputElement)
+  addHandlerToAuth() {
+    document.querySelectorAll('.form').forEach((form) =>
+      form.addEventListener('submit', (event: Event) => {
+        const target = event.target as HTMLFormElement;
+        event.preventDefault();
+        const email = (target.querySelector(`#${target.dataset.form}-email`) as HTMLInputElement)
           .value;
-        signUp(name, email, password);
-      }
-    }));
+        const password = (target.querySelector(
+          `#${target.dataset.form}-password`,
+        ) as HTMLInputElement).value;
+        (document.querySelector(
+          `#${target.dataset.form}-button`,
+        ) as HTMLInputElement).disabled = true;
+        if (target.classList.contains('form_signin')) {
+          this.authorization.signIn(email, password);
+        }
+        if (target.classList.contains('form_signup')) {
+          const name = (target.querySelector(`#${target.dataset.form}-name`) as HTMLInputElement)
+            .value;
+          this.authorization.signUp(name, email, password);
+        }
+      }),
+    );
   }
 
-  static addHandlerToUnAuth() {
+  addHandlerToUnAuth() {
     document.querySelector('.user__avatar')?.addEventListener('click', () => {
-      clearLocalStorage('user');
-      showAuthorizedUser('user');
+      this.state.isAuthorized = false;
+      this.state.name = '';
+      this.state.userId = '';
+      this.state.token = '';
+      this.state.refreshToken = '';
+      this.authorization.clearLocalStorage('user');
+      this.authorization.showAuthorizedUser('user');
     });
   }
 
-  static addHandlerToLoadWindow() {
+  addHandlerToLoadWindow() {
     window.addEventListener('load', () => {
-      showAuthorizedUser('user');
+      this.authorization.showAuthorizedUser('user');
     });
   }
 }
 
-export default Authorization;
+export default AuthorizationHandlers;
