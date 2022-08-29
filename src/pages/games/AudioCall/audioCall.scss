@@ -37,15 +37,29 @@
   margin-bottom: 30px;
 }
 .audioCall__words-item {
-  cursor: pointer;
+  cursor: default;
   font-size: 25px;
   padding: 7px;
   border-radius: 10px;
+  transition: all 0.2s;
+  border: 2px;
   &:not(:last-child) {
     margin-right: 20px;
   }
-  &:hover {
-    background-color: rgba(250, 252, 254, 0.3);
+  &--right {
+    border: 2px solid green;
+    background-color: #45e071;
+  }
+  &--wrong {
+    border: 2px solid #ff0000;
+    background-color: #ff0000;
+    color: #fff;
+  }
+  &-enabled {
+    &:hover {
+      background-color: rgba(250, 252, 254, 0.3);
+      cursor: pointer;
+    }
   }
 }
 
@@ -66,5 +80,9 @@
   }
   &:active {
     scale: 1.04;
+  }
+  &:disabled {
+    background-color: rgba(250, 252, 254, 0.1);
+    cursor: auto;
   }
 }
