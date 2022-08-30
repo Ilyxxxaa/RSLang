@@ -1,4 +1,4 @@
-import State, { Level } from '../../types/state';
+import State from '../../types/state';
 import './styles/games.scss';
 
 class GameLevels {
@@ -22,7 +22,7 @@ class GameLevels {
     const gameLevelsContainer = document.createElement('div');
     gameLevelsContainer.className = 'levels';
 
-    const levels: Level[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+    const levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
     levels.forEach((level) => {
       const levelItem = document.createElement('div');
       levelItem.className = 'level';
@@ -41,6 +41,7 @@ class GameLevels {
     buttonStart.className = 'game__button game__button_start';
     buttonStart.id = `${this.state.game}`;
     buttonStart.textContent = 'начать';
+    buttonStart.disabled = true;
 
     buttonContainer.append(buttonBack, buttonStart);
     container.append(gameName, gameLevelsContainer, buttonContainer);

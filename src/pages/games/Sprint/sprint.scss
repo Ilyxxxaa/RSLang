@@ -1,3 +1,7 @@
+.hidden {
+  display: none;
+}
+
 .sprint__game {
   display: flex;
   flex-direction: column;
@@ -17,7 +21,11 @@
   justify-content: space-between;
   align-items: center;
   width: 120px;
-  margin: 30px 0;
+  margin: 30px 0 0;
+}
+
+.sprint__points {
+  margin: 0 0 10px;
 }
 
 .checkbox__item {
@@ -25,6 +33,11 @@
   height: 25px;
   border: 2px solid black;
   border-radius: 50%;
+
+  &_active {
+    border: 2px solid rgb(160, 89, 218);
+    background: rgb(160, 89, 218);
+  }
 }
 
 .word {
@@ -43,7 +56,7 @@
   margin: 40px 0;
 }
 
-.button {
+.sprint__button {
   width: 190px;
   height: 55px;
   border: none;
@@ -51,12 +64,12 @@
   color: white;
   font-size: 24px;
   cursor: pointer;
-}
 
-.button_true {
-  background-color: rgb(229, 151, 50);
-}
+  &_true {
+    background-color: rgb(229, 151, 50);
+  }
 
-.button_false {
-  background-color: rgb(120, 173, 217);
+  &_false {
+    background-color: rgb(120, 173, 217);
+  }
 }

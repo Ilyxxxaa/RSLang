@@ -67,6 +67,11 @@
 
   &_start {
     background:#e17f3d;
+
+    &:disabled {
+      background:#dd8e5a;
+      cursor: auto;
+    }
     
     &:hover {
       background:#dd8e5a;
@@ -107,6 +112,11 @@
   border: 3px solid white;
   border-radius: 50%;
   cursor: pointer;
+
+  &_active {
+    border: 3px solid #e17f3d;
+    background-color: #e17f3d;
+  }
 }
 
 .level__buttons {

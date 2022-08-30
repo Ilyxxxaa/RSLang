@@ -1,11 +1,8 @@
 import { IUserAuthorized } from '../../../types/auth';
 import State from '../../../types/state';
 import { requestPost } from './requests';
+import { signInLink, signUpLink } from '../../../const';
 import AuthModalView from './authview';
-
-const baseLink = 'https://serverforrslang.herokuapp.com';
-const signUpLink = `${baseLink}/users`;
-const signInLink = `${baseLink}/signin`;
 
 class Authorization {
   signUpModal = AuthModalView.drawSignUpModal();
