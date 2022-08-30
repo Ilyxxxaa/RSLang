@@ -23,7 +23,7 @@ export default class AudioCall {
     this.createArray();
     await this.getWords();
     this.addListeners();
-    await this.audioCallCreator.wordAudio.play();
+    // await this.audioCallCreator.wordAudio.play();
   }
 
   group: number = 0;
@@ -57,25 +57,30 @@ export default class AudioCall {
         const word = document.createElement('div');
         if (item === rigthWord) {
           word.setAttribute('data-answer', 'true');
+          this.audioCallCreator.wordAudio.setAttribute('autoplay', '');
           this.audioCallCreator.wordAudio.src = `https://serverforrslang.herokuapp.com/${
             words[+item].audio
           }`;
+          this.audioCallCreator.addSrcToWordImage(
+            `https://serverforrslang.herokuapp.com/${words[+item].image}`,
+          );
+          this.audioCallCreator.wordText.textContent = `${words[+item].word}`;
         } else {
           word.setAttribute('data-answer', 'false');
         }
         word.classList.add('audioCall__words-item', 'audioCall__words-item-enabled');
-        word.textContent = `${words[+item].word}`;
+        word.textContent = `${words[+item].wordTranslate}`;
 
         this.audioCallCreator.audioCallWordsContainer.append(word);
         this.audioCallCreator.acceptButton.disabled = true;
         this.audioCallCreator.addListenerToWordContainer();
-        this.audioCallCreator.wordAudio.play();
       });
   };
 
   addListeners() {
     this.audioCallCreator.acceptButton.addEventListener('click', () => {
       this.getWords();
+      this.audioCallCreator.toggleVisionWord();
     });
   }
 }
