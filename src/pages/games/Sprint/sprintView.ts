@@ -1,5 +1,5 @@
 import State from '../../../types/state';
-import './sprint.scss';
+import './_sprint.scss';
 
 class SprintView {
   state: State;
@@ -15,8 +15,14 @@ class SprintView {
     const sprintContainer = document.createElement('div');
     sprintContainer.className = 'sprint';
 
+    const sprintClose = document.createElement('img');
+    sprintClose.className = 'sprint__close';
+    sprintClose.alt = 'cancel';
+    sprintClose.src = '../assets/images/cancel.png';
+
     const sprintScore = document.createElement('div');
     sprintScore.className = 'sprint__score';
+    sprintScore.textContent = '0';
 
     const sprintGame = document.createElement('div');
     sprintGame.className = 'sprint__game';
@@ -56,7 +62,7 @@ class SprintView {
     buttonTrue.value = 'true';
     buttonTrue.textContent = 'верно';
 
-    sprintContainer.append(sprintGame);
+    sprintContainer.append(sprintClose, sprintScore, sprintGame);
     checkbox.append(checkboxItem1, checkboxItem2, checkboxItem3);
     buttonContainer.append(buttonFalse, buttonTrue);
     sprintGame.append(checkbox, sprintPoints, word, translate, buttonContainer);

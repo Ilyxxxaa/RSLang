@@ -14,7 +14,10 @@ export default interface State {
     wordsForGame: IWord[] | [];
     gameCurrentWord?: IWord;
     countRightAnswers: number;
+    countRightAnswersInARow: number;
     score: number;
+    rightAnswers: IWord[] | [];
+    wrongAnswers: IWord[] | [];
   }
 }
 

@@ -45,6 +45,10 @@ class App {
         score: 0,
         countRightAnswers: 0,
         wordsForGame: [],
+        rightAnswers: [],
+        wrongAnswers: [],
+        countRightAnswersInARow: 0,
+        // gameCurrentWord: {},
       },
     };
     this.menu = new Menu();

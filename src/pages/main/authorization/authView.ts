@@ -212,7 +212,7 @@ class AuthModalView {
     signUpModal.append(cancel, signUpTitle, signUpForm, signIn);
     modalWindow.append(modalOverlay, signUpModal);
 
-    document.querySelector('body')?.append(modalWindow);
+    document.querySelector('.page__content')?.append(modalWindow);
   }
 }
 

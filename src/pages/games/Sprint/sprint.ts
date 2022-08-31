@@ -3,6 +3,7 @@ import getRandomNumber from '../random';
 import SprintView from './sprintView';
 import { requestGet } from '../../main/authorization/requests';
 import { baseLink } from '../../../const';
+import SprintModal from './sprintModal';
 
 class Sprint {
   state: State;
@@ -24,7 +25,10 @@ class Sprint {
 
   drawSprintView() {
     this.sprintView.drawSprintGameView();
+    SprintModal.drawSprintInModal();
     this.addHandlersToSprintButtons();
+    this.showSprintModalWindow();
+    this.closeSprintModalWindow();
   }
 
   addHandlersToSprintButtons() {
@@ -68,11 +72,6 @@ class Sprint {
     }
   }
 
-  endSprintGame() {
-    document.querySelector('.sprint')?.classList.add('hidden');
-    (document.querySelector('.page__content') as HTMLElement).textContent = 'ИГРА ЗАВРШЕНА';
-  }
-
   checkAnswer(event: Event) {
     const target = event.target as HTMLButtonElement;
     const wordRu = document.querySelector('.word_ru') as HTMLElement;
@@ -80,17 +79,46 @@ class Sprint {
     const userAnswer = String(rightAnswer) === target.value;
     const checkbox = document.querySelectorAll<HTMLElement>('.checkbox__item');
     if (userAnswer) {
-      this.state.sprint.countRightAnswers += 1;
+      this.state.sprint.countRightAnswersInARow += 1;
       checkbox?.forEach((item, index) => {
-        if ((index + 1) === this.state.sprint.countRightAnswers) {
+        if (index + 1 === this.state.sprint.countRightAnswersInARow % 4) {
           item.classList.add('checkbox__item_active');
+          // if (this.state.sprint.gameCurrentWord) {
+          //   this.state.sprint.rightAnswers.push(this.state.sprint.gameCurrentWord);
+          // }
         }
       });
     }
-    if (!userAnswer || this.state.sprint.countRightAnswers === 4) {
-      this.state.sprint.countRightAnswers = 0;
+    if (!userAnswer || this.state.sprint.countRightAnswersInARow % 4 === 0) {
+      this.state.sprint.countRightAnswersInARow = 0;
       checkbox.forEach((item) => item.classList.remove('checkbox__item_active'));
     }
+    console.log('слово в стейте', this.state.sprint.gameCurrentWord);
+    console.log('правильный перевод', this.state.sprint.gameCurrentWord?.wordTranslate);
+    console.log('рандомный перевод', wordRu.textContent);
+    console.log('rightAnswer', String(rightAnswer));
+    console.log('target', target.value);
+    console.log('Пользователь ответил', String(rightAnswer) === target.value);
+  }
+
+  endSprintGame() {
+    document.querySelector('.sprint')?.classList.add('hidden');
+    (document.querySelector('.page__content') as HTMLElement).textContent = 'ИГРА ЗАВРШЕНА';
+  }
+
+  showSprintModalWindow() {
+    document.querySelector('.sprint__close')?.addEventListener('click', () => {
+      document.querySelector('.sprint-modal')?.classList.remove('hidden');
+      console.log('hello');
+      (document.querySelector('body') as HTMLElement).style.overflow = 'hidden';
+    });
+  }
+
+  closeSprintModalWindow() {
+    document.querySelector('.sprint-modal__close')?.addEventListener('click', () => {
+      document.querySelector('.sprint-modal')?.classList.add('hidden');
+      (document.querySelector('body') as HTMLElement).style.overflow = 'visible';
+    });
   }
 }
 
