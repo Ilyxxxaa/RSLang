@@ -2,72 +2,79 @@ import './audioCall.scss';
 import Utils from '../../../common/utils';
 import AudioCallCreator from './audioCallCreator';
 import { AudioCallState } from '../../../types/state';
+import AudioCallModal from './audioCallModal';
 
 export default class AudioCall {
   audioCallCreator: AudioCallCreator;
 
-  state: AudioCallState;
+  audioCallModal: AudioCallModal;
+
+  audioCallState: AudioCallState;
 
   constructor() {
-    this.state = {
-      name: 'Ilya',
+    this.audioCallState = {
       arrayOfIndexes: [],
       arrayOfRestIndexes: [],
       wordsArray: [],
+      wordsCount: 0,
+      rightWordsCount: 0,
     };
-    this.audioCallCreator = new AudioCallCreator();
+    this.audioCallCreator = new AudioCallCreator(this.audioCallState);
+    this.audioCallModal = new AudioCallModal(this.audioCallState);
   }
 
   async drawAudioCall() {
     this.audioCallCreator.createAudioCallContainer();
     this.createArray();
-    await this.getWords();
-    this.addListeners();
-    // await this.audioCallCreator.wordAudio.play();
+    // await this.getWords();
+    // this.addListeners();
+    this.audioCallModal.drawResults();
   }
 
   group: number = 0;
 
   createArray() {
     const array = Array.from({ length: 20 }, (v, i) => i).sort(() => 0.5 - Math.random());
-    this.state.arrayOfIndexes = [...array];
-    this.state.arrayOfRestIndexes = [...array];
+    this.audioCallState.arrayOfIndexes = [...array];
+    this.audioCallState.arrayOfRestIndexes = [...array];
   }
 
   createSetOfIndexes() {
     const set: Set<Number> = new Set();
-    const lastNumber = this.state.arrayOfRestIndexes[this.state.arrayOfRestIndexes.length - 1];
+    const lastNumber = this.audioCallState.arrayOfRestIndexes[
+      this.audioCallState.arrayOfRestIndexes.length - 1
+    ];
     set.add(lastNumber);
-    this.state.arrayOfRestIndexes.pop();
+    this.audioCallState.arrayOfRestIndexes.pop();
     while (set.size < 5) {
-      set.add(this.state.arrayOfIndexes[Utils.randomInteger(0, 19)]);
+      set.add(this.audioCallState.arrayOfIndexes[Utils.randomInteger(0, 19)]);
     }
-    this.state.wordsArray = Array.from(set);
-    console.log(this.state);
+    this.audioCallState.wordsArray = Array.from(set);
+    console.log(this.audioCallState);
   }
 
   getWords = async () => {
     const words = await Utils.getWords(this.group);
     this.createSetOfIndexes();
-    const rigthWord = this.state.wordsArray[0];
+    const rigthWord = this.audioCallState.wordsArray[0];
     this.audioCallCreator.audioCallWordsContainer.innerHTML = '';
-    this.state.wordsArray
+    this.audioCallState.wordsArray
       .sort(() => 0.5 - Math.random())
       .forEach((item) => {
         const word = document.createElement('div');
         if (item === rigthWord) {
           word.setAttribute('data-answer', 'true');
-          this.audioCallCreator.wordAudio.setAttribute('autoplay', '');
-          this.audioCallCreator.wordAudio.src = `https://serverforrslang.herokuapp.com/${
+          this.audioCallCreator.wordAudio.src = `${Utils.returnServerAdress()}/${
             words[+item].audio
           }`;
           this.audioCallCreator.addSrcToWordImage(
-            `https://serverforrslang.herokuapp.com/${words[+item].image}`,
+            `${Utils.returnServerAdress()}/${words[+item].image}`,
           );
           this.audioCallCreator.wordText.textContent = `${words[+item].word}`;
         } else {
           word.setAttribute('data-answer', 'false');
         }
+
         word.classList.add('audioCall__words-item', 'audioCall__words-item-enabled');
         word.textContent = `${words[+item].wordTranslate}`;
 
@@ -79,8 +86,16 @@ export default class AudioCall {
 
   addListeners() {
     this.audioCallCreator.acceptButton.addEventListener('click', () => {
-      this.getWords();
-      this.audioCallCreator.toggleVisionWord();
+      if (this.audioCallState.wordsCount < 10) {
+        this.getWords();
+        this.audioCallState.wordsCount += 1;
+        this.audioCallCreator.resultAllAnswers.textContent = `Всего слов: ${this.audioCallState.wordsCount}/20`;
+        this.audioCallCreator.resultRightAnswers.textContent = `Правильных слов: ${this.audioCallState.rightWordsCount}`;
+        console.log(this.audioCallState.wordsCount);
+        this.audioCallCreator.toggleVisionWord();
+      } else {
+        this.audioCallModal.drawResults();
+      }
     });
   }
 }

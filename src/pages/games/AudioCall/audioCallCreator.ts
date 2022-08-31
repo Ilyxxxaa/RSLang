@@ -1,5 +1,19 @@
+import { AudioCallState } from '../../../types/state';
+
 export default class AudioCallCreator {
+  audioCallState: AudioCallState;
+
+  constructor(state: AudioCallState) {
+    this.audioCallState = state;
+  }
+
   audioCallContainer: HTMLElement = document.createElement('div');
+
+  audioCallResultsContainer: HTMLElement = document.createElement('div');
+
+  resultAllAnswers: HTMLElement = document.createElement('div');
+
+  resultRightAnswers: HTMLElement = document.createElement('div');
 
   wordImage: HTMLElement = document.createElement('div');
 
@@ -29,6 +43,7 @@ export default class AudioCallCreator {
   }
 
   createGameContainer() {
+    this.createAudioCallResultsContainer();
     this.createWordImage();
     this.createAudioButtonContainer();
     this.createAudioCallWordsContainer();
@@ -36,12 +51,30 @@ export default class AudioCallCreator {
     this.createAudioElements();
 
     this.audioCallContainer.classList.add('audioCall__container');
+
     this.audioCallContainer.append(
+      this.audioCallResultsContainer,
       this.wordImage,
       this.audioButtonContainer,
       this.audioCallWordsContainer,
       this.acceptButton,
     );
+  }
+
+  createAudioCallResultsContainer() {
+    this.audioCallResultsContainer.classList.add('audioCall__results-container');
+    this.resultAllAnswers.classList.add('audioCall__results-all-answers');
+    this.resultRightAnswers.classList.add(
+      'audioCall__results-item',
+      'audioCall__results-right-answers',
+    );
+    this.resultAllAnswers.classList.add(
+      'audioCall__results-item',
+      'audioCall__results-all-answers',
+    );
+    this.resultAllAnswers.textContent = 'Всего слов: 0/20';
+    this.resultRightAnswers.textContent = 'Правильных слов: 0';
+    this.audioCallResultsContainer.append(this.resultAllAnswers, this.resultRightAnswers);
   }
 
   createWordImage() {
@@ -62,6 +95,7 @@ export default class AudioCallCreator {
   createAudioButton() {
     this.audioButton.classList.add('audioCall__audio-btn', 'audioCall__audio-btn--bigger');
     this.audioButton.innerHTML = ' <img src="./assets/images/audio-icon.svg" alt="audio">';
+    this.wordAudio.setAttribute('autoplay', '');
     this.addListenerToAudioButton();
   }
 
@@ -79,6 +113,7 @@ export default class AudioCallCreator {
   createAudioElements() {
     this.rightAnswerAudio.src = '../../../assets/sounds/rightAnswerAudio.mp3';
     this.wrongAnswerAuido.src = '../../../assets/sounds/wrongAnswerAudio.mp3';
+    this.wrongAnswerAuido.volume = 0.4;
   }
 
   addSrcToWordImage(src: string) {
@@ -104,22 +139,25 @@ export default class AudioCallCreator {
   listenerToWordContainer = (event: Event) => {
     const currentTarget = event.currentTarget as HTMLElement;
     const target = event.target as HTMLElement;
-
     if (target.hasAttribute('data-answer')) {
       const dataAnswer = target.getAttribute('data-answer');
+
       if (dataAnswer === 'true') {
         target.classList.add('audioCall__words-item--right');
         this.rightAnswerAudio.play();
         this.acceptButton.disabled = false;
+        this.audioCallState.rightWordsCount += 1;
       }
+
       if (dataAnswer === 'false') {
         target.classList.add('audioCall__words-item--wrong');
         const rightWord = currentTarget.querySelector('div[data-answer= true]');
         rightWord?.classList.add('audioCall__words-item--right');
-        console.log(rightWord);
+
         this.wrongAnswerAuido.play();
         this.acceptButton.disabled = false;
       }
+
       this.disableWordsButtons();
       this.audioCallWordsContainer.removeEventListener('click', this.listenerToWordContainer);
       this.toggleVisionWord();

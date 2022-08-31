@@ -19,6 +19,10 @@ export default class Utils {
     return +Math.round(rand);
   }
 
+  static returnServerAdress() {
+    return 'https://serverforrslang.herokuapp.com';
+  }
+
   // static isRepeated(array: Number[], i: number) {
   //   const randomNumber = Utils.randomInteger(0, 19);
   //   if (!array.includes(randomNumber)) {

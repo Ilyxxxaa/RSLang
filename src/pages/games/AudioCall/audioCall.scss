@@ -1,9 +1,25 @@
 .audioCall__container {
   display: flex;
+  position: relative;
   flex-direction: column;
   justify-content: center;
   background-color: #a198db;
   height: calc(100vh - 123px);
+}
+
+.audioCall__results-container {
+  position: absolute;
+  top: 100px;
+  left: 50px;
+}
+
+.audioCall__results-item {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 5px;
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
 }
 
 .audioCall__word-image {
@@ -22,7 +38,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 30px;
+  margin: 0 0 30px 0;
 }
 
 .audioCall__word-text {
