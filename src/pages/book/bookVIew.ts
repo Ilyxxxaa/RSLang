@@ -28,6 +28,10 @@ function createCardWord(card: IWord, level: number, index: number, wordsContaine
   return cardWord;
 }
 
+// function makeCardDifficult(cardData: IWord) {
+//   document.querySelector('.active-word')?.classList.add('difficult-card-word');
+// }
+
 function createCard(cardData: IWord) {
   const cardContainer = createElement('div', 'card');
   const cardContent = createElement('div', 'card-content');
@@ -38,6 +42,7 @@ function createCard(cardData: IWord) {
   cardImgContainer.style.background = `url('https://serverforrslang.herokuapp.com/${cardData.image}')`;
 
   const cardAudioContainer = createElement('div', 'card-audio-container');
+  const cardButtonsContainer = createElement('div', 'card-buttons-container');
   const audio = document.createElement('audio');
   audio.src = `https://serverforrslang.herokuapp.com/${cardData.audio}`;
   const audioMeaning = document.createElement('audio');
@@ -47,12 +52,18 @@ function createCard(cardData: IWord) {
   cardAudioContainer.append(audio, audioMeaning, audioExample);
   cardAudioContainer.addEventListener('click', (e) => playSounds(e, cardAudioContainer));
 
+  const buttonAddToDiff = createElement('button', 'button-add-to-diff');
+  buttonAddToDiff.innerText = '+ ИЗУЧАТЬ';
+  const buttonAddToLearned = createElement('button', 'button-add-to-learned');
+  buttonAddToLearned.innerText = '+ ИЗУЧЕНО';
+
   wordContainer.innerHTML = `
     <h4 class="word-word">${cardData.word}</h4>
     <h4 class="word-translate">${cardData.wordTranslate}</h4>
     <span class="word-transcription">${cardData.transcription}</span>
   `;
-  wordContainer.append(cardAudioContainer);
+  cardButtonsContainer.append(cardAudioContainer, buttonAddToDiff, buttonAddToLearned);
+  wordContainer.append(cardButtonsContainer);
 
   const wordMeaningContainer = createElement('div', 'word-meaning-container');
   const wordExampleContainer = createElement('div', 'word-example-container');
@@ -71,6 +82,9 @@ function createCard(cardData: IWord) {
 
   cardContent.append(wordContainer, wordDescriptionContainer);
   cardContainer.append(cardImgContainer, cardContent);
+
+  // buttonAddToDiff.addEventListener('click', () => makeCardDifficult(cardData));
+
   return cardContainer;
 }
 
