@@ -12,7 +12,7 @@
 
 .words-title,
 .book-title {
-  color: #FFFFFF;
+  color: #ffffff;
   text-align: left;
 }
 
@@ -34,7 +34,7 @@
   min-height: 532px;
 
   color: #2c2647;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border-radius: 5px;
   overflow: hidden;
 
@@ -58,7 +58,7 @@
   justify-content: space-evenly;
   align-items: center;
   padding: 0.5rem;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border-radius: 5px;
   border: none;
   overflow: hidden;
@@ -84,7 +84,7 @@
   margin: 20px;
   padding: 24px;
 
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .word-container,
@@ -95,7 +95,7 @@
 }
 
 .difficult-card-word::after {
-  content: "";
+  content: '';
   background: #ef0a0a;
   width: 60px;
   height: 60px;
@@ -114,7 +114,7 @@
   top: 5px;
 
   background-color: #ef0a0a;
-  color: #FFFFFF;
+  color: #ffffff;
   font-weight: 500;
   border: 5px solid transparent;
   border-radius: 5px;

@@ -66,12 +66,10 @@ class App {
     this.header.drawHeader();
     this.authorization.addAuthHandlers();
 
-    if (this.state.view === 'main') this.mainPage.drawMainPage();
+    if (this.state.view === 'main') this.renderMainPage();
     if (this.state.view === 'games') this.renderGamesPage();
     if (this.state.view === 'statistics') this.renderStatisticsPage();
     if (this.state.view === 'book') this.renderBookPage();
-
-    this.footer.drawFooter();
   }
 
   addListenersToMenuButtons() {
