@@ -16,22 +16,41 @@ export default class AudioCall {
       arrayOfIndexes: [],
       arrayOfRestIndexes: [],
       wordsArray: [],
-      wordsCount: 0,
+      wordsCount: 1,
       rightWordsCount: 0,
+      rightWordsArray: [],
+      wrongWordsArray: [],
     };
     this.audioCallCreator = new AudioCallCreator(this.audioCallState);
     this.audioCallModal = new AudioCallModal(this.audioCallState);
   }
 
   async drawAudioCall() {
+    this.clearState();
     this.audioCallCreator.createAudioCallContainer();
     this.createArray();
-    // await this.getWords();
-    // this.addListeners();
-    this.audioCallModal.drawResults();
+    await this.getWords();
+    this.addListeners();
+    this.audioCallModal.addListenerToTabs();
+  }
+
+  async refreshAudioCall() {
+    this.audioCallCreator.createAudioCallContainer();
+    this.createArray();
+    await this.getWords();
   }
 
   group: number = 0;
+
+  clearState() {
+    this.audioCallState.arrayOfIndexes = [];
+    this.audioCallState.arrayOfRestIndexes = [];
+    this.audioCallState.wordsArray = [];
+    this.audioCallState.wordsCount = 1;
+    this.audioCallState.rightWordsCount = 0;
+    this.audioCallState.rightWordsArray = [];
+    this.audioCallState.wrongWordsArray = [];
+  }
 
   createArray() {
     const array = Array.from({ length: 20 }, (v, i) => i).sort(() => 0.5 - Math.random());
@@ -64,6 +83,8 @@ export default class AudioCall {
         const word = document.createElement('div');
         if (item === rigthWord) {
           word.setAttribute('data-answer', 'true');
+          word.setAttribute('data-audio', `${Utils.returnServerAdress()}/${words[+item].audio}`);
+          word.setAttribute('data-text', `${words[+item].word}`);
           this.audioCallCreator.wordAudio.src = `${Utils.returnServerAdress()}/${
             words[+item].audio
           }`;
@@ -86,7 +107,7 @@ export default class AudioCall {
 
   addListeners() {
     this.audioCallCreator.acceptButton.addEventListener('click', () => {
-      if (this.audioCallState.wordsCount < 10) {
+      if (this.audioCallState.wordsCount < 4) {
         this.getWords();
         this.audioCallState.wordsCount += 1;
         this.audioCallCreator.resultAllAnswers.textContent = `Всего слов: ${this.audioCallState.wordsCount}/20`;
@@ -95,6 +116,11 @@ export default class AudioCall {
         this.audioCallCreator.toggleVisionWord();
       } else {
         this.audioCallModal.drawResults();
+        console.log(this.audioCallState);
+        this.audioCallModal.modalPlayAgainButton.addEventListener('click', () => {
+          this.clearState();
+          this.refreshAudioCall();
+        });
       }
     });
   }

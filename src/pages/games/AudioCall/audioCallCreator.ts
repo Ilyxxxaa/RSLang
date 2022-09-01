@@ -34,6 +34,7 @@ export default class AudioCallCreator {
   wrongAnswerAuido = document.createElement('audio');
 
   createAudioCallContainer() {
+    this.audioCallContainer.innerHTML = '';
     this.createGameContainer();
     const pageContent = document.querySelector('.page__content');
     if (pageContent) {
@@ -144,6 +145,12 @@ export default class AudioCallCreator {
 
       if (dataAnswer === 'true') {
         target.classList.add('audioCall__words-item--right');
+        const wordInfo = {
+          word: target.textContent,
+          translate: target.getAttribute('data-text'),
+          audio: target.getAttribute('data-audio'),
+        };
+        this.audioCallState.rightWordsArray.push(wordInfo);
         this.rightAnswerAudio.play();
         this.acceptButton.disabled = false;
         this.audioCallState.rightWordsCount += 1;
@@ -152,7 +159,15 @@ export default class AudioCallCreator {
       if (dataAnswer === 'false') {
         target.classList.add('audioCall__words-item--wrong');
         const rightWord = currentTarget.querySelector('div[data-answer= true]');
-        rightWord?.classList.add('audioCall__words-item--right');
+        if (rightWord) {
+          rightWord.classList.add('audioCall__words-item--right');
+          const wordInfo = {
+            word: rightWord.textContent,
+            translate: rightWord.getAttribute('data-text'),
+            audio: rightWord.getAttribute('data-audio'),
+          };
+          this.audioCallState.wrongWordsArray.push(wordInfo);
+        }
 
         this.wrongAnswerAuido.play();
         this.acceptButton.disabled = false;

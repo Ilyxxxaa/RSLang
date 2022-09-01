@@ -1,14 +1,12 @@
-import { Chart, ChartItem, registerables } from 'chart.js';
 import './audioCallModal.scss';
 import { AudioCallState } from '../../../types/state';
-
-Chart.register(...registerables);
+import CreateChart from './createChart';
 
 export default class AudioCallModal {
   AudioCallState: AudioCallState;
 
   constructor(state: AudioCallState) {
-    this.AudioCallState = state;
+    this.AudioCallState = state; // здесь я подключаю State Своей игры - объект с разными свойствами
   }
 
   modalWindow: HTMLElement = document.createElement('div');
@@ -21,33 +19,68 @@ export default class AudioCallModal {
 
   modalLeftTab: HTMLButtonElement = document.createElement('button');
 
+  modalResultsContainer = document.createElement('div');
+
+  modalResultAllAnswers = document.createElement('div');
+
+  modalResultRightAnswers = document.createElement('div');
+
+  modalResultWrongAnswers = document.createElement('div');
+
+  modalCanvasContainer: HTMLElement = document.createElement('div');
+
   modalCanvas: HTMLCanvasElement = document.createElement('canvas');
 
+  modalButtonsContainer: HTMLElement = document.createElement('div');
+
+  modalPlayAgainButton: HTMLButtonElement = document.createElement('button');
+
+  modalGoToBookButton: HTMLButtonElement = document.createElement('button');
+
+  rightAnswersContainer: HTMLElement = document.createElement('div');
+
+  wrongAnswersContainer: HTMLElement = document.createElement('div');
+
   drawResults() {
+    // ф-ция для отрисовки модалки, вызываю как слова закончились
+    this.modalResultsContainer.innerHTML = '';
+    this.modalRightTab.classList.remove('audioCall-modal__tabs-item--active');
     this.createModalWindow();
     const audioCallContainer = document.querySelector('.audioCall__container');
     if (audioCallContainer) {
       audioCallContainer.innerHTML = '';
       audioCallContainer.append(this.modalWindow);
     }
-
-    this.createChart();
+    this.modalCanvas.innerHTML = '';
+    CreateChart.createChart(this.AudioCallState.wordsCount, this.AudioCallState.rightWordsCount);
+    //  здесь я беру из State св-ва wordsCount - кол-во слов(всех что были),
+    //  и rightWordsCount - кол-во правильных слов
+    // в методе ниже всё тоже самое
   }
 
   createModalWindow() {
-    this.createModalWindowContent();
+    this.createModalWindowContent(
+      this.AudioCallState.wordsCount,
+      this.AudioCallState.rightWordsCount,
+    );
 
     this.modalWindow.classList.add('audioCall-modal');
     this.modalWindow.append(this.modalWindowContent);
   }
 
-  createModalWindowContent() {
+  createModalWindowContent(wordsCount: number, rightWordsCount: number) {
     this.modalWindowContent.classList.add('audioCall-modal__content');
 
     this.createModalTabs();
-    this.createModalCanvas();
+    this.createModalResultsContainer(wordsCount, rightWordsCount);
+    this.createButtonsContainer();
+    this.createListOfWords();
 
-    this.modalWindowContent.append(this.modalWindowTabs, this.modalCanvas);
+    this.modalWindowContent.append(
+      this.modalWindowTabs,
+      this.modalResultsContainer,
+      this.modalButtonsContainer,
+    );
   }
 
   createModalTabs() {
@@ -62,52 +95,148 @@ export default class AudioCallModal {
     this.modalWindowTabs.append(this.modalLeftTab, this.modalRightTab);
   }
 
-  createModalCanvas() {
-    this.modalCanvas.setAttribute('id', 'myChart');
-    this.modalCanvas.setAttribute('width', '400');
-    this.modalCanvas.setAttribute('height', '400');
+  createModalResultsContainer(wordsCount: number, rightWordsCount: number) {
+    const wrongWordsCount = wordsCount - rightWordsCount;
+    this.modalResultsContainer.classList.add('audioCall-modal__results-container');
+    this.modalResultAllAnswers.classList.add('audioCall-modal__results-item');
+    this.modalResultRightAnswers.classList.add('audioCall-modal__results-item');
+    this.modalResultWrongAnswers.classList.add('audioCall-modal__results-item');
+    this.modalResultAllAnswers.textContent = `Всего слов: ${wordsCount}`;
+    this.modalResultRightAnswers.textContent = `Правильных слов: ${rightWordsCount} `;
+    this.modalResultWrongAnswers.textContent = `Неправильных слов: ${wrongWordsCount} `;
+    this.createModalCanvas();
+    this.modalResultsContainer.append(
+      this.modalResultAllAnswers,
+      this.modalResultRightAnswers,
+      this.modalResultWrongAnswers,
+      this.modalCanvasContainer,
+    );
   }
 
-  createChart() {
-    const ctx = document.getElementById('myChart') as ChartItem;
+  createModalCanvas() {
+    this.modalCanvasContainer.innerHTML = '';
+    this.modalCanvasContainer.classList.add('audioCall-modal__canvas-container');
+    this.modalCanvas.setAttribute('id', 'myChart');
+    this.modalCanvasContainer.setAttribute('width', '300');
+    this.modalCanvasContainer.setAttribute('height', '300');
+    this.modalCanvasContainer.setAttribute('position', 'relative');
+    this.modalCanvasContainer.append(this.modalCanvas);
+  }
 
-    if (ctx) {
-      console.log('afaf');
-      const myChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Red', 'Green'],
-          datasets: [
-            {
-              label: '# of Votes',
-              data: [19, 100],
-              backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)',
-              ],
-              borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)',
-              ],
-              borderWidth: 1,
-            },
-          ],
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true,
-            },
-          },
-        },
+  createButtonsContainer() {
+    this.modalButtonsContainer.classList.add('audioCall-modal__buttons-container');
+    this.modalPlayAgainButton.classList.add('audioCall-modal__buttons-item');
+    this.modalGoToBookButton.classList.add('audioCall-modal__buttons-item');
+    this.modalPlayAgainButton.textContent = 'Сыграть еще раз';
+    this.modalGoToBookButton.textContent = 'Перейти в учебник';
+    this.modalButtonsContainer.append(this.modalPlayAgainButton, this.modalGoToBookButton);
+  }
+
+  createListOfWords() {
+    this.rightAnswersContainer.classList.add('audioCall-modal__rightAnswers-container');
+    this.wrongAnswersContainer.classList.add('audioCall-modal__wrongAnswers-container');
+  }
+
+  addListenerToTabs() {
+    this.modalRightTab.addEventListener('click', () => {
+      this.drawResultWithWords();
+    });
+
+    this.modalLeftTab.addEventListener('click', () => {
+      this.drawResultWithChart();
+    });
+  }
+
+  drawResultWithWords() {
+    this.modalResultsContainer.innerHTML = '';
+
+    this.modalLeftTab.classList.remove('audioCall-modal__tabs-item--active');
+    this.modalRightTab.classList.add('audioCall-modal__tabs-item--active');
+
+    this.modalResultsContainer.append(this.rightAnswersContainer, this.wrongAnswersContainer);
+
+    this.renderWords();
+  }
+
+  drawResultWithChart() {
+    this.modalResultsContainer.innerHTML = '';
+
+    this.modalLeftTab.classList.add('audioCall-modal__tabs-item--active');
+    this.modalRightTab.classList.remove('audioCall-modal__tabs-item--active');
+
+    this.modalResultsContainer.append(
+      this.modalResultAllAnswers,
+      this.modalResultRightAnswers,
+      this.modalResultWrongAnswers,
+      this.modalCanvasContainer,
+    );
+    CreateChart.createChart(this.AudioCallState.wordsCount, this.AudioCallState.rightWordsCount);
+    //  здесь я беру из State св-ва wordsCount - кол-во слов(всех что были),
+    //  и rightWordsCount - кол-во правильных слов
+  }
+
+  renderWords() {
+    this.rightAnswersContainer.innerHTML = '';
+
+    const rightAnswersContainerTitle = document.createElement('div');
+    rightAnswersContainerTitle.classList.add('rightAnswersContainerTitle');
+    rightAnswersContainerTitle.textContent = 'Правильные слова';
+
+    this.wrongAnswersContainer.innerHTML = '';
+
+    const wrongAnswersContainerTitle = document.createElement('div');
+    wrongAnswersContainerTitle.classList.add('wrongAnswersContainerTitle');
+    wrongAnswersContainerTitle.textContent = 'Неправильные слова';
+
+    if (this.AudioCallState.rightWordsArray.length !== 0) {
+      this.rightAnswersContainer.append(rightAnswersContainerTitle);
+      //  здесь для св-ва state.rightWordsArray вызываю перебор
+      // rightWordsArray  - массив с обьектами правильно отвеченных слов
+      this.AudioCallState.rightWordsArray.forEach((word) => {
+        const item = document.createElement('div');
+        item.classList.add('item');
+        const audio = document.createElement('audio');
+        audio.src = `${word.audio}`;
+        const itemImageContainer = document.createElement('div');
+        itemImageContainer.classList.add('imageContainer');
+        const itemImage = document.createElement('img');
+        itemImage.src = './assets/images/audio-icon.svg';
+        const itemText = document.createElement('div');
+        itemText.classList.add('itemText');
+        itemText.textContent = `${word.translate} - ${word.word}`;
+        itemImageContainer.append(itemImage);
+        item.append(itemImageContainer, itemText);
+        this.rightAnswersContainer.append(item);
+
+        itemImageContainer.addEventListener('click', () => {
+          audio.play();
+        });
+      });
+    }
+
+    if (this.AudioCallState.wrongWordsArray.length !== 0) {
+      this.wrongAnswersContainer.append(wrongAnswersContainerTitle);
+      //  здесь для св-ва state.wrongWordsArray вызываю перебор
+      // wrongWordsArray  - массив с обьектами правильно отвеченных слов
+      this.AudioCallState.wrongWordsArray.forEach((word) => {
+        const item = document.createElement('div');
+        item.classList.add('item');
+        const audio = document.createElement('audio');
+        audio.src = `${word.audio}`;
+        const itemImageContainer = document.createElement('div');
+        itemImageContainer.classList.add('imageContainer');
+        const itemImage = document.createElement('img');
+        itemImage.src = './assets/images/audio-icon.svg';
+        const itemText = document.createElement('div');
+        itemText.classList.add('itemText');
+        itemText.textContent = `${word.translate} - ${word.word}`;
+        itemImageContainer.append(itemImage);
+        item.append(itemImageContainer, itemText);
+        this.wrongAnswersContainer.append(item);
+
+        itemImageContainer.addEventListener('click', () => {
+          audio.play();
+        });
       });
     }
   }

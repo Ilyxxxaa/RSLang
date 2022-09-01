@@ -24,4 +24,12 @@ export interface AudioCallState {
   wordsArray: Number[];
   wordsCount: number;
   rightWordsCount: number;
+  rightWordsArray: AudioCallWordInfo[];
+  wrongWordsArray: AudioCallWordInfo[];
 }
+
+type AudioCallWordInfo = {
+  word: string | null;
+  translate: string | null;
+  audio: string | null;
+};
