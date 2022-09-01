@@ -9,7 +9,6 @@ import Book from './pages/book/book';
 
 import './pages/main/styles/main.scss';
 import Footer from './pages/main/footer';
-// import './pages/games/styles/games.scss';
 
 class App {
   state: State;

@@ -61,7 +61,9 @@ export default class Games {
         const target = event.target as HTMLElement;
         target.classList.add('level_active');
 
-        (document.querySelector('.game__button_start') as HTMLButtonElement)?.removeAttribute('disabled');
+        (document.querySelector('.game__button_start') as HTMLButtonElement)?.removeAttribute(
+          'disabled',
+        );
 
         this.state.gameLevel = index;
         this.state.gamePage = getRandomNumber(0, PAGE_COUNTS - 1);
@@ -92,7 +94,7 @@ export default class Games {
   }
 
   drawGameAudioCall() {
-    AudioCall.drawAudioCall();
+    this.audioCall.drawAudioCall();
   }
 
   async drawGameSprint(page: number, level: number) {

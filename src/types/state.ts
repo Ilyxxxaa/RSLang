@@ -1,7 +1,7 @@
 import { IWord } from './dictionaryTypes';
 
 export default interface State {
-  isAuthorized: boolean,
+  isAuthorized: boolean;
   userId: string;
   name: string;
   token: string;
@@ -30,3 +30,19 @@ export enum Game {
   audiocall = 'Аудиовызов',
   sprint = 'Спринт',
 }
+
+export interface AudioCallState {
+  arrayOfIndexes: Number[];
+  arrayOfRestIndexes: Number[];
+  wordsArray: Number[];
+  wordsCount: number;
+  rightWordsCount: number;
+  rightWordsArray: AudioCallWordInfo[];
+  wrongWordsArray: AudioCallWordInfo[];
+}
+
+type AudioCallWordInfo = {
+  word: string | null;
+  translate: string | null;
+  audio: string | null;
+};
