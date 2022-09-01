@@ -22,39 +22,55 @@ class AuthorizationHandlers {
   }
 
   addHandlerToShowModal() {
-    document.querySelector('.header__auth')?.addEventListener('click', this.authorization.showAuthModal);
+    document
+      .querySelector('.header__auth')
+      ?.addEventListener('click', this.authorization.showAuthModal);
   }
 
   addHandlerToCloseModal() {
-    document.querySelectorAll('.modal')?.forEach((modal) => modal.addEventListener('click', this.authorization.closeAuthModal));
+    document
+      .querySelectorAll('.modal')
+      ?.forEach((modal) => modal.addEventListener('click', this.authorization.closeAuthModal));
   }
 
   addHandlerToShowModalAdd() {
-    document.querySelectorAll('.auth-button_add')?.forEach((button) => button.addEventListener('click', (event: Event) => {
-      this.authorization.closeAuthModal(event);
-      this.authorization.showAuthModal(event);
-    }));
+    document.querySelectorAll('.auth-button_add')?.forEach((button) =>
+      button.addEventListener('click', (event: Event) => {
+        this.authorization.closeAuthModal(event);
+        this.authorization.showAuthModal(event);
+      }),
+    );
   }
 
   addHandlerToShowPassword() {
-    document.querySelectorAll('.checkbox')?.forEach((elem) => elem.addEventListener('input', this.authorization.showPassword));
+    document
+      .querySelectorAll('.checkbox')
+      ?.forEach((elem) => elem.addEventListener('input', this.authorization.showPassword));
   }
 
   addHandlerToAuth() {
-    document.querySelectorAll('.form').forEach((form) => form.addEventListener('submit', (event: Event) => {
-      const target = event.target as HTMLFormElement;
-      event.preventDefault();
-      const email = (target.querySelector(`#${target.dataset.form}-email`) as HTMLInputElement).value;
-      const password = (target.querySelector(`#${target.dataset.form}-password`) as HTMLInputElement).value;
-      (document.querySelector(`#${target.dataset.form}-button`) as HTMLInputElement).disabled = true;
-      if (target.classList.contains('form_signin')) {
-        this.authorization.signIn(email, password);
-      }
-      if (target.classList.contains('form_signup')) {
-        const name = (target.querySelector(`#${target.dataset.form}-name`) as HTMLInputElement).value;
-        this.authorization.signUp(name, email, password);
-      }
-    }));
+    document.querySelectorAll('.form').forEach((form) =>
+      form.addEventListener('submit', (event: Event) => {
+        const target = event.target as HTMLFormElement;
+        event.preventDefault();
+        const email = (target.querySelector(`#${target.dataset.form}-email`) as HTMLInputElement)
+          .value;
+        const password = (target.querySelector(
+          `#${target.dataset.form}-password`,
+        ) as HTMLInputElement).value;
+        (document.querySelector(
+          `#${target.dataset.form}-button`,
+        ) as HTMLInputElement).disabled = true;
+        if (target.classList.contains('form_signin')) {
+          this.authorization.signIn(email, password);
+        }
+        if (target.classList.contains('form_signup')) {
+          const name = (target.querySelector(`#${target.dataset.form}-name`) as HTMLInputElement)
+            .value;
+          this.authorization.signUp(name, email, password);
+        }
+      }),
+    );
   }
 
   addHandlerToUnAuth() {

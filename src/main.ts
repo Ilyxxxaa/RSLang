@@ -9,7 +9,6 @@ import Book from './pages/book/book';
 
 import './pages/main/styles/main.scss';
 import Footer from './pages/main/footer';
-// import './pages/games/styles/games.scss';
 
 class App {
   state: State;
@@ -38,12 +37,24 @@ class App {
       token: '',
       refreshToken: '',
       view: 'main',
+      game: '',
+      gamePage: 0,
+      gameLevel: 0,
+      sprint: {
+        pointsScored: 0,
+        pointsPerWord: 10,
+        countRightAnswers: 0,
+        wordsForGame: [],
+        rightAnswers: [],
+        wrongAnswers: [],
+        countRightAnswersInARow: 0,
+      },
     };
     this.menu = new Menu();
     this.header = new Header();
     this.authorization = new AuthorizationHandlers(this.state);
     this.mainPage = new MainPage();
-    this.games = new Games();
+    this.games = new Games(this.state);
     this.statistics = new Statistics();
     this.book = new Book(this.state);
     this.footer = new Footer();
@@ -89,7 +100,10 @@ class App {
         if (nav) {
           nav.classList.add('hide');
         }
-        this.games.drawGames();
+        this.games.clearPageContent();
+        this.games.drawGamesCards();
+        this.games.addHandlersToChooseGame();
+        (document.querySelector('.content') as HTMLElement).style.background = '#a198db';
       }
     });
 
