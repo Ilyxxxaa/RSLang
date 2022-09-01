@@ -70,6 +70,8 @@ class App {
     if (this.state.view === 'games') this.renderGamesPage();
     if (this.state.view === 'statistics') this.renderStatisticsPage();
     if (this.state.view === 'book') this.renderBookPage();
+
+    this.footer.drawFooter();
   }
 
   addListenersToMenuButtons() {
@@ -79,6 +81,7 @@ class App {
         localStorage.setItem('currentView', 'main');
 
         this.renderMainPage();
+        this.menu.closeMenu();
 
         console.log(this.state);
       }
@@ -90,6 +93,7 @@ class App {
         localStorage.setItem('currentView', 'games');
 
         this.renderGamesPage();
+        this.menu.closeMenu();
       }
     });
 
@@ -99,6 +103,7 @@ class App {
         localStorage.setItem('currentView', 'statistics');
 
         this.renderStatisticsPage();
+        this.menu.closeMenu();
       }
     });
 
@@ -108,6 +113,7 @@ class App {
         localStorage.setItem('currentView', 'book');
 
         this.renderBookPage();
+        this.menu.closeMenu();
       }
     });
   }
@@ -116,7 +122,7 @@ class App {
     this.menu.clearAllActiveButtons();
 
     const content: HTMLDivElement | null = document.querySelector('.content');
-    if (content) content.style.background = 'url("../assets/images/header-bg.png")';
+    if (content) content.style.backgroundImage = 'url("../assets/images/content-bg.png")';
 
     const nav = document.querySelector('.nav');
     if (nav) {
