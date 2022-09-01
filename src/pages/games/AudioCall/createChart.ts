@@ -11,9 +11,8 @@ export default class CreateChart {
 
     const ctx = document.getElementById('myChart') as ChartItem;
 
-    const wrongWordsCount = wordsCount - rightWordsCount;
+    const wrongWordsCount = wordsCount + 1 - rightWordsCount;
     if (ctx) {
-      console.log('ctx is found');
       const myChart = new Chart(ctx, {
         type: 'doughnut',
         data: {

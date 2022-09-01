@@ -14,10 +14,13 @@ export default class Games {
 
   sprint: Sprint;
 
+  audioCall: AudioCall;
+
   constructor(state: State) {
     this.state = state;
     this.levels = new GameLevels(state);
     this.sprint = new Sprint(state);
+    this.audioCall = new AudioCall(state);
   }
 
   clearPageContent() {
@@ -94,7 +97,7 @@ export default class Games {
   }
 
   drawGameAudioCall() {
-    this.audioCall.drawAudioCall();
+    this.audioCall.drawAudioCall(this.state.gameLevel);
   }
 
   async drawGameSprint(page: number, level: number) {
