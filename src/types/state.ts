@@ -1,3 +1,5 @@
+import { IWord } from './dictionaryTypes';
+
 export default interface State {
   isAuthorized: boolean;
   userId: string;
@@ -6,12 +8,23 @@ export default interface State {
   refreshToken: string;
   view: View;
   game: string;
-  level: Level;
+  gamePage: number;
+  gameLevel: number;
+  sprint: {
+    wordsForGame: IWord[];
+    gameCurrentWord?: IWord;
+    countRightAnswers: number;
+    countRightAnswersInARow: number;
+    pointsPerWord: number;
+    pointsScored: number;
+    rightAnswers: IWord[];
+    wrongAnswers: IWord[];
+  }
 }
 
 type View = 'main' | 'book' | 'games' | 'statistics';
 
-export type Level = '' | 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
+// export type Level = '' | 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 
 export enum Game {
   audiocall = 'Аудиовызов',

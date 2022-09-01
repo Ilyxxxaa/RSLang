@@ -3,7 +3,7 @@ import AuthorizationHandlers from './pages/main/authorization/authApp';
 import State from './types/state';
 import Header from './pages/main/header';
 import MainPage from './pages/main/mainPage';
-import GamesController from './pages/games/gamesController';
+import Games from './pages/games/games';
 import Statistics from './pages/stats/statistics';
 import Book from './pages/book/book';
 
@@ -23,7 +23,7 @@ class App {
 
   mainPage: MainPage;
 
-  games: GamesController;
+  games: Games;
 
   statistics: Statistics;
 
@@ -42,13 +42,23 @@ class App {
       refreshToken: '',
       view: 'main',
       game: '',
-      level: '',
+      gamePage: 0,
+      gameLevel: 0,
+      sprint: {
+        pointsScored: 0,
+        pointsPerWord: 10,
+        countRightAnswers: 0,
+        wordsForGame: [],
+        rightAnswers: [],
+        wrongAnswers: [],
+        countRightAnswersInARow: 0,
+      },
     };
     this.menu = new Menu();
     this.header = new Header();
     this.authorization = new AuthorizationHandlers(this.state);
     this.mainPage = new MainPage();
-    this.games = new GamesController(this.state);
+    this.games = new Games(this.state);
     this.statistics = new Statistics();
     this.book = new Book();
     this.footer = new Footer();

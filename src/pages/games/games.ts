@@ -1,22 +1,23 @@
-import { audiocallDescription, sprintDescription } from '../../const';
+import { audiocallDescription, sprintDescription, PAGE_COUNTS } from '../../const';
 import GameCardView from './gameCardView';
 import GameLevels from './gameLevels';
 import State from '../../types/state';
-import SprintView from './Sprint/sprintView';
+import Sprint from './Sprint/sprint';
 import AudioCall from './AudioCall/audioCall';
+import getRandomNumber from './random';
 import './styles/games.scss';
 
-export default class GamesController {
+export default class Games {
   state: State;
 
   levels: GameLevels;
 
-  audioCall = new AudioCall();
+  sprint: Sprint;
 
   constructor(state: State) {
     this.state = state;
     this.levels = new GameLevels(state);
-    this.audioCall = new AudioCall();
+    this.sprint = new Sprint(state);
   }
 
   clearPageContent() {
@@ -45,6 +46,27 @@ export default class GamesController {
         this.levels.drawGameLevels();
         this.addHandlersToBack();
         this.addHandlersToStart();
+        this.addHandlersToChooseLevel();
+      });
+    });
+  }
+
+  addHandlersToChooseLevel() {
+    document.querySelectorAll<HTMLElement>('.level').forEach((level, index) => {
+      level.addEventListener('click', (event: Event) => {
+        document.querySelectorAll<HTMLElement>('.level').forEach((elem) => {
+          elem.classList.remove('level_active');
+        });
+
+        const target = event.target as HTMLElement;
+        target.classList.add('level_active');
+
+        (document.querySelector('.game__button_start') as HTMLButtonElement)?.removeAttribute(
+          'disabled',
+        );
+
+        this.state.gameLevel = index;
+        this.state.gamePage = getRandomNumber(0, PAGE_COUNTS - 1);
       });
     });
   }
@@ -55,7 +77,6 @@ export default class GamesController {
       this.drawGamesCards();
       this.addHandlersToChooseGame();
     });
-    console.log(document.querySelector('.game__button_start'));
   }
 
   addHandlersToStart() {
@@ -63,7 +84,8 @@ export default class GamesController {
       const target = event.target as HTMLElement;
       this.clearPageContent();
       if (target.id === 'sprint') {
-        this.drawGameSprint();
+        this.state.game = target.id;
+        this.drawGameSprint(this.state.gamePage, this.state.gameLevel);
       }
       if (target.id === 'audiocall') {
         this.drawGameAudioCall();
@@ -75,7 +97,10 @@ export default class GamesController {
     this.audioCall.drawAudioCall();
   }
 
-  drawGameSprint() {
-    SprintView.drawSprintGameView();
+  async drawGameSprint(page: number, level: number) {
+    this.sprint.getWordsForGame(page, level).then(() => {
+      this.sprint.drawSprintView();
+      this.sprint.setRandomWord();
+    });
   }
 }
