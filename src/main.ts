@@ -60,10 +60,8 @@ class App {
     this.addListenersToMenuButtons();
     this.header.drawHeader();
     this.authorization.addAuthHandlers();
-    this.audioCall.drawAudioCall();
-
-    // this.mainPage.drawMainPage();
-    // this.footer.drawFooter();
+    this.mainPage.drawMainPage();
+    this.footer.drawFooter();
   }
 
   addListenersToMenuButtons() {
