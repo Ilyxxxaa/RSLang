@@ -36,6 +36,8 @@ class Sprint {
       const target = event.target as HTMLElement;
       if (target.classList.contains('sprint__button')) {
         this.checkAnswer(event);
+        this.setPoints();
+        this.scorePoints();
         this.setRandomWord();
       }
     });
@@ -74,31 +76,61 @@ class Sprint {
 
   checkAnswer(event: Event) {
     const target = event.target as HTMLButtonElement;
+
+    const rightAnswerAudio = document.querySelector('.sprint-audio_right') as HTMLAudioElement;
+    const wrongAnswerAudio = document.querySelector('.sprint-audio_wrong') as HTMLAudioElement;
+    const increasePointsAudio = document.querySelector('.sprint-audio_points') as HTMLAudioElement;
+
+    const checkbox = document.querySelectorAll<HTMLElement>('.checkbox__item');
+
     const wordRu = document.querySelector('.word_ru') as HTMLElement;
     const rightAnswer = this.state.sprint.gameCurrentWord?.wordTranslate === wordRu.textContent;
     const userAnswer = String(rightAnswer) === target.value;
-    const checkbox = document.querySelectorAll<HTMLElement>('.checkbox__item');
+
     if (userAnswer) {
+      rightAnswerAudio.play();
       this.state.sprint.countRightAnswersInARow += 1;
+      this.state.sprint.pointsScored += this.state.sprint.pointsPerWord;
+      if (this.state.sprint.gameCurrentWord) {
+        this.state.sprint.rightAnswers.push(this.state.sprint.gameCurrentWord);
+      }
       checkbox?.forEach((item, index) => {
+        if (this.state.sprint.countRightAnswersInARow % 4 === 0) {
+          increasePointsAudio.play();
+          item.classList.remove('checkbox__item_active');
+        }
         if (index + 1 === this.state.sprint.countRightAnswersInARow % 4) {
           item.classList.add('checkbox__item_active');
-          // if (this.state.sprint.gameCurrentWord) {
-          //   this.state.sprint.rightAnswers.push(this.state.sprint.gameCurrentWord);
-          // }
         }
       });
     }
-    if (!userAnswer || this.state.sprint.countRightAnswersInARow % 4 === 0) {
+    if (!userAnswer) {
+      wrongAnswerAudio.play();
       this.state.sprint.countRightAnswersInARow = 0;
       checkbox.forEach((item) => item.classList.remove('checkbox__item_active'));
+      if (this.state.sprint.gameCurrentWord) {
+        this.state.sprint.wrongAnswers.push(this.state.sprint.gameCurrentWord);
+      }
     }
-    console.log('слово в стейте', this.state.sprint.gameCurrentWord);
-    console.log('правильный перевод', this.state.sprint.gameCurrentWord?.wordTranslate);
-    console.log('рандомный перевод', wordRu.textContent);
-    console.log('rightAnswer', String(rightAnswer));
-    console.log('target', target.value);
-    console.log('Пользователь ответил', String(rightAnswer) === target.value);
+  }
+
+  setPoints() {
+    const { countRightAnswersInARow } = this.state.sprint;
+    if (countRightAnswersInARow <= 3) {
+      this.state.sprint.pointsPerWord = 10;
+    } else if (countRightAnswersInARow >= 4 && countRightAnswersInARow <= 7) {
+      this.state.sprint.pointsPerWord = 20;
+    } else if (countRightAnswersInARow >= 8 && countRightAnswersInARow <= 11) {
+      this.state.sprint.pointsPerWord = 40;
+    } else {
+      this.state.sprint.pointsPerWord = 80;
+    }
+  }
+
+  scorePoints() {
+    (document.querySelector('.sprint__points') as HTMLElement).textContent = `+${this.state.sprint.pointsPerWord} очков за слово`;
+    const score = document.querySelector('.sprint__score') as HTMLElement;
+    score.textContent = this.state.sprint.pointsScored.toString();
   }
 
   endSprintGame() {

@@ -11,13 +11,14 @@ export default interface State {
   gamePage: number;
   gameLevel: number;
   sprint: {
-    wordsForGame: IWord[] | [];
+    wordsForGame: IWord[];
     gameCurrentWord?: IWord;
     countRightAnswers: number;
     countRightAnswersInARow: number;
-    score: number;
-    rightAnswers: IWord[] | [];
-    wrongAnswers: IWord[] | [];
+    pointsPerWord: number;
+    pointsScored: number;
+    rightAnswers: IWord[];
+    wrongAnswers: IWord[];
   }
 }
 

@@ -9,6 +9,18 @@ class SprintView {
   }
 
   drawSprintGameView() {
+    const rightAnswerAudio = document.createElement('audio');
+    rightAnswerAudio.className = 'sprint-audio_right';
+    rightAnswerAudio.src = '../../../assets/sounds/rightAnswerAudio.mp3';
+
+    const wrongAnswerAudio = document.createElement('audio');
+    wrongAnswerAudio.className = 'sprint-audio_wrong';
+    wrongAnswerAudio.src = '../../../assets/sounds/wrongAnswerAudio.mp3';
+
+    const increasePointsAudio = document.createElement('audio');
+    increasePointsAudio.className = 'sprint-audio_points';
+    increasePointsAudio.src = '../../../assets/sounds/line_open.mp3';
+
     const pageContent = document.querySelector('.page__content') as HTMLElement;
     pageContent.innerHTML = '';
 
@@ -62,6 +74,7 @@ class SprintView {
     buttonTrue.value = 'true';
     buttonTrue.textContent = 'верно';
 
+    sprintContainer.append(rightAnswerAudio, wrongAnswerAudio, increasePointsAudio);
     sprintContainer.append(sprintClose, sprintScore, sprintGame);
     checkbox.append(checkboxItem1, checkboxItem2, checkboxItem3);
     buttonContainer.append(buttonFalse, buttonTrue);

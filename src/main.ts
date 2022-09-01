@@ -42,13 +42,13 @@ class App {
       gamePage: 0,
       gameLevel: 0,
       sprint: {
-        score: 0,
+        pointsScored: 0,
+        pointsPerWord: 10,
         countRightAnswers: 0,
         wordsForGame: [],
         rightAnswers: [],
         wrongAnswers: [],
         countRightAnswersInARow: 0,
-        // gameCurrentWord: {},
       },
     };
     this.menu = new Menu();
