@@ -9,8 +9,6 @@ import Book from './pages/book/book';
 
 import './pages/main/styles/main.scss';
 import Footer from './pages/main/footer';
-import AudioCall from './pages/games/AudioCall/audioCall';
-// import './pages/games/styles/games.scss';
 
 class App {
   state: State;
@@ -30,8 +28,6 @@ class App {
   book: Book;
 
   footer: Footer;
-
-  audioCall: AudioCall;
 
   constructor() {
     this.state = {
@@ -62,7 +58,6 @@ class App {
     this.statistics = new Statistics();
     this.book = new Book();
     this.footer = new Footer();
-    this.audioCall = new AudioCall();
   }
 
   start() {
