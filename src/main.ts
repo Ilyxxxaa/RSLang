@@ -9,6 +9,7 @@ import Book from './pages/book/book';
 
 import './pages/main/styles/main.scss';
 import Footer from './pages/main/footer';
+import Utils from './common/utils';
 
 class App {
   state: State;
@@ -120,7 +121,7 @@ class App {
     this.menu.clearAllActiveButtons();
 
     const content: HTMLDivElement | null = document.querySelector('.content');
-    if (content) content.style.backgroundImage = 'url("../assets/images/content-bg.png")';
+    if (content) content.style.background = 'url("../assets/images/content-bg.png") no-repeat';
 
     const nav = document.querySelector('.nav');
     if (nav) {
@@ -128,6 +129,16 @@ class App {
     }
 
     this.mainPage.drawMainPage();
+
+    const startLearnButton = document.querySelector('.about__info-btn');
+    if (startLearnButton) {
+      startLearnButton.addEventListener('click', () => {
+        this.state.view = 'book';
+        localStorage.setItem('currentView', 'book');
+        this.renderBookPage();
+      });
+    }
+
     this.footer.drawFooter();
     this.menu.menuItemMain.classList.add('menu__list-item--active');
   };
@@ -176,3 +187,4 @@ class App {
 
 const app = new App();
 app.start();
+Utils.smoothScroll();
