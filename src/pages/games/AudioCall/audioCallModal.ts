@@ -96,12 +96,12 @@ export default class AudioCallModal {
   }
 
   createModalResultsContainer(wordsCount: number, rightWordsCount: number) {
-    const wrongWordsCount = wordsCount - rightWordsCount;
+    const wrongWordsCount = wordsCount + 1 - rightWordsCount;
     this.modalResultsContainer.classList.add('audioCall-modal__results-container');
     this.modalResultAllAnswers.classList.add('audioCall-modal__results-item');
     this.modalResultRightAnswers.classList.add('audioCall-modal__results-item');
     this.modalResultWrongAnswers.classList.add('audioCall-modal__results-item');
-    this.modalResultAllAnswers.textContent = `Всего слов: ${wordsCount}`;
+    this.modalResultAllAnswers.textContent = `Всего слов: ${wordsCount + 1}`;
     this.modalResultRightAnswers.textContent = `Правильных слов: ${rightWordsCount} `;
     this.modalResultWrongAnswers.textContent = `Неправильных слов: ${wrongWordsCount} `;
     this.createModalCanvas();

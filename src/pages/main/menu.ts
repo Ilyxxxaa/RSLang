@@ -106,14 +106,21 @@ export default class Menu {
       const menuImage = this.menuTitle.querySelector('img');
       if (menuImage) {
         if (this.menu.classList.contains('menu--enabled')) {
-          this.menu.classList.remove('menu--enabled');
-          menuImage.src = './assets/images/menu-icon.svg';
+          this.closeMenu();
         } else {
           this.menu.classList.add('menu--enabled');
           menuImage.src = './assets/images/cross-icon.svg';
         }
       }
     });
+  }
+
+  closeMenu() {
+    const menuImage = this.menuTitle.querySelector('img');
+    this.menu.classList.remove('menu--enabled');
+    if (menuImage) {
+      menuImage.src = './assets/images/menu-icon.svg';
+    }
   }
 
   clearAllActiveButtons() {

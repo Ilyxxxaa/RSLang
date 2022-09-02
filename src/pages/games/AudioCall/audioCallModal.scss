@@ -13,7 +13,6 @@
   &__content {
     max-width: 500px;
     width: 500px;
-    // height: 500px;
     display: flex;
     padding: 20px;
     justify-content: start;
@@ -62,7 +61,7 @@
     font-size: 18px;
     align-items: center;
     justify-content: flex-start;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 
   &__buttons-container {

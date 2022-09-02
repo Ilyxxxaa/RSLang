@@ -19,7 +19,9 @@ function createCardWord(card: IWord, level: number, index: number, wordsContaine
   cardWord.addEventListener('click', () => {
     const prevActive: HTMLButtonElement | null = document.querySelector('.active-word');
     if (prevActive) prevActive.style.background = noBgColor;
-    wordsContainer.querySelectorAll('.active-word').forEach((el) => el.classList.remove('active-word'));
+    wordsContainer
+      .querySelectorAll('.active-word')
+      .forEach((el) => el.classList.remove('active-word'));
     cardWord.classList.add('active-word');
     cardWord.style.background = `${levelColors[level]} `;
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
@@ -95,14 +97,14 @@ function drawCards(array: IWord[], level: number) {
 
   const content: HTMLDivElement | null = document.querySelector('.content');
   if (content) {
-    content.style.background = `url('../assets/images/book/bookBackgrounds/${backgrounds[level]}.png')`;
+    content.style.backgroundImage = `url('../assets/images/book/bookBackgrounds/${backgrounds[level]}.png')`;
   }
 
   const wordsContainer = createElement('div', 'words-container');
   cardsContainer.append(wordsContainer);
 
-  array.forEach(
-    (card, index) => wordsContainer.append(createCardWord(card, level, index, wordsContainer)),
+  array.forEach((card, index) =>
+    wordsContainer.append(createCardWord(card, level, index, wordsContainer)),
   );
 
   cardsContainer.append(createCard(array[0]));

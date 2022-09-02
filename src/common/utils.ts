@@ -1,17 +1,15 @@
 export default class Utils {
-  static getWords = async (group: number, page = this.getRandomPage()) => {
+  static getWords = async (group: number, page: number) => {
     const serverAdress = 'https://serverforrslang.herokuapp.com';
     const wordsPath = `${serverAdress}/words`;
     const response = await fetch(`${wordsPath}/?group=${group}&page=${page}`);
     const words = await response.json();
-    console.log(`page: ${page}, group: ${group}`);
-    console.log(words);
+    console.log(`group: ${group},page: ${page}`);
     return words;
   };
 
   static getRandomPage() {
-    // return this.randomInteger(0, 29);
-    return 0;
+    return this.randomInteger(0, 29);
   }
 
   static randomInteger(min: number, max: number) {
@@ -22,12 +20,4 @@ export default class Utils {
   static returnServerAdress() {
     return 'https://serverforrslang.herokuapp.com';
   }
-
-  // static isRepeated(array: Number[], i: number) {
-  //   const randomNumber = Utils.randomInteger(0, 19);
-  //   if (!array.includes(randomNumber)) {
-  //     array[i] = randomNumber;
-  //     return true;
-  //   } else Utils.isRepeated(array, i);
-  // }
 }

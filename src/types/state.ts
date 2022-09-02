@@ -19,10 +19,10 @@ export default interface State {
     pointsScored: number;
     rightAnswers: IWord[];
     wrongAnswers: IWord[];
-  }
+  };
 }
 
-type View = 'main' | 'book' | 'games' | 'statistics';
+type View = 'main' | 'book' | 'games' | 'statistics' | string;
 
 // export type Level = '' | 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 
@@ -39,6 +39,7 @@ export interface AudioCallState {
   rightWordsCount: number;
   rightWordsArray: AudioCallWordInfo[];
   wrongWordsArray: AudioCallWordInfo[];
+  pageNumber: number;
 }
 
 type AudioCallWordInfo = {
