@@ -31,13 +31,9 @@ class App {
 
   constructor() {
     this.state = {
-      isAuthorized: false,
-      name: '',
-      userId: '',
-      token: '',
-      refreshToken: '',
       view: localStorage.getItem('currentView') || 'main',
       game: '',
+      gameInit: 'menu',
       gamePage: 0,
       gameLevel: 0,
       sprint: {
@@ -48,6 +44,19 @@ class App {
         rightAnswers: [],
         wrongAnswers: [],
         countRightAnswersInARow: 0,
+
+        difficulty: 'normal',
+        optional: {
+          isNew: 0,
+          learned: false,
+          time: new Date(),
+          audiocallCountAnswes: 0,
+          audiocallRightAnswers: 0,
+          audiocallRightAnswersInARaw: 0,
+          sprintCountAnswes: 0,
+          sprintRightAnswers: 0,
+          sprintRightAnswersInARaw: 0,
+        },
       },
     };
     this.menu = new Menu();
@@ -65,6 +74,7 @@ class App {
     this.addListenersToMenuButtons();
     this.header.drawHeader();
     this.authorization.addAuthHandlers();
+    this.games.addHandlersToStartGameFromBook();
 
     if (this.state.view === 'main') this.renderMainPage();
     if (this.state.view === 'games') this.renderGamesPage();

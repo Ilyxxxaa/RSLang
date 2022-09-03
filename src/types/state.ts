@@ -1,12 +1,9 @@
-import { IWord } from './dictionaryTypes';
+import { TimeScale } from 'chart.js';
+import { IWord, IOptional } from './dictionaryTypes';
 
 export default interface State {
-  isAuthorized: boolean;
-  userId: string;
-  name: string;
-  token: string;
-  refreshToken: string;
   view: View;
+  gameInit?: string,
   game: string;
   gamePage: number;
   gameLevel: number;
@@ -19,6 +16,8 @@ export default interface State {
     pointsScored: number;
     rightAnswers: IWord[];
     wrongAnswers: IWord[];
+    difficulty: string,
+    optional: IOptional;
   };
 }
 
