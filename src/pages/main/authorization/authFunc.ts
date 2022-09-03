@@ -55,10 +55,10 @@ class Authorization {
 
   showAuthorizedUser = (key: string) => {
     if (localStorage.getItem(key)) {
-      const { name } = JSON.parse(localStorage.getItem(key) || '');
+      const userName = JSON.parse(localStorage.getItem(key) || '');
       document.querySelectorAll('.auth__btn')?.forEach((btn) => btn.classList.add('hidden'));
       document.querySelectorAll('.user')?.forEach((user) => user.classList.remove('hidden'));
-      (document.querySelector('.user__name') as HTMLElement).textContent = name;
+      (document.querySelector('.user__name') as HTMLElement).textContent = userName;
     } else {
       document.querySelectorAll('.auth__btn')?.forEach((btn) => btn.classList.remove('hidden'));
       document.querySelectorAll('.user')?.forEach((user) => user.classList.add('hidden'));
@@ -75,13 +75,12 @@ class Authorization {
 
   signIn = (email: string, password: string) => {
     requestPost(signInLink, { email, password }).then((response) => {
-      this.state.isAuthorized = true;
-      ({ name: this.state.name, userId: this.state.userId } = response);
-      ({ token: this.state.token, refreshToken: this.state.refreshToken } = response);
-      this.setLocalStorage('user', response);
+      Object.keys(response).forEach((key) => {
+        this.setLocalStorage(key, response[key]);
+      });
       document.querySelectorAll('.modal')?.forEach((modal) => modal.classList.add('hidden'));
       this.fixOverlay();
-      this.showAuthorizedUser('user');
+      this.showAuthorizedUser('name');
     }).finally(() => document.querySelectorAll<HTMLButtonElement>('.auth-button').forEach((button) => {
       button.removeAttribute('disabled');
     }));
