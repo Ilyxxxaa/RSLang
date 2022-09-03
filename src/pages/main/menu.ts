@@ -97,7 +97,7 @@ export default class Menu {
 
   createMenuItemLogoutBtn() {
     this.menuItemLogout.classList.add('menu__list-item', 'menuItemLogout');
-    this.menuItemLogout.innerHTML = `<div class="menu__list-item-img"><img src="./assets/images/logout-icon.svg" alt="logout-icon"></div>
+    this.menuItemLogout.innerHTML = `<div class="menu__list-item-img"><img class="logout" src="./assets/images/logout-icon.svg" alt="logout-icon"></div>
     <div class="menu__list-item-name">Выйти</div>`;
   }
 
