@@ -9,6 +9,9 @@ import Book from './pages/book/book';
 
 import './pages/main/styles/main.scss';
 import Footer from './pages/main/footer';
+import Utils from './common/utils';
+
+import { createHardWord } from './common/apiRequests';
 
 class App {
   state: State;
@@ -44,19 +47,6 @@ class App {
         rightAnswers: [],
         wrongAnswers: [],
         countRightAnswersInARow: 0,
-
-        difficulty: 'normal',
-        optional: {
-          isNew: 0,
-          learned: false,
-          time: new Date(),
-          audiocallCountAnswes: 0,
-          audiocallRightAnswers: 0,
-          audiocallRightAnswersInARaw: 0,
-          sprintCountAnswes: 0,
-          sprintRightAnswers: 0,
-          sprintRightAnswersInARaw: 0,
-        },
       },
     };
     this.menu = new Menu();
@@ -74,7 +64,6 @@ class App {
     this.addListenersToMenuButtons();
     this.header.drawHeader();
     this.authorization.addAuthHandlers();
-    this.games.addHandlersToStartGameFromBook();
 
     if (this.state.view === 'main') this.renderMainPage();
     if (this.state.view === 'games') this.renderGamesPage();
@@ -130,7 +119,7 @@ class App {
     this.menu.clearAllActiveButtons();
 
     const content: HTMLDivElement | null = document.querySelector('.content');
-    if (content) content.style.backgroundImage = 'url("../assets/images/content-bg.png")';
+    if (content) content.style.background = 'url("../assets/images/content-bg.png") no-repeat';
 
     const nav = document.querySelector('.nav');
     if (nav) {
@@ -138,6 +127,16 @@ class App {
     }
 
     this.mainPage.drawMainPage();
+
+    const startLearnButton = document.querySelector('.about__info-btn');
+    if (startLearnButton) {
+      startLearnButton.addEventListener('click', () => {
+        this.state.view = 'book';
+        localStorage.setItem('currentView', 'book');
+        this.renderBookPage();
+      });
+    }
+
     this.footer.drawFooter();
     this.menu.menuItemMain.classList.add('menu__list-item--active');
   };
@@ -186,3 +185,4 @@ class App {
 
 const app = new App();
 app.start();
+Utils.smoothScroll();

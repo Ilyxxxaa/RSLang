@@ -1,9 +1,9 @@
 import { TimeScale } from 'chart.js';
-import { IWord, IOptional } from './dictionaryTypes';
+import { IWord } from './dictionaryTypes';
 
 export default interface State {
   view: View;
-  gameInit?: string,
+  gameInit?: string;
   game: string;
   gamePage: number;
   gameLevel: number;
@@ -16,8 +16,6 @@ export default interface State {
     pointsScored: number;
     rightAnswers: IWord[];
     wrongAnswers: IWord[];
-    difficulty: string,
-    optional: IOptional;
   };
 }
 
