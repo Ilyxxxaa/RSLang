@@ -1,5 +1,5 @@
 export function createElement(elem: string, className: string) {
-  const htmlElem: HTMLElement = document.createElement(elem);
+  const htmlElem: HTMLButtonElement | HTMLElement = document.createElement(elem);
   htmlElem.classList.add(className);
   return htmlElem;
 }

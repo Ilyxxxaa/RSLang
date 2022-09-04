@@ -1,11 +1,13 @@
-import { IWord } from '../../types/bookTypes';
+/* eslint-disable import/no-cycle */
+import { IWord } from '../../types/dictionaryTypes';
 import './styles/main.scss';
-import { getWords, getAggregatedWords, createUserWord, updateUserWord } from './bookRequests';
+import { getWords } from './bookRequests';
 import { levelColors, createElement } from './utils';
 import { playSounds, stopAudio } from './audio';
-import State from '../../types/state';
-import { drawDictionaryCards } from './dictionary';
-import { WORDS_PER_PAGE } from '../../const';
+import { user } from './book';
+import getUserWords, { createHardWord, createLearnedWord, updateHardWord, updateLearnedWord } from '../../common/apiRequests';
+import currentBookWords from './bookState';
+import drawDictionary from './dictionary';
 
 const noBgColor = '#FFFFFF';
 
@@ -13,27 +15,26 @@ const noBgColor = '#FFFFFF';
 function createCardWord(card: IWord, level: number, index: number, wordsContainer: HTMLElement) {
   const cardWord = createElement('button', 'card-word');
   if (index === 0) {
-    console.log(level);
     cardWord.classList.add('active-word');
-    cardWord.style.background = (level >= 0) ? `${levelColors[level]}` : `${levelColors[7]}`;
+    cardWord.style.background = `${levelColors[level]}`;
   }
   cardWord.innerHTML = `<h4 class="">${card.word}</h4>
   <p class="">${card.wordTranslate}</p>
   </button>`;
-
   if (card.userWord && card.userWord.difficulty === 'hard') {
     cardWord.classList.add('difficult-card-word');
   }
-  if (card.userWord && card.userWord.optional && card.userWord.optional.learned) {
+  if (card.userWord && card.userWord.optional.learned === true) {
     cardWord.classList.add('learned-card-word');
   }
 
   cardWord.addEventListener('click', () => {
     const prevActive: HTMLButtonElement | null = document.querySelector('.active-word');
     if (prevActive) prevActive.style.background = noBgColor;
-    wordsContainer.querySelectorAll('.active-word').forEach((el) => el.classList.remove('active-word'));
+    wordsContainer
+      .querySelectorAll('.active-word')
+      .forEach((el) => el.classList.remove('active-word'));
     cardWord.classList.add('active-word');
-    console.log(level);
     cardWord.style.background = (level >= 0) ? `${levelColors[level]}` : `${levelColors[7]}`;
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     updateCard(card);
@@ -41,51 +42,42 @@ function createCardWord(card: IWord, level: number, index: number, wordsContaine
   return cardWord;
 }
 
-function addWordDifficult(cardData: IWord) {
-  const id = cardData.id ? cardData.id : cardData._id;
-  const local: string | null = localStorage.getItem('user');
-  const user = local ? JSON.parse(local) : null;
-
+async function addWordDifficult(cardData: IWord, button: HTMLButtonElement, bookView: string) {
+  const buttonElement = button;
+  if (button) buttonElement.disabled = true;
   if (cardData.userWord) {
     if (cardData.userWord.difficulty === 'hard') {
-      const params = { difficulty: 'none', optional: { learned: false } };
-      updateUserWord(user, id, params);
-      drawDictionaryCards();
-      // localStorage.setItem('book-last-active-word', `${cardData.word}`);
-    } else {
-      const params = { difficulty: 'hard', optional: { learned: false } };
-      updateUserWord(user, id, params);
-      drawDictionaryCards();
-      // localStorage.setItem('book-last-active-word', `${cardData.word}`);
-    }
+      await updateHardWord(cardData, 'string');
+    } else await updateHardWord(cardData, 'hard');
   } else {
-    const params = { difficulty: 'hard', optional: { learned: false } };
-    createUserWord(user, id, params);
+    await createHardWord(cardData, 'hard');
   }
+  if (bookView && bookView === 'dictionary') {
+    await drawDictionary();
+  } else await updateCards(currentBookWords.currentLevel, currentBookWords.currentPage);
+  buttonElement.disabled = false;
 }
 
-function addWordLearned(cardData: IWord) {
-  const id = cardData.id ? cardData.id : cardData._id;
-  const local: string | null = localStorage.getItem('user');
-  const user = local ? JSON.parse(local) : null;
-
-  if (cardData.userWord && cardData.userWord.optional) {
+async function addWordLearned(cardData: IWord, button: HTMLButtonElement, bookView: string) {
+  const buttonElement = button;
+  if (button) buttonElement.disabled = true;
+  if (cardData.userWord) {
     if (cardData.userWord.optional.learned === true) {
-      const params = { difficulty: 'none', optional: { learned: false } };
-      updateUserWord(user, id, params);
-      // localStorage.setItem('book-last-active-word', `${cardData.word}`);
-    } else {
-      const params = { difficulty: 'none', optional: { learned: true } };
-      updateUserWord(user, id, params);
-      // localStorage.setItem('book-last-active-word', `${cardData.word}`);
-    }
+      await updateLearnedWord(cardData, false);
+    } else await updateLearnedWord(cardData, true);
   } else {
-    const params = { difficulty: 'none', optional: { learned: true } };
-    createUserWord(user, id, params);
+    await createLearnedWord(cardData, true);
   }
+  if (bookView && bookView === 'dictionary') {
+    await drawDictionary();
+  } else await updateCards(currentBookWords.currentLevel, currentBookWords.currentPage);
+  buttonElement.disabled = false;
 }
 
 function createCard(cardData: IWord) {
+  const bookView = localStorage.getItem('currentBookView') || 'book';
+  const isAutorizated = localStorage.getItem('userId');
+
   const cardContainer = createElement('div', 'card');
   const cardContent = createElement('div', 'card-content');
   const cardImgContainer = createElement('div', 'card-img-container');
@@ -95,7 +87,6 @@ function createCard(cardData: IWord) {
   cardImgContainer.style.background = `url('https://serverforrslang.herokuapp.com/${cardData.image}')`;
 
   const cardAudioContainer = createElement('div', 'card-audio-container');
-
   const audio = document.createElement('audio');
   audio.src = `https://serverforrslang.herokuapp.com/${cardData.audio}`;
   const audioMeaning = document.createElement('audio');
@@ -104,13 +95,6 @@ function createCard(cardData: IWord) {
   audioExample.src = `https://serverforrslang.herokuapp.com/${cardData.audioExample}`;
   cardAudioContainer.append(audio, audioMeaning, audioExample);
   cardAudioContainer.addEventListener('click', (e) => playSounds(e, cardAudioContainer));
-
-  if (cardData.userWord && cardData.userWord.difficulty === 'hard') {
-    cardContainer.classList.add('difficult-card');
-  }
-  if (cardData.userWord && cardData.userWord.optional && cardData.userWord.optional.learned) {
-    cardContainer.classList.add('learned-card');
-  }
 
   wordContainer.innerHTML = `
     <h4 class="word-word">${cardData.word}</h4>
@@ -138,18 +122,31 @@ function createCard(cardData: IWord) {
 
   const cardButtonsContainer = createElement('div', 'card-buttons-container');
   cardButtonsContainer.append(cardAudioContainer);
-  const user = localStorage.getItem('user');
-  if (user) {
-    const buttonAddToDiff = createElement('button', 'button-add-to-diff');
+
+  if (isAutorizated) {
     if (cardData.userWord && cardData.userWord.difficulty === 'hard') {
-      buttonAddToDiff.innerText = '- ИЗ СЛОЖНЫХ СЛОВ';
-    } else buttonAddToDiff.innerText = '+ В СЛОЖНЫЕ СЛОВА';
+      cardContainer.classList.add('difficult-card');
+    }
+    if (cardData.userWord && cardData.userWord.optional && cardData.userWord.optional.learned) {
+      cardContainer.classList.add('learned-card');
+    }
 
-    buttonAddToDiff.addEventListener('click', () => addWordDifficult(cardData));
+    const buttonAddToDiff: HTMLButtonElement = document.createElement('button');
+    buttonAddToDiff.classList.add('button-add-to-diff');
+    const buttonAddToLearned: HTMLButtonElement = document.createElement('button');
+    buttonAddToLearned.classList.add('button-add-to-learned');
 
-    const buttonAddToLearned = createElement('button', 'button-add-to-learned');
+    buttonAddToDiff.innerText = '+ В СЛОЖНЫЕ СЛОВА';
+    if (cardData.userWord && cardData.userWord.difficulty === 'hard') buttonAddToDiff.innerText = '- ИЗ СЛОЖНЫХ';
+
+    buttonAddToDiff.addEventListener('click', () => addWordDifficult(cardData, buttonAddToDiff, bookView));
+
     buttonAddToLearned.innerText = 'ИЗУЧЕНО';
-    buttonAddToLearned.addEventListener('click', () => addWordLearned(cardData));
+    if (cardData.userWord && cardData.userWord.optional.learned === true) {
+      buttonAddToLearned.innerText = 'ИЗУЧАТЬ';
+    }
+    buttonAddToLearned.addEventListener('click', () => addWordLearned(cardData, buttonAddToLearned, bookView));
+
     cardButtonsContainer.append(buttonAddToDiff, buttonAddToLearned);
 
     const wordGameResultsContainer = createElement('div', 'word-results-container');
@@ -157,20 +154,20 @@ function createCard(cardData: IWord) {
     const wordGameStatistic = createElement('div', 'word-game-statistic');
     gameResultsTitle.innerText = 'Результаты игр';
     wordGameStatistic.innerHTML = `
-      <div class="game-statistic-wrapper" >
-        <span class="game-name"> Спринт </span>
-        <span class="game-stat"> 0 </span>
-      </div>
-      <div class="game-statistic-wrapper">
-        <span class="game-name"> Аудивызов </span>
-        <span class="game-stat"> 0 </span>
-      </div>
-      `;
+        <div class="game-statistic-wrapper" >
+          <span class="game-name"> Спринт </span>
+          <span class="game-stat">${getGameResults(cardData, 'sprint')}</span>
+        </div>
+        <div class="game-statistic-wrapper">
+          <span class="game-name"> Аудивызов </span>
+          <span class="game-stat">${getGameResults(cardData, 'audioCall')}</span>
+        </div>
+        `;
     wordGameResultsContainer.append(gameResultsTitle, wordGameStatistic);
     wordDescriptionContainer.append(wordGameResultsContainer);
   }
-  wordContainer.append(cardButtonsContainer);
 
+  wordContainer.append(cardButtonsContainer);
   return cardContainer;
 }
 
@@ -184,7 +181,7 @@ function updateCard(cardData: IWord) {
   }
 }
 
-export function drawCards(array: IWord[], level: number, user: State) {
+export function drawCards(array: IWord[], level: number) {
   let cardsContainer = document.querySelector('.cards-container');
   if (cardsContainer) {
     cardsContainer.innerHTML = '';
@@ -195,22 +192,22 @@ export function drawCards(array: IWord[], level: number, user: State) {
   }
 
   const wordsContainer = createElement('div', 'words-container');
+  array.forEach((card, i) => wordsContainer.append(createCardWord(card, level, i, wordsContainer)));
   cardsContainer.append(wordsContainer);
-
-  array.forEach(
-    (card, index) => wordsContainer.append(createCardWord(card, level, index, wordsContainer)),
-  );
-
   cardsContainer.append(createCard(array[0]));
 }
 
 export default async function updateCards(level: number, page: number) {
   localStorage.setItem('currentBookPage', `${page}`);
   localStorage.setItem('currentBookLevel', `${level}`);
-  const local: string | null = localStorage.getItem('user');
-  const user = local ? JSON.parse(local) : null;
 
-  const arrayWords = user ? await getAggregatedWords(level, page, user)
+  const arrayWords = user.userId ? await getUserWords(level, page)
     : await getWords(level, page);
-  await drawCards(arrayWords, level, user);
+  await drawCards(arrayWords, level);
+}
+
+function getGameResults(cardData: IWord, game: 'sprint' | 'audioCall') {
+  const result = cardData.userWord ? `${cardData.userWord.optional.games[game].right} / ${cardData.userWord.optional.games[game].right + cardData.userWord.optional.games.sprint.wrong}` : '0 / 0';
+  console.log(result);
+  return result;
 }

@@ -9,6 +9,9 @@ import Book from './pages/book/book';
 
 import './pages/main/styles/main.scss';
 import Footer from './pages/main/footer';
+import Utils from './common/utils';
+
+import { createHardWord } from './common/apiRequests';
 
 class App {
   state: State;
@@ -31,13 +34,9 @@ class App {
 
   constructor() {
     this.state = {
-      isAuthorized: false,
-      name: '',
-      userId: '',
-      token: '',
-      refreshToken: '',
-      view: 'main',
+      view: localStorage.getItem('currentView') || 'main',
       game: '',
+      gameInit: 'menu',
       gamePage: 0,
       gameLevel: 0,
       sprint: {
@@ -65,81 +64,125 @@ class App {
     this.addListenersToMenuButtons();
     this.header.drawHeader();
     this.authorization.addAuthHandlers();
-    this.mainPage.drawMainPage();
-    this.footer.drawFooter();
+
+    if (this.state.view === 'main') this.renderMainPage();
+    if (this.state.view === 'games') this.renderGamesPage();
+    if (this.state.view === 'statistics') this.renderStatisticsPage();
+    if (this.state.view === 'book') this.renderBookPage();
   }
 
   addListenersToMenuButtons() {
     this.menu.menuItemMain.addEventListener('click', () => {
-      const content: HTMLDivElement | null = document.querySelector('.content');
-      if (content) content.style.backgroundImage = 'url("../assets/images/header-bg.png")';
-
       if (this.state.view !== 'main') {
         this.state.view = 'main';
+        localStorage.setItem('currentView', 'main');
 
-        this.menu.clearAllActiveButtons();
-        this.menu.menuItemMain.classList.add('menu__list-item--active');
+        this.renderMainPage();
+        this.menu.closeMenu();
 
-        const nav = document.querySelector('.nav');
-        if (nav) {
-          nav.classList.remove('hide');
-        }
-        this.mainPage.drawMainPage();
-        this.footer.drawFooter();
+        console.log(this.state);
       }
     });
 
     this.menu.menuItemGames.addEventListener('click', () => {
       if (this.state.view !== 'games') {
         this.state.view = 'games';
+        localStorage.setItem('currentView', 'games');
 
-        this.menu.clearAllActiveButtons();
-        this.menu.menuItemGames.classList.add('menu__list-item--active');
-
-        const nav = document.querySelector('.nav');
-        if (nav) {
-          nav.classList.add('hide');
-        }
-        this.games.clearPageContent();
-        this.games.drawGamesCards();
-        this.games.addHandlersToChooseGame();
-        (document.querySelector('.content') as HTMLElement).style.background = '#a198db';
+        this.renderGamesPage();
+        this.menu.closeMenu();
       }
     });
 
     this.menu.menuItemStats.addEventListener('click', () => {
       if (this.state.view !== 'statistics') {
         this.state.view = 'statistics';
+        localStorage.setItem('currentView', 'statistics');
 
-        this.menu.clearAllActiveButtons();
-        this.menu.menuItemStats.classList.add('menu__list-item--active');
-
-        const nav = document.querySelector('.nav');
-        if (nav) {
-          nav.classList.add('hide');
-        }
-        this.statistics.drawStatistics();
-        this.footer.drawFooter();
+        this.renderStatisticsPage();
+        this.menu.closeMenu();
       }
     });
 
     this.menu.menuItemBook.addEventListener('click', () => {
       if (this.state.view !== 'book') {
         this.state.view = 'book';
+        localStorage.setItem('currentView', 'book');
 
-        this.menu.clearAllActiveButtons();
-        this.menu.menuItemBook.classList.add('menu__list-item--active');
-
-        const nav = document.querySelector('.nav');
-        if (nav) {
-          nav.classList.add('hide');
-        }
-        this.book.drawBook();
-        this.footer.drawFooter();
+        this.renderBookPage();
+        this.menu.closeMenu();
       }
     });
   }
+
+  renderMainPage = () => {
+    this.menu.clearAllActiveButtons();
+
+    const content: HTMLDivElement | null = document.querySelector('.content');
+    if (content) content.style.background = 'url("../assets/images/content-bg.png") no-repeat';
+
+    const nav = document.querySelector('.nav');
+    if (nav) {
+      nav.classList.remove('hide');
+    }
+
+    this.mainPage.drawMainPage();
+
+    const startLearnButton = document.querySelector('.about__info-btn');
+    if (startLearnButton) {
+      startLearnButton.addEventListener('click', () => {
+        this.state.view = 'book';
+        localStorage.setItem('currentView', 'book');
+        this.renderBookPage();
+      });
+    }
+
+    this.footer.drawFooter();
+    this.menu.menuItemMain.classList.add('menu__list-item--active');
+  };
+
+  renderGamesPage = () => {
+    this.menu.clearAllActiveButtons();
+
+    const nav = document.querySelector('.nav');
+    if (nav) {
+      nav.classList.add('hide');
+    }
+
+    this.games.clearPageContent();
+    this.games.drawGamesCards();
+    this.games.addHandlersToChooseGame();
+    (document.querySelector('.content') as HTMLElement).style.background = '#a198db';
+    this.menu.menuItemGames.classList.add('menu__list-item--active');
+  };
+
+  renderStatisticsPage = () => {
+    this.menu.clearAllActiveButtons();
+
+    const nav = document.querySelector('.nav');
+    if (nav) {
+      nav.classList.add('hide');
+    }
+
+    this.statistics.drawStatistics();
+    this.footer.drawFooter();
+    this.menu.menuItemStats.classList.add('menu__list-item--active');
+  };
+
+  renderBookPage = () => {
+    this.menu.clearAllActiveButtons();
+
+    const nav = document.querySelector('.nav');
+    if (nav) {
+      nav.classList.add('hide');
+    }
+
+    this.book.drawBook();
+    this.footer.drawFooter();
+    this.menu.menuItemBook.classList.add('menu__list-item--active');
+  };
 }
 
 const app = new App();
 app.start();
+Utils.smoothScroll();

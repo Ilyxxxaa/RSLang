@@ -41,7 +41,7 @@
   width: 400px;
 
   color: #2c2647;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border-radius: 5px;
   overflow: hidden;
 
@@ -93,7 +93,7 @@
   justify-content: space-evenly;
   align-items: center;
   padding: 0.5rem;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border-radius: 5px;
   border: none;
   overflow: hidden;
@@ -115,7 +115,7 @@
   margin: 20px;
   padding: 24px;
 
-  color: #FFFFFF;
+  color: #ffffff;
 }
 
 .word-container,
@@ -227,9 +227,9 @@
   padding-right: 1rem;
 }
 
-.button-to-book::after {
+.button-to-dictionary::before {
   content: "|";
-  padding-left: 1rem;
+  padding-right: 1rem;
   color: #ffffff72;
 }
 

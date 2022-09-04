@@ -1,7 +1,7 @@
 import './audioCall.scss';
 import Utils from '../../../common/utils';
 import AudioCallCreator from './audioCallCreator';
-import { AudioCallState } from '../../../types/state';
+import State, { AudioCallState } from '../../../types/state';
 import AudioCallModal from './audioCallModal';
 
 export default class AudioCall {
@@ -11,25 +11,32 @@ export default class AudioCall {
 
   audioCallState: AudioCallState;
 
-  constructor() {
+  state: State;
+
+  constructor(state: State) {
+    this.state = state;
     this.audioCallState = {
       arrayOfIndexes: [],
       arrayOfRestIndexes: [],
       wordsArray: [],
-      wordsCount: 1,
+      wordsCount: 0,
       rightWordsCount: 0,
       rightWordsArray: [],
       wrongWordsArray: [],
+      pageNumber: Utils.getRandomPage(),
     };
     this.audioCallCreator = new AudioCallCreator(this.audioCallState);
     this.audioCallModal = new AudioCallModal(this.audioCallState);
   }
 
-  async drawAudioCall() {
+  async drawAudioCall(level: number, page: number = this.audioCallState.pageNumber) {
+    if (page) {
+      this.audioCallState.pageNumber = page;
+    }
     this.clearState();
     this.audioCallCreator.createAudioCallContainer();
     this.createArray();
-    await this.getWords();
+    await this.getWords(level, page);
     this.addListeners();
     this.audioCallModal.addListenerToTabs();
   }
@@ -37,16 +44,14 @@ export default class AudioCall {
   async refreshAudioCall() {
     this.audioCallCreator.createAudioCallContainer();
     this.createArray();
-    await this.getWords();
+    await this.getWords(this.state.gameLevel, this.audioCallState.pageNumber);
   }
-
-  group: number = 0;
 
   clearState() {
     this.audioCallState.arrayOfIndexes = [];
     this.audioCallState.arrayOfRestIndexes = [];
     this.audioCallState.wordsArray = [];
-    this.audioCallState.wordsCount = 1;
+    this.audioCallState.wordsCount = 0;
     this.audioCallState.rightWordsCount = 0;
     this.audioCallState.rightWordsArray = [];
     this.audioCallState.wrongWordsArray = [];
@@ -69,11 +74,11 @@ export default class AudioCall {
       set.add(this.audioCallState.arrayOfIndexes[Utils.randomInteger(0, 19)]);
     }
     this.audioCallState.wordsArray = Array.from(set);
-    console.log(this.audioCallState);
   }
 
-  getWords = async () => {
-    const words = await Utils.getWords(this.group);
+  getWords = async (level: number, page: number) => {
+    const words = await Utils.getWords(level, page);
+    console.log(words);
     this.createSetOfIndexes();
     const rigthWord = this.audioCallState.wordsArray[0];
     this.audioCallCreator.audioCallWordsContainer.innerHTML = '';
@@ -106,22 +111,22 @@ export default class AudioCall {
   };
 
   addListeners() {
-    this.audioCallCreator.acceptButton.addEventListener('click', () => {
-      if (this.audioCallState.wordsCount < 4) {
-        this.getWords();
-        this.audioCallState.wordsCount += 1;
-        this.audioCallCreator.resultAllAnswers.textContent = `Всего слов: ${this.audioCallState.wordsCount}/20`;
-        this.audioCallCreator.resultRightAnswers.textContent = `Правильных слов: ${this.audioCallState.rightWordsCount}`;
-        console.log(this.audioCallState.wordsCount);
-        this.audioCallCreator.toggleVisionWord();
-      } else {
-        this.audioCallModal.drawResults();
-        console.log(this.audioCallState);
-        this.audioCallModal.modalPlayAgainButton.addEventListener('click', () => {
-          this.clearState();
-          this.refreshAudioCall();
-        });
-      }
-    });
+    this.audioCallCreator.acceptButton.addEventListener('click', this.listenerToAcceptButton);
   }
+
+  listenerToAcceptButton = () => {
+    if (this.audioCallState.wordsCount + 1 < 5) {
+      this.getWords(this.state.gameLevel, this.audioCallState.pageNumber);
+      this.audioCallState.wordsCount += 1;
+      this.audioCallCreator.resultAllAnswers.textContent = `Всего слов: ${this.audioCallState.wordsCount}/5`;
+      this.audioCallCreator.resultRightAnswers.textContent = `Правильных слов: ${this.audioCallState.rightWordsCount}`;
+      this.audioCallCreator.toggleVisionWord();
+    } else {
+      this.audioCallModal.drawResults();
+      this.audioCallModal.modalPlayAgainButton.addEventListener('click', () => {
+        this.clearState();
+        this.refreshAudioCall();
+      });
+    }
+  };
 }

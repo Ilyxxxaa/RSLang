@@ -1,19 +1,16 @@
-import { getDifficultWords } from './bookRequests';
+import { getDifficultWords } from '../../common/apiRequests';
+// eslint-disable-next-line import/no-cycle
 import { drawCards } from './bookVIew';
 
-const local: string | null = localStorage.getItem('user');
-const user = local ? JSON.parse(local) : null;
+const dictionaryGroupNumber = 7;
 
 export async function drawDictionaryCards() {
-  if (user) {
-    const arrayWords = await getDifficultWords(user);
-    drawCards(arrayWords);
-  }
-
-  // await drawCards(arrayWords, level, user);
+  const arrayWords = await getDifficultWords();
+  drawCards(arrayWords, dictionaryGroupNumber);
 }
 
 export default function drawDictionary() {
+  localStorage.setItem('currentBookView', 'dictionary');
   const buttonToDictionary = document.querySelector('.button-to-dictionary');
   const buttonToBook = document.querySelector('.button-to-book');
   buttonToDictionary?.classList.add('book-title-active');

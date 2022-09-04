@@ -34,12 +34,10 @@ class AuthorizationHandlers {
   }
 
   addHandlerToShowModalAdd() {
-    document.querySelectorAll('.auth-button_add')?.forEach((button) =>
-      button.addEventListener('click', (event: Event) => {
-        this.authorization.closeAuthModal(event);
-        this.authorization.showAuthModal(event);
-      }),
-    );
+    document.querySelectorAll('.auth-button_add')?.forEach((button) => button.addEventListener('click', (event: Event) => {
+      this.authorization.closeAuthModal(event);
+      this.authorization.showAuthModal(event);
+    }));
   }
 
   addHandlerToShowPassword() {
@@ -49,45 +47,43 @@ class AuthorizationHandlers {
   }
 
   addHandlerToAuth() {
-    document.querySelectorAll('.form').forEach((form) =>
-      form.addEventListener('submit', (event: Event) => {
-        const target = event.target as HTMLFormElement;
-        event.preventDefault();
-        const email = (target.querySelector(`#${target.dataset.form}-email`) as HTMLInputElement)
+    document.querySelectorAll('.form').forEach((form) => form.addEventListener('submit', (event: Event) => {
+      const target = event.target as HTMLFormElement;
+      event.preventDefault();
+      const email = (target.querySelector(`#${target.dataset.form}-email`) as HTMLInputElement)
+        .value;
+      const password = (target.querySelector(
+        `#${target.dataset.form}-password`,
+      ) as HTMLInputElement).value;
+      (document.querySelector(
+        `#${target.dataset.form}-button`,
+      ) as HTMLInputElement).disabled = true;
+      if (target.classList.contains('form_signin')) {
+        this.authorization.signIn(email, password);
+      }
+      if (target.classList.contains('form_signup')) {
+        const name = (target.querySelector(`#${target.dataset.form}-name`) as HTMLInputElement)
           .value;
-        const password = (target.querySelector(
-          `#${target.dataset.form}-password`,
-        ) as HTMLInputElement).value;
-        (document.querySelector(
-          `#${target.dataset.form}-button`,
-        ) as HTMLInputElement).disabled = true;
-        if (target.classList.contains('form_signin')) {
-          this.authorization.signIn(email, password);
-        }
-        if (target.classList.contains('form_signup')) {
-          const name = (target.querySelector(`#${target.dataset.form}-name`) as HTMLInputElement)
-            .value;
-          this.authorization.signUp(name, email, password);
-        }
-      }),
-    );
+        this.authorization.signUp(name, email, password);
+      }
+    }));
   }
 
   addHandlerToUnAuth() {
-    document.querySelector('.user__avatar')?.addEventListener('click', () => {
-      this.state.isAuthorized = false;
-      this.state.name = '';
-      this.state.userId = '';
-      this.state.token = '';
-      this.state.refreshToken = '';
+    document.querySelector('.logout')?.addEventListener('click', () => {
       this.authorization.clearLocalStorage('user');
+      this.authorization.clearLocalStorage('message');
+      this.authorization.clearLocalStorage('token');
+      this.authorization.clearLocalStorage('refreshToken');
+      this.authorization.clearLocalStorage('name');
+      this.authorization.clearLocalStorage('userId');
       this.authorization.showAuthorizedUser('user');
     });
   }
 
   addHandlerToLoadWindow() {
     window.addEventListener('load', () => {
-      this.authorization.showAuthorizedUser('user');
+      this.authorization.showAuthorizedUser('name');
     });
   }
 }
