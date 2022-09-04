@@ -1,5 +1,6 @@
 import State from '../../../types/state';
 import './_sprintModal.scss';
+import './_sprint.scss';
 
 class SprintModal {
   state: State;

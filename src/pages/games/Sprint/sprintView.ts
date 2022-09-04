@@ -27,10 +27,29 @@ class SprintView {
     const sprintContainer = document.createElement('div');
     sprintContainer.className = 'sprint';
 
+    const clockImage = document.createElement('img');
+    clockImage.className = 'alarm-clock';
+    clockImage.alt = 'alarm-clock';
+    clockImage.src = '../../../assets/images/alarm-clock.png';
+
+    const countDown = document.createElement('div');
+    countDown.className = 'sprint__countdown';
+    countDown.textContent = '60';
+
     const sprintClose = document.createElement('img');
     sprintClose.className = 'sprint__close';
     sprintClose.alt = 'cancel';
     sprintClose.src = '../assets/images/cancel.png';
+
+    const sprintUnmute = document.createElement('img');
+    sprintUnmute.className = 'sprint__unmute';
+    sprintUnmute.alt = 'unmute';
+    sprintUnmute.src = '../assets/images/music.png';
+
+    const sprintMute = document.createElement('img');
+    sprintMute.className = 'sprint__mute hidden';
+    sprintMute.alt = 'mute';
+    sprintMute.src = '../assets/images/mute.png';
 
     const sprintScore = document.createElement('div');
     sprintScore.className = 'sprint__score';
@@ -38,6 +57,11 @@ class SprintView {
 
     const sprintGame = document.createElement('div');
     sprintGame.className = 'sprint__game';
+
+    const audioImage = document.createElement('img');
+    audioImage.className = 'sprint__audio';
+    audioImage.alt = 'audio';
+    audioImage.src = '../../../assets/images/audio-icon.svg';
 
     const checkbox = document.createElement('div');
     checkbox.className = 'sprint__checkbox';
@@ -75,10 +99,11 @@ class SprintView {
     buttonTrue.textContent = 'верно';
 
     sprintContainer.append(rightAnswerAudio, wrongAnswerAudio, increasePointsAudio);
-    sprintContainer.append(sprintClose, sprintScore, sprintGame);
+    sprintContainer.append(sprintMute, sprintUnmute);
+    sprintContainer.append(clockImage, countDown, sprintClose, sprintScore, sprintGame);
     checkbox.append(checkboxItem1, checkboxItem2, checkboxItem3);
     buttonContainer.append(buttonFalse, buttonTrue);
-    sprintGame.append(checkbox, sprintPoints, word, translate, buttonContainer);
+    sprintGame.append(checkbox, audioImage, sprintPoints, word, translate, buttonContainer);
     pageContent.append(sprintContainer);
   }
 }

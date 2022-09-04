@@ -45,6 +45,7 @@ export default class Games {
       button.addEventListener('click', (event: Event) => {
         const target = event.target as HTMLElement;
         this.state.game = target.id;
+        this.state.gameInit = 'menu';
         this.clearPageContent();
         this.levels.drawGameLevels();
         this.addHandlersToBack();
@@ -96,12 +97,25 @@ export default class Games {
     });
   }
 
+  addHandlersToStartGameFromBook() {
+    document.querySelector('.user__avatar')?.addEventListener('click', () => {
+      this.state.gameInit = 'book';
+      if (localStorage.getItem('currentLevel') && localStorage.getItem('currentPage')) {
+        this.state.gameLevel = Number(localStorage.getItem('currentLevel'));
+        this.state.gamePage = Number(localStorage.getItem('currentPage'));
+      }
+      (document.querySelector('.page__content') as HTMLElement).innerHTML = '';
+      this.drawGameSprint(this.state.gamePage, this.state.gameLevel);
+      // Добавить вызов функции аудиовызова
+    });
+  }
+
   drawGameAudioCall() {
     this.audioCall.drawAudioCall(this.state.gameLevel);
   }
 
   async drawGameSprint(page: number, level: number) {
-    this.sprint.getWordsForGame(page, level).then(() => {
+    this.sprint.helper(page, level).then(() => {
       this.sprint.drawSprintView();
       this.sprint.setRandomWord();
     });

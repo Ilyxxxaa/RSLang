@@ -1,5 +1,5 @@
 import { TimeScale } from 'chart.js';
-import { IWord, IOptional } from './dictionaryTypes';
+import { IWord } from './dictionaryTypes';
 
 export default interface State {
   view: View;
@@ -16,14 +16,10 @@ export default interface State {
     pointsScored: number;
     rightAnswers: IWord[];
     wrongAnswers: IWord[];
-    difficulty: string,
-    optional: IOptional;
   };
 }
 
 type View = 'main' | 'book' | 'games' | 'statistics' | string;
-
-// export type Level = '' | 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 
 export enum Game {
   audiocall = 'Аудиовызов',
