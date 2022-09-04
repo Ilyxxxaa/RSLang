@@ -20,4 +20,30 @@ export default class Utils {
   static returnServerAdress() {
     return 'https://serverforrslang.herokuapp.com';
   }
+
+  static smoothScroll() {
+    document.querySelectorAll('a[href^="#"').forEach((item) => {
+      const link = item as HTMLElement;
+
+      let href: string = link.getAttribute('href') as string;
+      href = href.substring(1);
+
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const scrollTarget = document.getElementById(href);
+
+        const topOffset = 0;
+        const elementPosition = scrollTarget?.getBoundingClientRect().top;
+        if (elementPosition) {
+          const offsetPosition = elementPosition - topOffset;
+
+          window.scrollBy({
+            top: offsetPosition,
+            behavior: 'smooth',
+          });
+        }
+      });
+    });
+  }
 }

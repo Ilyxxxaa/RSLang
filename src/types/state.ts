@@ -3,7 +3,7 @@ import { IWord } from './dictionaryTypes';
 
 export default interface State {
   view: View;
-  gameInit?: string,
+  gameInit?: string;
   game: string;
   gamePage: number;
   gameLevel: number;
