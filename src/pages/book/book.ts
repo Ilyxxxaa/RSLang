@@ -1,21 +1,51 @@
+/* eslint-disable import/no-cycle */
 import updateCards from './bookVIew';
 import drawLevelsBlock from './levels';
 import drawPagination from './pagination';
 import currentWords from './bookState';
+import { createElement } from './utils';
+import drawDictionary from './dictionary';
+import { drawGamesBlock } from './gamesBlock';
+import State from '../../types/state';
+
+export const user = {
+  message: localStorage.getItem('message'),
+  token: localStorage.getItem('token'),
+  refreshToken: localStorage.getItem('refreshToken'),
+  userId: localStorage.getItem('userId'),
+};
+
+const obj = {
+  currentBookView: localStorage.getItem('currentBookView') || 'book',
+};
 
 export default class Book {
+  state: State;
+
+  constructor(state: State) {
+    this.state = state;
+  }
+
   public async drawBook() {
-    console.log(currentWords.currentLevel, currentWords.currentPage);
     const pageContent = document.querySelector('.page__content');
     if (pageContent) pageContent.innerHTML = '';
-
     const bookContainer = document.createElement('div');
     bookContainer.classList.add('book_container');
     pageContent?.append(bookContainer);
+    const bookTitle = createElement('h1', 'book-main-title');
+    const bookButton = createElement('button', 'button-to-book');
+    bookButton.classList.add('book-title-active');
+    bookButton.innerHTML = 'Учебник';
+    bookTitle.append(bookButton);
+    localStorage.setItem('currentBookView', 'book');
 
-    const bookTitle = document.createElement('h1');
-    bookTitle.innerText = 'Учебник';
-    bookTitle.classList.add('book-title');
+    if (user.userId) {
+      const dictionaryButton = createElement('button', 'button-to-dictionary');
+      dictionaryButton.innerHTML = 'Словарь';
+      bookTitle.append(dictionaryButton);
+      dictionaryButton.addEventListener('click', () => drawDictionary());
+    }
+    bookButton.addEventListener('click', () => this.drawBook());
 
     const wordsTitle = document.createElement('h2');
     wordsTitle.innerText = 'Слова';
@@ -24,6 +54,8 @@ export default class Book {
     bookContainer.append(bookTitle, drawLevelsBlock(), wordsTitle);
 
     await updateCards(currentWords.currentLevel, currentWords.currentPage);
-    bookContainer.append(await drawPagination());
+
+    bookContainer.append(drawPagination());
+    bookContainer.append(...drawGamesBlock());
   }
 }

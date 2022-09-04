@@ -1,11 +1,17 @@
-import { IWord } from '../../types/bookTypes';
+/* eslint-disable import/no-cycle */
+import { IWord } from '../../types/dictionaryTypes';
 import './styles/main.scss';
-import playSounds from './audio';
-import getWords from './bookRequests';
-import { levelColors, createElement, backgrounds } from './utils';
+import { getWords } from './bookRequests';
+import { levelColors, createElement } from './utils';
+import { playSounds, stopAudio } from './audio';
+import { user } from './book';
+import getUserWords, { createHardWord, createLearnedWord, updateHardWord, updateLearnedWord } from '../../common/apiRequests';
+import currentBookWords from './bookState';
+import drawDictionary from './dictionary';
 
 const noBgColor = '#FFFFFF';
 
+// eslint-disable-next-line max-len
 function createCardWord(card: IWord, level: number, index: number, wordsContainer: HTMLElement) {
   const cardWord = createElement('button', 'card-word');
   if (index === 0) {
@@ -15,6 +21,12 @@ function createCardWord(card: IWord, level: number, index: number, wordsContaine
   cardWord.innerHTML = `<h4 class="">${card.word}</h4>
   <p class="">${card.wordTranslate}</p>
   </button>`;
+  if (card.userWord && card.userWord.difficulty === 'hard') {
+    cardWord.classList.add('difficult-card-word');
+  }
+  if (card.userWord && card.userWord.optional.learned === true) {
+    cardWord.classList.add('learned-card-word');
+  }
 
   cardWord.addEventListener('click', () => {
     const prevActive: HTMLButtonElement | null = document.querySelector('.active-word');
@@ -23,14 +35,49 @@ function createCardWord(card: IWord, level: number, index: number, wordsContaine
       .querySelectorAll('.active-word')
       .forEach((el) => el.classList.remove('active-word'));
     cardWord.classList.add('active-word');
-    cardWord.style.background = `${levelColors[level]} `;
+    cardWord.style.background = (level >= 0) ? `${levelColors[level]}` : `${levelColors[7]}`;
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     updateCard(card);
   });
   return cardWord;
 }
 
+async function addWordDifficult(cardData: IWord, button: HTMLButtonElement, bookView: string) {
+  const buttonElement = button;
+  if (button) buttonElement.disabled = true;
+  if (cardData.userWord) {
+    if (cardData.userWord.difficulty === 'hard') {
+      await updateHardWord(cardData, 'string');
+    } else await updateHardWord(cardData, 'hard');
+  } else {
+    await createHardWord(cardData, 'hard');
+  }
+  if (bookView && bookView === 'dictionary') {
+    await drawDictionary();
+  } else await updateCards(currentBookWords.currentLevel, currentBookWords.currentPage);
+  buttonElement.disabled = false;
+}
+
+async function addWordLearned(cardData: IWord, button: HTMLButtonElement, bookView: string) {
+  const buttonElement = button;
+  if (button) buttonElement.disabled = true;
+  if (cardData.userWord) {
+    if (cardData.userWord.optional.learned === true) {
+      await updateLearnedWord(cardData, false);
+    } else await updateLearnedWord(cardData, true);
+  } else {
+    await createLearnedWord(cardData, true);
+  }
+  if (bookView && bookView === 'dictionary') {
+    await drawDictionary();
+  } else await updateCards(currentBookWords.currentLevel, currentBookWords.currentPage);
+  buttonElement.disabled = false;
+}
+
 function createCard(cardData: IWord) {
+  const bookView = localStorage.getItem('currentBookView') || 'book';
+  const isAutorizated = localStorage.getItem('userId');
+
   const cardContainer = createElement('div', 'card');
   const cardContent = createElement('div', 'card-content');
   const cardImgContainer = createElement('div', 'card-img-container');
@@ -54,7 +101,6 @@ function createCard(cardData: IWord) {
     <h4 class="word-translate">${cardData.wordTranslate}</h4>
     <span class="word-transcription">${cardData.transcription}</span>
   `;
-  wordContainer.append(cardAudioContainer);
 
   const wordMeaningContainer = createElement('div', 'word-meaning-container');
   const wordExampleContainer = createElement('div', 'word-example-container');
@@ -73,10 +119,60 @@ function createCard(cardData: IWord) {
 
   cardContent.append(wordContainer, wordDescriptionContainer);
   cardContainer.append(cardImgContainer, cardContent);
+
+  const cardButtonsContainer = createElement('div', 'card-buttons-container');
+  cardButtonsContainer.append(cardAudioContainer);
+
+  if (isAutorizated) {
+    if (cardData.userWord && cardData.userWord.difficulty === 'hard') {
+      cardContainer.classList.add('difficult-card');
+    }
+    if (cardData.userWord && cardData.userWord.optional && cardData.userWord.optional.learned) {
+      cardContainer.classList.add('learned-card');
+    }
+
+    const buttonAddToDiff: HTMLButtonElement = document.createElement('button');
+    buttonAddToDiff.classList.add('button-add-to-diff');
+    const buttonAddToLearned: HTMLButtonElement = document.createElement('button');
+    buttonAddToLearned.classList.add('button-add-to-learned');
+
+    buttonAddToDiff.innerText = '+ В СЛОЖНЫЕ СЛОВА';
+    if (cardData.userWord && cardData.userWord.difficulty === 'hard') buttonAddToDiff.innerText = '- ИЗ СЛОЖНЫХ';
+
+    buttonAddToDiff.addEventListener('click', () => addWordDifficult(cardData, buttonAddToDiff, bookView));
+
+    buttonAddToLearned.innerText = 'ИЗУЧЕНО';
+    if (cardData.userWord && cardData.userWord.optional.learned === true) {
+      buttonAddToLearned.innerText = 'ИЗУЧАТЬ';
+    }
+    buttonAddToLearned.addEventListener('click', () => addWordLearned(cardData, buttonAddToLearned, bookView));
+
+    cardButtonsContainer.append(buttonAddToDiff, buttonAddToLearned);
+
+    const wordGameResultsContainer = createElement('div', 'word-results-container');
+    const gameResultsTitle = createElement('p', 'game-results-title');
+    const wordGameStatistic = createElement('div', 'word-game-statistic');
+    gameResultsTitle.innerText = 'Результаты игр';
+    wordGameStatistic.innerHTML = `
+        <div class="game-statistic-wrapper" >
+          <span class="game-name"> Спринт </span>
+          <span class="game-stat">${getGameResults(cardData, 'sprint')}</span>
+        </div>
+        <div class="game-statistic-wrapper">
+          <span class="game-name"> Аудивызов </span>
+          <span class="game-stat">${getGameResults(cardData, 'audioCall')}</span>
+        </div>
+        `;
+    wordGameResultsContainer.append(gameResultsTitle, wordGameStatistic);
+    wordDescriptionContainer.append(wordGameResultsContainer);
+  }
+
+  wordContainer.append(cardButtonsContainer);
   return cardContainer;
 }
 
 function updateCard(cardData: IWord) {
+  stopAudio();
   const cardContainer = document.querySelector('.card');
   const cardsContainer = document.querySelector('.cards-container');
   if (cardContainer) {
@@ -85,7 +181,7 @@ function updateCard(cardData: IWord) {
   }
 }
 
-function drawCards(array: IWord[], level: number) {
+export function drawCards(array: IWord[], level: number) {
   let cardsContainer = document.querySelector('.cards-container');
   if (cardsContainer) {
     cardsContainer.innerHTML = '';
@@ -95,24 +191,23 @@ function drawCards(array: IWord[], level: number) {
     bookContainer?.append(cardsContainer);
   }
 
-  const content: HTMLDivElement | null = document.querySelector('.content');
-  if (content) {
-    content.style.backgroundImage = `url('../assets/images/book/bookBackgrounds/${backgrounds[level]}.png')`;
-  }
-
   const wordsContainer = createElement('div', 'words-container');
+  array.forEach((card, i) => wordsContainer.append(createCardWord(card, level, i, wordsContainer)));
   cardsContainer.append(wordsContainer);
-
-  array.forEach((card, index) =>
-    wordsContainer.append(createCardWord(card, level, index, wordsContainer)),
-  );
-
   cardsContainer.append(createCard(array[0]));
 }
 
 export default async function updateCards(level: number, page: number) {
-  localStorage.setItem('currentPage', `${page}`);
-  localStorage.setItem('currentLevel', `${level}`);
-  const arrayWords = await getWords(level, page);
+  localStorage.setItem('currentBookPage', `${page}`);
+  localStorage.setItem('currentBookLevel', `${level}`);
+
+  const arrayWords = user.userId ? await getUserWords(level, page)
+    : await getWords(level, page);
   await drawCards(arrayWords, level);
+}
+
+function getGameResults(cardData: IWord, game: 'sprint' | 'audioCall') {
+  const result = cardData.userWord ? `${cardData.userWord.optional.games[game].right} / ${cardData.userWord.optional.games[game].right + cardData.userWord.optional.games.sprint.wrong}` : '0 / 0';
+  console.log(result);
+  return result;
 }
