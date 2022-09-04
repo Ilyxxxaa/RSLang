@@ -72,7 +72,7 @@ class App {
   addListenersToMenuButtons() {
     this.menu.menuItemMain.addEventListener('click', () => {
       const content: HTMLDivElement | null = document.querySelector('.content');
-      if (content) content.style.background = 'url("../assets/images/header-bg.png")';
+      if (content) content.style.backgroundImage = 'url("../assets/images/header-bg.png")';
 
       if (this.state.view !== 'main') {
         this.state.view = 'main';

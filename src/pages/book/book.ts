@@ -3,6 +3,11 @@ import drawLevelsBlock from './levels';
 import drawPagination from './pagination';
 import currentWords from './bookState';
 import State from '../../types/state';
+import { createElement } from './utils';
+import { getAggregatedWords, getDifficultWords } from './bookRequests';
+import drawDictionary from './dictionary';
+
+let user: State | null = null;
 
 export default class Book {
   state: State;
@@ -12,7 +17,9 @@ export default class Book {
   }
 
   public async drawBook() {
-    console.log(this.state);
+    const local: string | null = localStorage.getItem('user');
+    user = local ? JSON.parse(local) : null;
+
     const content: HTMLDivElement | null = document.querySelector('.content');
     if (content) {
       content.style.background = 'url("../assets/images/book/bookBackgrounds/bg2.png")';
@@ -25,8 +32,18 @@ export default class Book {
     pageContent?.append(bookContainer);
 
     const bookTitle = document.createElement('h1');
-    bookTitle.innerText = 'Учебник';
-    bookTitle.classList.add('book-title');
+    const bookButton = createElement('button', 'button-to-book');
+    bookButton.classList.add('book-title-active');
+    bookButton.innerHTML = 'Учебник';
+    bookTitle.append(bookButton);
+    if (user) {
+      const dictionaryButton = createElement('button', 'button-to-dictionary');
+      dictionaryButton.innerHTML = 'Словарь';
+      bookTitle.append(dictionaryButton);
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      dictionaryButton.addEventListener('click', () => drawDictionary());
+    }
+    bookButton.addEventListener('click', () => this.drawBook());
 
     const wordsTitle = document.createElement('h2');
     wordsTitle.innerText = 'Слова';
@@ -36,5 +53,18 @@ export default class Book {
 
     await updateCards(currentWords.currentLevel, currentWords.currentPage);
     bookContainer.append(await drawPagination());
+
+    const gameButtonsContainer = createElement('div', 'game-buttons-container');
+    const gameContainerTitle = document.createElement('h2');
+    gameContainerTitle.classList.add('games-title');
+    gameContainerTitle.innerText = 'Игры';
+    const toAudioCall = createElement('button', 'button-to-audioCall');
+    toAudioCall.addEventListener('click', () => console.log('Аудиовызов', currentWords));
+    const toSprint = createElement('button', 'button-to-sprint');
+    toSprint.addEventListener('click', () => console.log('Спринт', currentWords));
+    toAudioCall.innerText = 'Аудиовызов';
+    toSprint.innerText = 'Спринт';
+    gameButtonsContainer.append(toAudioCall, toSprint);
+    bookContainer.append(gameContainerTitle, gameButtonsContainer);
   }
 }

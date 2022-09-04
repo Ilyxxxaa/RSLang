@@ -1,5 +1,6 @@
 export interface IWord {
   id: string;
+  _id?: string;
   group: number;
   page: number;
   word: string;
@@ -13,4 +14,10 @@ export interface IWord {
   textExampleTranslate: string;
   textMeaningTranslate: string;
   wordTranslate: string;
+  userWord: {
+    'difficulty': string,
+    'optional': {
+      'learned': boolean,
+    }
+  }
 }

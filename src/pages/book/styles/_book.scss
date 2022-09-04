@@ -12,9 +12,8 @@
 }
 
 .words-title,
-.book-title {
+.games-title {
   color: #FFFFFF;
-  text-align: left;
 }
 
 .cards-container {
@@ -28,7 +27,11 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  // margin: 1rem auto;
+  align-content: baseline;
+}
+
+.active-word {
+  background: #2c2647;
 }
 
 .card {
@@ -58,18 +61,18 @@
   padding: 5px;
   color: #FFFFFF;
 
-  border-radius: 5px;
+  border-radius: 1rem;
   border: none;
   transition: all 0.3s;
   cursor: pointer;
 }
 
 .button-add-to-diff {
-  background-color: #ff00009e;
+  background-color: #f75a5a;
 }
 
 .button-add-to-learned {
-  background-color: #00ff5e75;
+  background-color: #00ff5e;
 }
 
 
@@ -124,7 +127,7 @@
 
 .difficult-card-word::after {
   content: "";
-  background: #ef0a0a;
+  background: #fb9595;
   width: 60px;
   height: 60px;
   border-radius: 30px;
@@ -133,21 +136,38 @@
   top: -30px;
 }
 
-.difficult-card::after {
+.learned-card-word::after {
+  content: "";
+  background: #0aef5a;
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  position: absolute;
+  right: -30px;
+  top: -30px;
+}
+
+.difficult-card::after,
+.learned-card::after {
   display: block;
   margin: 5px;
-
   position: absolute;
   left: 5px;
   top: 5px;
-
-  background-color: #ef0a0a;
   color: #FFFFFF;
   font-weight: 500;
   border: 5px solid transparent;
   border-radius: 5px;
+}
+
+.difficult-card::after {
+  background-color: #fb9595;
   content: 'Сложное';
-  cursor: pointer;
+}
+
+.learned-card::after {
+  background-color: #6dda95;
+  content: 'Изучено';
 }
 
 .text-meaning,
@@ -164,8 +184,66 @@
 
 .button-add-to-diff:hover,
 .card-word:hover,
-.button-add-to-learned:hover {
+.button-add-to-learned:hover,
+.game-buttons-container button:hover {
   opacity: 0.5;
+}
+
+.game-buttons-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 100px;
+  padding: 2rem;
+  background: #ffffff50;
+  border-radius: 2rem;
+}
+
+.game-buttons-container button {
+  height: 50px;
+  width: 170px;
+  background-color: #FFFFFF;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+}
+
+.button-to-book,
+.button-to-dictionary {
+  border: none;
+  background: transparent;
+  color: #ffffff72;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.book-title-active {
+  color: #ffffff;
+}
+
+.button-to-book {
+  padding-right: 1rem;
+}
+
+.button-to-book::after {
+  content: "|";
+  padding-left: 1rem;
+  color: #ffffff72;
+}
+
+.word-results-container {
+  background-color: rgba(44, 38, 71, 0.1254901961);
+}
+
+.game-stat {
+  font-weight: 600;
+}
+
+.game-results-title {
+  font-size: 1.1rem;
+  font-weight: 500;
 }
 
 @media (max-width: 760px) {
