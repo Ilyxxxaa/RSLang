@@ -5,14 +5,15 @@ import request from './request';
 const deepClone = require('rfdc/default');
 
 const server = 'https://serverforrslang.herokuapp.com';
-const notLearnedFilter =
-  '{"$or":[{"$and":[{"userWord.optional.learned":false}]},{"userWord":null}]}';
+const notLearnedFilter = JSON.stringify(
+  '{"$or":[{"$and":[{"userWord.optional.learned":false}]},{"userWord":null}]}',
+);
 
 const standardBody: IBody = {
   difficulty: 'string',
   optional: {
     isNew: false,
-    learned: true,
+    learned: false,
     date: new Date(),
     games: {
       sprint: {
@@ -233,4 +234,15 @@ export async function createLearnedWord(word: IWord, learned: boolean) {
   } catch (err) {
     console.log(err);
   }
+}
+// запрос для неавторизованных ниже
+export async function getAllWords(group: number, page: number) {
+  try {
+    const response = await request('GET', `${server}/words?group=${group}&page=${page}`);
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+  return false;
 }

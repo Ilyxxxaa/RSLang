@@ -34,7 +34,7 @@ export default class AudioCallCreator {
   wrongAnswerAuido = document.createElement('audio');
 
   createAudioCallContainer() {
-    this.audioCallContainer.innerHTML = '';
+    // this.audioCallContainer.innerHTML = '';
     this.createGameContainer();
     const pageContent = document.querySelector('.page__content');
     if (pageContent) {

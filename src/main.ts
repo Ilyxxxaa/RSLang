@@ -13,6 +13,8 @@ import Utils from './common/utils';
 
 import { createHardWord } from './common/apiRequests';
 
+import AudioCall1 from './pages/games/AudioCall/test';
+
 class App {
   state: State;
 
@@ -31,6 +33,8 @@ class App {
   book: Book;
 
   footer: Footer;
+
+  audioCall1: AudioCall1;
 
   constructor() {
     this.state = {
@@ -57,6 +61,7 @@ class App {
     this.statistics = new Statistics();
     this.book = new Book();
     this.footer = new Footer();
+    this.audioCall1 = new AudioCall1(this.state);
   }
 
   start() {
@@ -64,11 +69,12 @@ class App {
     this.addListenersToMenuButtons();
     this.header.drawHeader();
     this.authorization.addAuthHandlers();
+    this.audioCall1.sayHello();
 
-    if (this.state.view === 'main') this.renderMainPage();
-    if (this.state.view === 'games') this.renderGamesPage();
-    if (this.state.view === 'statistics') this.renderStatisticsPage();
-    if (this.state.view === 'book') this.renderBookPage();
+    // if (this.state.view === 'main') this.renderMainPage();
+    // if (this.state.view === 'games') this.renderGamesPage();
+    // if (this.state.view === 'statistics') this.renderStatisticsPage();
+    // if (this.state.view === 'book') this.renderBookPage();
   }
 
   addListenersToMenuButtons() {
@@ -79,8 +85,6 @@ class App {
 
         this.renderMainPage();
         this.menu.closeMenu();
-
-        console.log(this.state);
       }
     });
 

@@ -16,8 +16,8 @@ export default class AudioCall {
   constructor(state: State) {
     this.state = state;
     this.audioCallState = {
-      arrayOfIndexes: [],
       arrayOfRestIndexes: [],
+      wordsOrderArray: [],
       wordsArray: [],
       wordsCount: 0,
       rightWordsCount: 0,
@@ -48,7 +48,6 @@ export default class AudioCall {
   }
 
   clearState() {
-    this.audioCallState.arrayOfIndexes = [];
     this.audioCallState.arrayOfRestIndexes = [];
     this.audioCallState.wordsArray = [];
     this.audioCallState.wordsCount = 0;
@@ -59,27 +58,27 @@ export default class AudioCall {
 
   createArray() {
     const array = Array.from({ length: 20 }, (v, i) => i).sort(() => 0.5 - Math.random());
-    this.audioCallState.arrayOfIndexes = [...array];
+
     this.audioCallState.arrayOfRestIndexes = [...array];
   }
 
-  createSetOfIndexes() {
-    const set: Set<Number> = new Set();
-    const lastNumber = this.audioCallState.arrayOfRestIndexes[
-      this.audioCallState.arrayOfRestIndexes.length - 1
-    ];
-    set.add(lastNumber);
-    this.audioCallState.arrayOfRestIndexes.pop();
-    while (set.size < 5) {
-      set.add(this.audioCallState.arrayOfIndexes[Utils.randomInteger(0, 19)]);
-    }
-    this.audioCallState.wordsArray = Array.from(set);
-  }
+  // createSetOfIndexes() {
+  //   const set: Set<Number> = new Set();
+  //   const lastNumber = this.audioCallState.arrayOfRestIndexes[
+  //     this.audioCallState.arrayOfRestIndexes.length - 1
+  //   ];
+  //   set.add(lastNumber);
+  //   this.audioCallState.arrayOfRestIndexes.pop();
+  //   while (set.size < 5) {
+  //     set.add(this.audioCallState.arrayOfIndexes[Utils.randomInteger(0, 19)]);
+  //   }
+  //   this.audioCallState.wordsArray = Array.from(set);
+  // }
 
   getWords = async (level: number, page: number) => {
     const words = await Utils.getWords(level, page);
     console.log(words);
-    this.createSetOfIndexes();
+    // this.createSetOfIndexes();
     const rigthWord = this.audioCallState.wordsArray[0];
     this.audioCallCreator.audioCallWordsContainer.innerHTML = '';
     this.audioCallState.wordsArray

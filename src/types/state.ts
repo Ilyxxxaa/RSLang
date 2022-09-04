@@ -29,9 +29,9 @@ export enum Game {
 }
 
 export interface AudioCallState {
-  arrayOfIndexes: Number[];
+  wordsArray: IWord[];
   arrayOfRestIndexes: Number[];
-  wordsArray: Number[];
+  wordsOrderArray: Number[];
   wordsCount: number;
   rightWordsCount: number;
   rightWordsArray: AudioCallWordInfo[];

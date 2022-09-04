@@ -21,6 +21,11 @@ export default class Utils {
     return 'https://serverforrslang.herokuapp.com';
   }
 
+  static createRandomArray(amount: number) {
+    const array = Array.from({ length: amount }, (v, i) => i).sort(() => 0.5 - Math.random());
+    return array;
+  }
+
   static smoothScroll() {
     document.querySelectorAll('a[href^="#"').forEach((item) => {
       const link = item as HTMLElement;
