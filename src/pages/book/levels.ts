@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import updateCards from './bookVIew';
 import currentWords from './bookState';
 import { levelsName, levelColors, createElement } from './utils';

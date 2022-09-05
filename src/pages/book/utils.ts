@@ -4,6 +4,6 @@ export function createElement(elem: string, className: string) {
   return htmlElem;
 }
 
-export const levelColors = ['#0012ff', '#0095ff', '#09E35C', '#e6e930', '#FFAD00', '#DD0FC6', '#ff00aa', 'rgb(255 26 62)'];
+export const levelColors = ['#0012ff', '#0095ff', 'rgb(158, 255, 195)', '#e6e930', '#FFAD00', '#DD0FC6', '#ff00aa', 'rgb(255 26 62)'];
 export const levelsName = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 export const backgrounds = ['bg1', 'bg2', 'bg3', 'bg4', 'bg5', 'bg6'];

@@ -7,6 +7,7 @@ import { createElement } from './utils';
 import drawDictionary from './dictionary';
 import { drawGamesBlock } from './gamesBlock';
 import State from '../../types/state';
+import { loaderInit } from './loader';
 
 export const user = {
   message: localStorage.getItem('message'),
@@ -27,6 +28,7 @@ export default class Book {
   }
 
   public async drawBook() {
+    loaderInit();
     const pageContent = document.querySelector('.page__content');
     if (pageContent) pageContent.innerHTML = '';
     const bookContainer = document.createElement('div');
@@ -53,7 +55,7 @@ export default class Book {
 
     bookContainer.append(bookTitle, drawLevelsBlock(), wordsTitle);
 
-    await updateCards(currentWords.currentLevel, currentWords.currentPage);
+    await updateCards(currentWords.currentLevel, currentWords.currentPage, this.state);
 
     bookContainer.append(drawPagination());
     bookContainer.append(...drawGamesBlock());
