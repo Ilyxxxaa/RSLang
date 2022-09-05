@@ -1,6 +1,10 @@
+/* eslint-disable import/no-cycle */
 import '../AudioCall/audioCallModal.scss';
 import CreateChart from '../AudioCall/createChart';
 import State from '../../../types/state';
+import Book from '../../book/book';
+// eslint-disable-next-line import/no-cycle
+import Games from '../games';
 import { baseLink } from '../../../const';
 
 export default class SprintResultModal {
@@ -148,12 +152,44 @@ export default class SprintResultModal {
   }
 
   addHandlersToSprintResultModal() {
+    const book = new Book(this.state);
+    const games = new Games(this.state);
     this.modalPlayAgainButton.addEventListener('click', () => {
-      console.log('hello start');
+      document.querySelectorAll<HTMLButtonElement>('.menu__list-item')?.forEach((item) => item.removeAttribute('disabled'));
+      games.clearPageContent();
+      if (this.state.gameInit === 'menu') {
+        games.levels.drawGameLevels();
+        games.addHandlersToBack();
+        games.addHandlersToStart();
+        games.addHandlersToChooseLevel();
+      }
+      if (this.state.gameInit === 'book') {
+        games.drawGameSprint(this.state.gamePage, this.state.gameLevel);
+      }
+      this.state.sprint = {
+        pointsScored: 0,
+        pointsPerWord: 10,
+        countRightAnswers: 0,
+        wordsForGame: [],
+        rightAnswers: [],
+        wrongAnswers: [],
+        countRightAnswersInARow: 0,
+      };
     });
-
     this.modalGoToBookButton.addEventListener('click', () => {
-      console.log('hello book');
+      document.querySelectorAll<HTMLButtonElement>('.menu__list-item')?.forEach((item) => item.removeAttribute('disabled'));
+      this.state.view = 'book';
+      this.state.sprint = {
+        pointsScored: 0,
+        pointsPerWord: 10,
+        countRightAnswers: 0,
+        wordsForGame: [],
+        rightAnswers: [],
+        wrongAnswers: [],
+        countRightAnswersInARow: 0,
+      };
+      book.drawBook();
+      games.addHandlersToStartGameFromBook();
     });
   }
 

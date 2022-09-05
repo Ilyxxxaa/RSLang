@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { audiocallDescription, sprintDescription, PAGE_COUNTS } from '../../const';
 import GameCardView from './gameCardView';
 import GameLevels from './gameLevels';
@@ -71,6 +72,8 @@ export default class Games {
 
         this.state.gameLevel = index;
         this.state.gamePage = getRandomNumber(0, PAGE_COUNTS - 1);
+        console.log('level:', this.state.gameLevel);
+        console.log('page:', this.state.gamePage);
       });
     });
   }
@@ -98,15 +101,15 @@ export default class Games {
   }
 
   addHandlersToStartGameFromBook() {
-    document.querySelector('.user__avatar')?.addEventListener('click', () => {
+    document.querySelector('.button-to-sprint')?.addEventListener('click', () => {
       this.state.gameInit = 'book';
+      this.state.game = 'sprint';
       if (localStorage.getItem('currentLevel') && localStorage.getItem('currentPage')) {
-        this.state.gameLevel = Number(localStorage.getItem('currentLevel'));
-        this.state.gamePage = Number(localStorage.getItem('currentPage'));
+        // this.state.gameLevel = Number(localStorage.getItem('currentBookLevel'));
+        // this.state.gamePage = Number(localStorage.getItem('currentBookPage'));
       }
       (document.querySelector('.page__content') as HTMLElement).innerHTML = '';
       this.drawGameSprint(this.state.gamePage, this.state.gameLevel);
-      // Добавить вызов функции аудиовызова
     });
   }
 

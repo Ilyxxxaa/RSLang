@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import State from '../../../types/state';
 import getRandomNumber from '../random';
 import SprintView from './sprintView';
@@ -23,7 +24,6 @@ class Sprint {
   async getWordsForGameAnonymous(page: number, level: number) {
     const url = `words?page=${page}&group=${level}`;
     const wordsForGame = request('GET', url);
-    // const wordsForGame = requestGetAnonymous(`${baseLink}/words?page=${page}&group=${level}`);
     return wordsForGame.then((result) => {
       this.state.sprint.wordsForGame = [];
       this.state.sprint.wordsForGame = [...result];
@@ -84,12 +84,9 @@ class Sprint {
     }
     if (!seconds) {
       clearInterval(this.intervalId);
-      sprintResultModal.drawResults();
-      sprintResultModal.addListenerToTabs();
+      this.showSprintResultsModal();
     }
     if (this.state.game === 'sprint' && seconds > 0) {
-      console.log(this.state.game);
-      console.log(seconds);
       document.querySelectorAll<HTMLButtonElement>('.menu__list-item')?.forEach((item) => item.setAttribute('disabled', 'disabled'));
     } else {
       document.querySelectorAll<HTMLButtonElement>('.menu__list-item')?.forEach((item) => item.removeAttribute('disabled'));
@@ -262,8 +259,10 @@ class Sprint {
 
   addHandlersToSprintModal() {
     document.querySelector('.sprint-modal__button_close')?.addEventListener('click', () => {
-      // localStorage.setItem('currentView', 'games');
-      // document.location.reload();
+      document.querySelector('.sprint-modal')?.classList.add('hidden');
+      (document.querySelector('body') as HTMLElement).style.overflow = 'visible';
+      clearInterval(this.intervalId);
+      this.showSprintResultsModal();
     });
 
     document.querySelector('.sprint-modal__button_continue')?.addEventListener('click', () => {
@@ -296,9 +295,9 @@ class Sprint {
   };
 
   endSprintGame() {
+    this.showSprintResultsModal();
     document.querySelector('.sprint')?.classList.add('hidden');
-    // (document.querySelector('.page__content') as HTMLElement).textContent = 'ИГРА ЗАВРШЕНА';
-    (document.querySelector('.page__content') as HTMLElement).textContent = 'ИГРА ЗАВРШЕНА';
+    clearInterval(this.intervalId);
   }
 
   showSprintModalWindow() {

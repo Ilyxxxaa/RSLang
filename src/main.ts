@@ -60,7 +60,6 @@ class App {
     this.addListenersToMenuButtons();
     this.header.drawHeader();
     addAuthHandlers();
-    this.games.addHandlersToStartGameFromBook();
 
     if (this.state.view === 'main') this.renderMainPage();
     if (this.state.view === 'games') this.renderGamesPage();
@@ -177,9 +176,12 @@ class App {
     this.book.drawBook();
     this.footer.drawFooter();
     this.menu.menuItemBook.classList.add('menu__list-item--active');
+    this.games.addHandlersToStartGameFromBook();
   };
 }
 
 const app = new App();
 app.start();
 Utils.smoothScroll();
+
+console.log('today:', new Date());
