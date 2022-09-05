@@ -1,11 +1,11 @@
-export interface ICurrentWords {
+export interface IcurrentBookWords {
   currentPage: number,
   currentLevel: number,
 }
 
-const currentWords: ICurrentWords = {
-  currentPage: localStorage.getItem('currentPage') ? Number(localStorage.getItem('currentPage')) : 0,
-  currentLevel: localStorage.getItem('currentLevel') ? Number(localStorage.getItem('currentLevel')) : 0,
+const currentBookWords: IcurrentBookWords = {
+  currentPage: localStorage.getItem('currentBookPage') ? Number(localStorage.getItem('currentBookPage')) : 0,
+  currentLevel: localStorage.getItem('currentBookLevel') ? Number(localStorage.getItem('currentBookLevel')) : 0,
 };
 
-export default currentWords;
+export default currentBookWords;

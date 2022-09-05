@@ -1,9 +1,11 @@
+/* eslint-disable import/no-cycle */
 import updateCards from './bookVIew';
 import currentWords from './bookState';
 import { levelsName, levelColors, createElement } from './utils';
 import { updatePaginationColor } from './pagination';
+import { stopAudio } from './audio';
 
-function choseWordLevel(element: HTMLElement, i: number) {
+function changeLevel(element: HTMLElement, i: number) {
   currentWords.currentLevel = i;
   const buttonLevel = <HTMLElement>element;
 
@@ -12,6 +14,7 @@ function choseWordLevel(element: HTMLElement, i: number) {
   buttonLevel.classList.remove('unactive-level');
 
   const level = i;
+  stopAudio();
   updatePaginationColor();
   updateCards(level, currentWords.currentPage);
 }
@@ -47,7 +50,7 @@ export default function drawLevelsBlock() {
 
     levelButton.classList.add(`level-${i}-button`);
     levelsContainer.append(levelButton);
-    levelButton.addEventListener('click', () => choseWordLevel(levelButton, i));
+    levelButton.addEventListener('click', () => changeLevel(levelButton, i));
   }
 
   return levelsContainer;

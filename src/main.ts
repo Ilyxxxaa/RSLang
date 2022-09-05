@@ -59,7 +59,7 @@ class App {
     this.mainPage = new MainPage();
     this.games = new Games(this.state);
     this.statistics = new Statistics();
-    this.book = new Book();
+    this.book = new Book(this.state);
     this.footer = new Footer();
     this.audioCall = new AudioCall(this.state);
   }
