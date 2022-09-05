@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { audiocallDescription, sprintDescription, PAGE_COUNTS } from '../../const';
 import GameCardView from './gameCardView';
 import GameLevels from './gameLevels';
@@ -45,6 +46,7 @@ export default class Games {
       button.addEventListener('click', (event: Event) => {
         const target = event.target as HTMLElement;
         this.state.game = target.id;
+        this.state.gameInit = 'menu';
         this.clearPageContent();
         this.levels.drawGameLevels();
         this.addHandlersToBack();
@@ -70,6 +72,8 @@ export default class Games {
 
         this.state.gameLevel = index;
         this.state.gamePage = getRandomNumber(0, PAGE_COUNTS - 1);
+        console.log('level:', this.state.gameLevel);
+        console.log('page:', this.state.gamePage);
       });
     });
   }
@@ -96,12 +100,25 @@ export default class Games {
     });
   }
 
+  addHandlersToStartGameFromBook() {
+    document.querySelector('.button-to-sprint')?.addEventListener('click', () => {
+      this.state.gameInit = 'book';
+      this.state.game = 'sprint';
+      if (localStorage.getItem('currentLevel') && localStorage.getItem('currentPage')) {
+        // this.state.gameLevel = Number(localStorage.getItem('currentBookLevel'));
+        // this.state.gamePage = Number(localStorage.getItem('currentBookPage'));
+      }
+      (document.querySelector('.page__content') as HTMLElement).innerHTML = '';
+      this.drawGameSprint(this.state.gamePage, this.state.gameLevel);
+    });
+  }
+
   drawGameAudioCall() {
     this.audioCall.drawAudioCall(this.state.gameLevel);
   }
 
   async drawGameSprint(page: number, level: number) {
-    this.sprint.getWordsForGame(page, level).then(() => {
+    this.sprint.helper(page, level).then(() => {
       this.sprint.drawSprintView();
       this.sprint.setRandomWord();
     });

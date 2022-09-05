@@ -14,15 +14,24 @@
 .sprint-modal__stop {
   box-sizing: border-box;
   position: fixed;
-  top: 50%;
-  left: 50%;
+  top: calc(40% + 45px);
+  left: calc(50% + 45px);
   transform: translate(-50%, -50%);
-  width: 50vw;
-  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  width: 40vw;
+  height: 35vh;
   padding: 60px 20px 40px;
   background-color:white;
   border-radius: 5px;
   z-index: 101;
+
+  @media screen and (max-width: 850px) {
+    width: 60%;
+  }
 }
 
 .sprint-modal__close {
@@ -31,4 +40,34 @@
   right: 15px;
   width: 20px;
   cursor: pointer;
+}
+
+.sprint-modal__title {
+  font-size: 24px;
+  color: black;
+}
+
+.sprint-modal__buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.sprint-modal__button {
+  width: 40%;
+  height: 50px;
+  font-size: 18px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &_close {
+    background-color: rgb(80, 161, 161);
+  }
+
+  &_continue {
+    background-color: rgb(91, 166, 91);
+  }
 }

@@ -1,17 +1,18 @@
-export default class Statistics {
-  statistics: HTMLElement = document.createElement('div');
+import StatisticsView from './statisticsView';
 
+export default class Statistics {
   drawStatistics() {
     const pageContent = document.querySelector('.page__content');
-    this.createStatistics();
     if (pageContent) {
       pageContent.innerHTML = '';
-      pageContent.append(this.statistics);
     }
+    this.createStatistics();
   }
 
   createStatistics() {
-    this.statistics.classList.add('games');
-    this.statistics.textContent = 'Тут будет статистика';
+    const statView = new StatisticsView();
+    statView.drawStatContainer();
+    statView.drawGameStatCard('audiocall', 'Аудиовызов');
+    statView.drawGameStatCard('sprint', 'Спринт');
   }
 }
