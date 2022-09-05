@@ -14,7 +14,7 @@ class AuthModalView {
     const cancel = document.createElement('img');
     cancel.className = 'cancel';
     cancel.alt = 'cancel';
-    cancel.src = '../../assets/images/cancel.png';
+    cancel.src = './assets/images/cancel.png';
 
     const signInTitle = document.createElement('h2');
     signInTitle.className = 'auth-title';
@@ -85,7 +85,8 @@ class AuthModalView {
 
     const signUp = document.createElement('div');
     signUp.className = 'auth-add';
-    signUp.innerHTML = '<p>Нет аккаунта? <span class="auth-button_add" data-auth="signup">Зарегистрироваться</span></p>';
+    signUp.innerHTML =
+      '<p>Нет аккаунта? <span class="auth-button_add" data-auth="signup">Зарегистрироваться</span></p>';
 
     authEmail.append(signInEmail, labelEmail, labelEmailPocket);
     authPassword.append(signInPassword, labelPassword, labelPasswordPocket);
@@ -109,7 +110,7 @@ class AuthModalView {
     const cancel = document.createElement('img');
     cancel.className = 'cancel';
     cancel.alt = 'cancel';
-    cancel.src = '../../assets/images/cancel.png';
+    cancel.src = './assets/images/cancel.png';
 
     const signUpTitle = document.createElement('h2');
     signUpTitle.className = 'auth-title';
@@ -202,7 +203,8 @@ class AuthModalView {
 
     const signIn = document.createElement('div');
     signIn.className = 'auth-add';
-    signIn.innerHTML = '<p>Есть аккаунт? <span class="auth-button_add" data-auth="signin">ВОЙТИ</span></p>';
+    signIn.innerHTML =
+      '<p>Есть аккаунт? <span class="auth-button_add" data-auth="signin">ВОЙТИ</span></p>';
 
     authName.append(signUpName, labelName, labelNamePocket);
     authEmail.append(signUpEmail, labelEmail, labelEmailPocket);

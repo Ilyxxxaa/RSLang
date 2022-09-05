@@ -122,7 +122,7 @@ class App {
     this.menu.clearAllActiveButtons();
 
     const content: HTMLDivElement | null = document.querySelector('.content');
-    if (content) content.style.background = 'url("../assets/images/content-bg.png") no-repeat';
+    if (content) content.style.background = 'url("./assets/images/content-bg.png") no-repeat';
 
     const nav = document.querySelector('.nav');
     if (nav) {
