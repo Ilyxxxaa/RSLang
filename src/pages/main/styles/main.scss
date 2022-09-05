@@ -6,12 +6,13 @@ body {
   display: flex;
   font-family: 'Montserrat', sans-serif;
 }
+
 .content {
   width: 100%;
   min-height: 100vh;
   background-image: url('../../../assets/images/content-bg.png');
   background-position: top center;
-  background-repeat: no-repeat;
+  background-repeat: repeat;
 }
 
 .container {

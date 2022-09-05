@@ -16,5 +16,5 @@ export interface IWord {
   textExampleTranslate: string;
   textMeaningTranslate: string;
   wordTranslate: string;
-  userWord: IBody;
+  userWord?: IBody;
 }

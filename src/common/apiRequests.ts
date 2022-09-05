@@ -6,12 +6,13 @@ const deepClone = require('rfdc/default');
 
 const server = 'https://serverforrslang.herokuapp.com';
 const notLearnedFilter = '{"$or":[{"$and":[{"userWord.optional.learned":false}]},{"userWord":null}]}';
+const difficultyFilter = '{"$or":[{"userWord.difficulty":"hard"}]}';
 
 const standardBody: IBody = {
   difficulty: 'string',
   optional: {
     isNew: false,
-    learned: true,
+    learned: false,
     date: new Date(),
     games: {
       sprint: {
@@ -56,6 +57,26 @@ export async function getNotLearedUserWords(group: number, page: number) {
     const response = await request(
       'GET',
       `${server}/users/${userId}/aggregatedWords?group=${group}&page=${page}&wordsPerPage=20&filter=${notLearnedFilter}`,
+      false,
+      token,
+    );
+    const data = await response.json();
+    console.log(data);
+    return data[0].paginatedResults;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
+
+export async function getDifficultWords() {
+  const token = localStorage.getItem('token')?.slice(1, -1);
+  const userId = localStorage.getItem('userId')?.slice(1, -1);
+
+  try {
+    const response = await request(
+      'GET',
+      `${server}/users/${userId}/aggregatedWords?wordsPerPage=3600&filter=${difficultyFilter}`,
       false,
       token,
     );
