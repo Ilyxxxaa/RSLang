@@ -1,12 +1,11 @@
 import Menu from './pages/main/menu';
-import AuthorizationHandlers from './pages/main/authorization/authApp';
+import { addAuthHandlers } from './pages/main/authorization/authApp';
 import State from './types/state';
 import Header from './pages/main/header';
 import MainPage from './pages/main/mainPage';
 import Games from './pages/games/games';
 import Statistics from './pages/stats/statistics';
 import Book from './pages/book/book';
-
 import './pages/main/styles/main.scss';
 import Footer from './pages/main/footer';
 import Utils from './common/utils';
@@ -19,8 +18,6 @@ class App {
   state: State;
 
   menu: Menu;
-
-  authorization: AuthorizationHandlers;
 
   header: Header;
 
@@ -55,7 +52,6 @@ class App {
     };
     this.menu = new Menu();
     this.header = new Header();
-    this.authorization = new AuthorizationHandlers(this.state);
     this.mainPage = new MainPage();
     this.games = new Games(this.state);
     this.statistics = new Statistics();
@@ -68,7 +64,7 @@ class App {
     this.menu.drawMenu();
     this.addListenersToMenuButtons();
     this.header.drawHeader();
-    this.authorization.addAuthHandlers();
+    addAuthHandlers();
 
     if (this.state.view === 'main') this.renderMainPage();
     if (this.state.view === 'games') this.renderGamesPage();

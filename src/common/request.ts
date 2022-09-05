@@ -1,3 +1,5 @@
+import { logOut } from '../pages/main/authorization/authFunc';
+
 interface IReqParams {
   method: string;
   headers: {
@@ -30,6 +32,9 @@ const request = async (
     reqParams.headers.Authorization = `Bearer ${token}`;
   }
   const response = await fetch(`${url}`, reqParams as {});
+  if (response.status === 401) {
+    logOut();
+  }
   return response;
 };
 

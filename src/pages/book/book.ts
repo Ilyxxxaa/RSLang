@@ -6,6 +6,7 @@ import currentWords from './bookState';
 import { createElement } from './utils';
 import drawDictionary from './dictionary';
 import { drawGamesBlock } from './gamesBlock';
+import Games from '../games/games';
 import State from '../../types/state';
 import { loaderInit } from './loader';
 
@@ -59,5 +60,8 @@ export default class Book {
 
     bookContainer.append(drawPagination());
     bookContainer.append(...drawGamesBlock());
+
+    const games = new Games(this.state);
+    games.addHandlersToStartGameFromBook();
   }
 }
