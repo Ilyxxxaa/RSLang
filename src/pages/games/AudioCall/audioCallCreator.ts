@@ -102,7 +102,6 @@ export default class AudioCallCreator {
 
   createAudioCallWordsContainer() {
     this.audioCallWordsContainer.classList.add('audioCall__words');
-    this.addListenerToWordContainer();
   }
 
   createAcceptButton() {
@@ -132,53 +131,6 @@ export default class AudioCallCreator {
       this.wordAudio.play();
     });
   }
-
-  addListenerToWordContainer() {
-    this.audioCallWordsContainer.addEventListener('click', this.listenerToWordContainer);
-  }
-
-  listenerToWordContainer = (event: Event) => {
-    const currentTarget = event.currentTarget as HTMLElement;
-    const target = event.target as HTMLElement;
-    if (target.hasAttribute('data-answer')) {
-      const dataAnswer = target.getAttribute('data-answer');
-
-      if (dataAnswer === 'true') {
-        target.classList.add('audioCall__words-item--right');
-        const wordInfo = {
-          word: target.textContent,
-          translate: target.getAttribute('data-text'),
-          audio: target.getAttribute('data-audio'),
-        };
-        this.audioCallState.rightWordsArray.push(wordInfo);
-        this.rightAnswerAudio.play();
-        this.acceptButton.disabled = false;
-        this.audioCallState.rightWordsCount += 1;
-      }
-
-      if (dataAnswer === 'false') {
-        target.classList.add('audioCall__words-item--wrong');
-        const rightWord = currentTarget.querySelector('div[data-answer= true]');
-        if (rightWord) {
-          rightWord.classList.add('audioCall__words-item--right');
-          const wordInfo = {
-            word: rightWord.textContent,
-            translate: rightWord.getAttribute('data-text'),
-            audio: rightWord.getAttribute('data-audio'),
-          };
-          this.audioCallState.wrongWordsArray.push(wordInfo);
-        }
-
-        this.wrongAnswerAuido.play();
-        this.acceptButton.disabled = false;
-      }
-
-      this.disableWordsButtons();
-      this.audioCallWordsContainer.removeEventListener('click', this.listenerToWordContainer);
-      this.toggleVisionWord();
-      this.audioButton.classList.remove('audioCall__audio-btn--bigger');
-    }
-  };
 
   disableWordsButtons() {
     const buttons = this.audioCallWordsContainer.querySelectorAll('.audioCall__words-item');

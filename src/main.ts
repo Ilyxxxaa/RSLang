@@ -12,6 +12,8 @@ import Utils from './common/utils';
 
 import { createHardWord } from './common/apiRequests';
 
+import AudioCall from './pages/games/AudioCall/audioCall';
+
 class App {
   state: State;
 
@@ -28,6 +30,8 @@ class App {
   book: Book;
 
   footer: Footer;
+
+  audioCall: AudioCall;
 
   constructor() {
     this.state = {
@@ -53,6 +57,7 @@ class App {
     this.statistics = new Statistics();
     this.book = new Book(this.state);
     this.footer = new Footer();
+    this.audioCall = new AudioCall(this.state);
   }
 
   start() {
@@ -75,8 +80,6 @@ class App {
 
         this.renderMainPage();
         this.menu.closeMenu();
-
-        console.log(this.state);
       }
     });
 
@@ -115,7 +118,7 @@ class App {
     this.menu.clearAllActiveButtons();
 
     const content: HTMLDivElement | null = document.querySelector('.content');
-    if (content) content.style.background = 'url("../assets/images/content-bg.png") no-repeat';
+    if (content) content.style.background = 'url("./assets/images/content-bg.png") no-repeat';
 
     const nav = document.querySelector('.nav');
     if (nav) {
@@ -176,12 +179,9 @@ class App {
     this.book.drawBook();
     this.footer.drawFooter();
     this.menu.menuItemBook.classList.add('menu__list-item--active');
-    this.games.addHandlersToStartGameFromBook();
   };
 }
 
 const app = new App();
 app.start();
 Utils.smoothScroll();
-
-console.log('today:', new Date());
