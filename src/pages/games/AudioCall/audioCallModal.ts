@@ -1,12 +1,14 @@
-import './audioCallModal.scss';
+import Utils from '../../../common/utils';
 import { AudioCallState } from '../../../types/state';
+import './audioCallModal.scss';
+
 import CreateChart from './createChart';
 
 export default class AudioCallModal {
-  AudioCallState: AudioCallState;
+  audioState: AudioCallState;
 
   constructor(state: AudioCallState) {
-    this.AudioCallState = state; // здесь я подключаю State Своей игры - объект с разными свойствами
+    this.audioState = state; // здесь я подключаю State Своей игры - объект с разными свойствами
   }
 
   modalWindow: HTMLElement = document.createElement('div');
@@ -52,17 +54,14 @@ export default class AudioCallModal {
       audioCallContainer.append(this.modalWindow);
     }
     this.modalCanvas.innerHTML = '';
-    CreateChart.createChart(this.AudioCallState.wordsCount, this.AudioCallState.rightWordsCount);
+    CreateChart.createChart(this.audioState.wordsCount, this.audioState.rightWordsCount);
     //  здесь я беру из State св-ва wordsCount - кол-во слов(всех что были),
     //  и rightWordsCount - кол-во правильных слов
     // в методе ниже всё тоже самое
   }
 
   createModalWindow() {
-    this.createModalWindowContent(
-      this.AudioCallState.wordsCount,
-      this.AudioCallState.rightWordsCount,
-    );
+    this.createModalWindowContent(this.audioState.wordsCount, this.audioState.rightWordsCount);
 
     this.modalWindow.classList.add('audioCall-modal');
     this.modalWindow.append(this.modalWindowContent);
@@ -170,7 +169,7 @@ export default class AudioCallModal {
       this.modalResultWrongAnswers,
       this.modalCanvasContainer,
     );
-    CreateChart.createChart(this.AudioCallState.wordsCount, this.AudioCallState.rightWordsCount);
+    CreateChart.createChart(this.audioState.wordsCount, this.audioState.rightWordsCount);
     //  здесь я беру из State св-ва wordsCount - кол-во слов(всех что были),
     //  и rightWordsCount - кол-во правильных слов
   }
@@ -188,22 +187,22 @@ export default class AudioCallModal {
     wrongAnswersContainerTitle.classList.add('wrongAnswersContainerTitle');
     wrongAnswersContainerTitle.textContent = 'Неправильные слова';
 
-    if (this.AudioCallState.rightWordsArray.length !== 0) {
+    if (this.audioState.rightWordsArray.length !== 0) {
       this.rightAnswersContainer.append(rightAnswersContainerTitle);
       //  здесь для св-ва state.rightWordsArray вызываю перебор
       // rightWordsArray  - массив с обьектами правильно отвеченных слов
-      this.AudioCallState.rightWordsArray.forEach((word) => {
+      this.audioState.rightWordsArray.forEach((word) => {
         const item = document.createElement('div');
         item.classList.add('item');
         const audio = document.createElement('audio');
-        audio.src = `${word.audio}`;
+        audio.src = `https://serverforrslang.herokuapp.com/${word.audio}`;
         const itemImageContainer = document.createElement('div');
         itemImageContainer.classList.add('imageContainer');
         const itemImage = document.createElement('img');
         itemImage.src = './assets/images/audio-icon.svg';
         const itemText = document.createElement('div');
         itemText.classList.add('itemText');
-        itemText.textContent = `${word.translate} - ${word.word}`;
+        itemText.textContent = `${word.wordTranslate} - ${word.word}`;
         itemImageContainer.append(itemImage);
         item.append(itemImageContainer, itemText);
         this.rightAnswersContainer.append(item);
@@ -214,22 +213,22 @@ export default class AudioCallModal {
       });
     }
 
-    if (this.AudioCallState.wrongWordsArray.length !== 0) {
+    if (this.audioState.wrongWordsArray.length !== 0) {
       this.wrongAnswersContainer.append(wrongAnswersContainerTitle);
       //  здесь для св-ва state.wrongWordsArray вызываю перебор
       // wrongWordsArray  - массив с обьектами правильно отвеченных слов
-      this.AudioCallState.wrongWordsArray.forEach((word) => {
+      this.audioState.wrongWordsArray.forEach((word) => {
         const item = document.createElement('div');
         item.classList.add('item');
         const audio = document.createElement('audio');
-        audio.src = `${word.audio}`;
+        audio.src = `https://serverforrslang.herokuapp.com/${word.audio}`;
         const itemImageContainer = document.createElement('div');
         itemImageContainer.classList.add('imageContainer');
         const itemImage = document.createElement('img');
         itemImage.src = './assets/images/audio-icon.svg';
         const itemText = document.createElement('div');
         itemText.classList.add('itemText');
-        itemText.textContent = `${word.translate} - ${word.word}`;
+        itemText.textContent = `${word.wordTranslate} - ${word.word}`;
         itemImageContainer.append(itemImage);
         item.append(itemImageContainer, itemText);
         this.wrongAnswersContainer.append(item);

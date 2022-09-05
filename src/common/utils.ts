@@ -26,6 +26,10 @@ export default class Utils {
     return array;
   }
 
+  static shuffleArray(arr: Number[]) {
+    return arr.sort(() => 0.5 - Math.random());
+  }
+
   static smoothScroll() {
     document.querySelectorAll('a[href^="#"').forEach((item) => {
       const link = item as HTMLElement;

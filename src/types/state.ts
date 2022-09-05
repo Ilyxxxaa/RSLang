@@ -34,9 +34,9 @@ export interface AudioCallState {
   wordsOrderArray: Number[];
   wordsCount: number;
   rightWordsCount: number;
-  rightWordsArray: AudioCallWordInfo[];
-  wrongWordsArray: AudioCallWordInfo[];
-  pageNumber: number;
+  rightWordsArray: IWord[];
+  wrongWordsArray: IWord[];
+  rightNumber: Number;
 }
 
 type AudioCallWordInfo = {

@@ -97,7 +97,7 @@ export default class Games {
   }
 
   drawGameAudioCall() {
-    this.audioCall.drawAudioCall(this.state.gameLevel);
+    this.audioCall.drawAudioCall();
   }
 
   async drawGameSprint(page: number, level: number) {
