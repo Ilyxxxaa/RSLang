@@ -1,4 +1,5 @@
 import { createElement, levelColors } from './utils';
+// eslint-disable-next-line import/no-cycle
 import updateCards from './bookVIew';
 import currentWords from './bookState';
 
