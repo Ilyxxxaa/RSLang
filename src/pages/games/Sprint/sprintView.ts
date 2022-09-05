@@ -11,15 +11,15 @@ class SprintView {
   drawSprintGameView() {
     const rightAnswerAudio = document.createElement('audio');
     rightAnswerAudio.className = 'sprint-audio_right';
-    rightAnswerAudio.src = '../../../assets/sounds/rightAnswerAudio.mp3';
+    rightAnswerAudio.src = './assets/images/sounds/rightAnswerAudio.mp3';
 
     const wrongAnswerAudio = document.createElement('audio');
     wrongAnswerAudio.className = 'sprint-audio_wrong';
-    wrongAnswerAudio.src = '../../../assets/sounds/wrongAnswerAudio.mp3';
+    wrongAnswerAudio.src = './assets/images/sounds/wrongAnswerAudio.mp3';
 
     const increasePointsAudio = document.createElement('audio');
     increasePointsAudio.className = 'sprint-audio_points';
-    increasePointsAudio.src = '../../../assets/sounds/line_open.mp3';
+    increasePointsAudio.src = './assets/images/sounds/line_open.mp3';
 
     const pageContent = document.querySelector('.page__content') as HTMLElement;
     pageContent.innerHTML = '';
@@ -30,7 +30,7 @@ class SprintView {
     const clockImage = document.createElement('img');
     clockImage.className = 'alarm-clock';
     clockImage.alt = 'alarm-clock';
-    clockImage.src = '../../../assets/images/alarm-clock.png';
+    clockImage.src = './assets/images/alarm-clock.png';
 
     const countDown = document.createElement('div');
     countDown.className = 'sprint__countdown';
@@ -39,17 +39,17 @@ class SprintView {
     const sprintClose = document.createElement('img');
     sprintClose.className = 'sprint__close';
     sprintClose.alt = 'cancel';
-    sprintClose.src = '../assets/images/cancel.png';
+    sprintClose.src = './assets/images/cancel.png';
 
     const sprintUnmute = document.createElement('img');
     sprintUnmute.className = 'sprint__unmute';
     sprintUnmute.alt = 'unmute';
-    sprintUnmute.src = '../assets/images/music.png';
+    sprintUnmute.src = './assets/images//music.png';
 
     const sprintMute = document.createElement('img');
     sprintMute.className = 'sprint__mute hidden';
     sprintMute.alt = 'mute';
-    sprintMute.src = '../assets/images/mute.png';
+    sprintMute.src = './assets/images//mute.png';
 
     const sprintScore = document.createElement('div');
     sprintScore.className = 'sprint__score';
@@ -61,7 +61,7 @@ class SprintView {
     const audioImage = document.createElement('img');
     audioImage.className = 'sprint__audio';
     audioImage.alt = 'audio';
-    audioImage.src = '../../../assets/images/audio-icon.svg';
+    audioImage.src = './assets/images//audio-icon.svg';
 
     const checkbox = document.createElement('div');
     checkbox.className = 'sprint__checkbox';

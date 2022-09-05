@@ -61,6 +61,7 @@ class App {
   }
 
   start() {
+    alert('Не успели доделать работу, пожалуйста, проверьте работу после 7 сентября. Спасибо)');
     this.menu.drawMenu();
     this.addListenersToMenuButtons();
     this.header.drawHeader();

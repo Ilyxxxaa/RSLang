@@ -30,7 +30,7 @@ const baseConfig = {
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
-        test: /\.(?:ico|gif|png|jpg|jpeg|svg|webp)$/i,
+        test: /\.(?:ico|gif|png|jpg|jpeg|svg|webp|mp3)$/i,
         loader: 'file-loader',
         options: {
           outputPath: 'assets/images',

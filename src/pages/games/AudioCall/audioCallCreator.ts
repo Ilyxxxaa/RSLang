@@ -111,8 +111,8 @@ export default class AudioCallCreator {
   }
 
   createAudioElements() {
-    this.rightAnswerAudio.src = '../../../assets/sounds/rightAnswerAudio.mp3';
-    this.wrongAnswerAuido.src = '../../../assets/sounds/wrongAnswerAudio.mp3';
+    this.rightAnswerAudio.src = 'assets/images/sounds/rightAnswerAudio.mp3';
+    this.wrongAnswerAuido.src = 'assets/images/sounds/wrongAnswerAudio.mp3';
     this.wrongAnswerAuido.volume = 0.4;
   }
 

@@ -21,7 +21,7 @@ class SprintModal {
     const sprintModalClose = document.createElement('img');
     sprintModalClose.className = 'sprint-modal__close';
     sprintModalClose.alt = 'cancel';
-    sprintModalClose.src = '../assets/images/cancel.png';
+    sprintModalClose.src = './assets/images/cancel.png';
 
     const sprintModalText = document.createElement('p');
     sprintModalText.className = 'sprint-modal__title';
