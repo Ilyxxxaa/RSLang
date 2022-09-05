@@ -1,6 +1,7 @@
 import { getDifficultWords } from '../../common/apiRequests';
 // eslint-disable-next-line import/no-cycle
 import { drawCards } from './bookVIew';
+import { startLoader, stopLoader } from './loader';
 
 const dictionaryGroupNumber = 7;
 
@@ -10,6 +11,7 @@ export async function drawDictionaryCards() {
 }
 
 export default function drawDictionary() {
+  startLoader();
   localStorage.setItem('currentBookView', 'dictionary');
   const buttonToDictionary = document.querySelector('.button-to-dictionary');
   const buttonToBook = document.querySelector('.button-to-book');
@@ -18,8 +20,10 @@ export default function drawDictionary() {
   const pagination: HTMLDivElement | null = document.querySelector('.pagination-container');
   if (pagination) pagination.style.display = 'none';
   const levels: HTMLDivElement | null = document.querySelector('.levels-container');
-  if (levels) levels.style.display = 'none';
+  // if (levels) levels.style.display = 'none';
+  if (levels) levels.innerHTML = '';
   const wordsTitle: HTMLElement | null = document.querySelector('.words-title');
   if (wordsTitle) wordsTitle.innerText = 'Cложные слова';
   drawDictionaryCards();
+  stopLoader();
 }

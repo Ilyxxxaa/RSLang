@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable import/no-cycle */
 import { IWord } from '../../types/dictionaryTypes';
 import './styles/main.scss';
@@ -8,12 +9,16 @@ import { user } from './book';
 import getUserWords, { createHardWord, createLearnedWord, updateHardWord, updateLearnedWord } from '../../common/apiRequests';
 import currentBookWords from './bookState';
 import drawDictionary from './dictionary';
+import { startLoader, stopLoader } from './loader';
+import State from '../../types/state';
 
 const noBgColor = '#FFFFFF';
+let currentActiveWord: IWord | null = null;
 
 // eslint-disable-next-line max-len
 function createCardWord(card: IWord, level: number, index: number, wordsContainer: HTMLElement) {
   const cardWord = createElement('button', 'card-word');
+
   if (index === 0) {
     cardWord.classList.add('active-word');
     cardWord.style.background = `${levelColors[level]}`;
@@ -23,9 +28,11 @@ function createCardWord(card: IWord, level: number, index: number, wordsContaine
   </button>`;
   if (card.userWord && card.userWord.difficulty === 'hard') {
     cardWord.classList.add('difficult-card-word');
+    cardWord.classList.remove('learned-card-word');
   }
   if (card.userWord && card.userWord.optional.learned === true) {
     cardWord.classList.add('learned-card-word');
+    cardWord.classList.remove('difficult-card-word');
   }
 
   cardWord.addEventListener('click', () => {
@@ -39,6 +46,7 @@ function createCardWord(card: IWord, level: number, index: number, wordsContaine
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     updateCard(card);
   });
+  currentActiveWord = null;
   return cardWord;
 }
 
@@ -52,6 +60,9 @@ async function addWordDifficult(cardData: IWord, button: HTMLButtonElement, book
   } else {
     await createHardWord(cardData, 'hard');
   }
+  currentActiveWord = cardData;
+  console.log(currentActiveWord);
+
   if (bookView && bookView === 'dictionary') {
     await drawDictionary();
   } else await updateCards(currentBookWords.currentLevel, currentBookWords.currentPage);
@@ -127,7 +138,8 @@ function createCard(cardData: IWord) {
     if (cardData.userWord && cardData.userWord.difficulty === 'hard') {
       cardContainer.classList.add('difficult-card');
     }
-    if (cardData.userWord && cardData.userWord.optional && cardData.userWord.optional.learned) {
+    if (cardData.userWord && cardData.userWord.optional
+      && cardData.userWord.optional.learned === true) {
       cardContainer.classList.add('learned-card');
     }
 
@@ -197,7 +209,11 @@ export function drawCards(array: IWord[], level: number) {
   cardsContainer.append(createCard(array[0]));
 }
 
-export default async function updateCards(level: number, page: number) {
+export default async function updateCards(level: number, page: number, state?: State) {
+  if (state) {
+    state.gameLevel = level;
+    state.gamePage = page;
+  }
   localStorage.setItem('currentBookPage', `${page}`);
   localStorage.setItem('currentBookLevel', `${level}`);
 
@@ -208,6 +224,5 @@ export default async function updateCards(level: number, page: number) {
 
 function getGameResults(cardData: IWord, game: 'sprint' | 'audioCall') {
   const result = cardData.userWord ? `${cardData.userWord.optional.games[game].right} / ${cardData.userWord.optional.games[game].right + cardData.userWord.optional.games.sprint.wrong}` : '0 / 0';
-  console.log(result);
   return result;
 }
