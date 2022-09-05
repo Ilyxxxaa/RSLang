@@ -37,7 +37,7 @@ export default class Header {
         <div class="header__auth">
           <button class="auth__btn auth__btn-login" id='login' data-auth="signin">Войти</button>
           <button class="auth__btn auth__btn-registration" id='password' data-auth="signup">Регистрация</button>
-          <img class="user user__avatar hidden" src="../../assets/images/user.png" alt="avatar">
+          <img class="user user__avatar hidden" src="./assets/images/user.png" alt="avatar">
           <p class="user user__name hidden"></p>
         </div>
       </div>
