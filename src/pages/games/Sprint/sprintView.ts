@@ -34,7 +34,7 @@ class SprintView {
 
     const countDown = document.createElement('div');
     countDown.className = 'sprint__countdown';
-    countDown.textContent = '60';
+    countDown.textContent = '7';
 
     const sprintClose = document.createElement('img');
     sprintClose.className = 'sprint__close';

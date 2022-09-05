@@ -1,6 +1,5 @@
 import State from '../../../types/state';
 import './_sprintModal.scss';
-import './_sprint.scss';
 
 class SprintModal {
   state: State;
@@ -26,17 +25,21 @@ class SprintModal {
 
     const sprintModalText = document.createElement('p');
     sprintModalText.className = 'sprint-modal__title';
-    sprintModalText.textContent = 'Игра не закончена!\n Если вы закроете игру, ваши результаты обнулятся';
+    sprintModalText.textContent = 'Игра не закончена!';
+
+    const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'sprint-modal__buttons';
 
     const buttonClose = document.createElement('button');
-    buttonClose.className = 'sprint__button sprint__button_close';
+    buttonClose.className = 'sprint-modal__button sprint-modal__button_close';
     buttonClose.textContent = 'закрыть игру';
 
     const buttonContinue = document.createElement('button');
-    buttonContinue.className = 'sprint__button sprint__button_continue';
+    buttonContinue.className = 'sprint-modal__button sprint-modal__button_continue';
     buttonContinue.textContent = 'продолжить';
 
-    sprintModal.append(sprintModalClose, sprintModalText, buttonClose, buttonContinue);
+    buttonContainer.append(buttonClose, buttonContinue);
+    sprintModal.append(sprintModalClose, sprintModalText, buttonContainer);
     sprintModalWindow.append(modalOverlay, sprintModal);
 
     document.querySelector('body')?.append(sprintModalWindow);

@@ -5,8 +5,7 @@ import request from './request';
 const deepClone = require('rfdc/default');
 
 const server = 'https://serverforrslang.herokuapp.com';
-const notLearnedFilter =
-  '{"$or":[{"$and":[{"userWord.optional.learned":false}]},{"userWord":null}]}';
+const notLearnedFilter = '{"$or":[{"$and":[{"userWord.optional.learned":false}]},{"userWord":null}]}';
 
 const standardBody: IBody = {
   difficulty: 'string',

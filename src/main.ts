@@ -60,6 +60,7 @@ class App {
     this.addListenersToMenuButtons();
     this.header.drawHeader();
     addAuthHandlers();
+    this.games.addHandlersToStartGameFromBook();
 
     if (this.state.view === 'main') this.renderMainPage();
     if (this.state.view === 'games') this.renderGamesPage();

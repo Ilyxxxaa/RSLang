@@ -32,26 +32,37 @@ export const request = async <T>(method: string, url: string, body?: T) => {
   });
 
   if (response.status === 401) {
-    const refreshToken = localStorage.getItem('refreshToken');
-    const userId = JSON.parse(localStorage.getItem('userId') || '');
+    localStorage.removeItem('message');
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('name');
+    localStorage.removeItem('userId');
+    localStorage.setItem('currentView', 'main');
+    document.location.reload();
+    document.querySelectorAll('.auth__btn')?.forEach((btn) => btn.classList.remove('hidden'));
+    document.querySelectorAll('.user')?.forEach((user) => user.classList.add('hidden'));
 
-    const responseRef = await fetch(`${baseLink}/users/${userId}/tokens`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${refreshToken}`,
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-    });
+    // const refreshToken = localStorage.getItem('refreshToken');
+    // const userId = JSON.parse(localStorage.getItem('userId') || '');
 
-    if (responseRef.status === 403) {
-      console.log('функция logout');
-    }
+    // const responseRef = await fetch(`${baseLink}/users/${userId}/tokens`, {
+    //   method: 'GET',
+    //   headers: {
+    //     Authorization: `Bearer ${refreshToken}`,
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json',
+    //   },
+    // });
 
-    const resultRef = await responseRef.json();
-    const { token: newToken, refreshToken: newRefreshToken } = resultRef;
-    localStorage.setItem('token', newToken);
-    localStorage.setItem('refreshToken', newRefreshToken);
+    // if (responseRef.status === 403) {
+    //   console.log('функция logout');
+    // }
+
+    // const resultRef = await responseRef.json();
+    // const { token: newToken, refreshToken: newRefreshToken } = resultRef;
+    // localStorage.setItem('token', newToken);
+    // localStorage.setItem('refreshToken', newRefreshToken);
   }
 
   const result = await response.json();
@@ -60,7 +71,7 @@ export const request = async <T>(method: string, url: string, body?: T) => {
 
 // const testRequest = async () => {
 //   const refreshToken = localStorage.getItem('refreshToken');
-//   const userId = JSON.parse(localStorage.getItem('userId') || '');
+//   const userId = localStorage.getItem('userId')?.slice(1, -1);
 
 //   console.log('refreshToken', refreshToken);
 //   console.log('token', localStorage.getItem('token'));
@@ -75,11 +86,8 @@ export const request = async <T>(method: string, url: string, body?: T) => {
 //     },
 //   });
 
-//   if (responseRef.status === 403) {
-//     console.log('выйти из авторизации');
-//   }
-
 //   const resultRef = await responseRef.json();
+//   console.log(resultRef);
 //   const { token: newToken, refreshToken: newRefreshToken } = resultRef;
 //   localStorage.setItem('token', newToken);
 //   localStorage.setItem('refreshToken', newRefreshToken);

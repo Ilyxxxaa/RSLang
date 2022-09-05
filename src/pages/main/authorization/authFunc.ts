@@ -64,15 +64,16 @@ export const clearLocalStorage = (key: string) => {
 };
 
 export const signIn = (email: string, password: string) => {
-  // requestPost(signInLink, { email, password })
   request('POST', 'signin', { email, password })
     .then((response) => {
+      localStorage.setItem('currentView', 'main');
+      document.location.reload();
+      fixOverlay();
+      showAuthorizedUser('name');
+      document.querySelectorAll('.modal')?.forEach((modal) => modal.classList.add('hidden'));
       Object.keys(response).forEach((key) => {
         setLocalStorage(key, response[key]);
       });
-      document.querySelectorAll('.modal')?.forEach((modal) => modal.classList.add('hidden'));
-      fixOverlay();
-      showAuthorizedUser('name');
     })
     .finally(() => document.querySelectorAll<HTMLButtonElement>('.auth-button').forEach((button) => {
       button.removeAttribute('disabled');
@@ -89,6 +90,8 @@ export const signUp = (name: string, email: string, password: string) => {
 };
 
 export const logOut = () => {
+  localStorage.setItem('currentView', 'main');
+  document.location.reload();
   clearLocalStorage('user');
   clearLocalStorage('message');
   clearLocalStorage('token');

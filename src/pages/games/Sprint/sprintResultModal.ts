@@ -125,6 +125,8 @@ export default class SprintResultModal {
     this.modalButtonsContainer.classList.add('audioCall-modal__buttons-container');
     this.modalPlayAgainButton.classList.add('audioCall-modal__buttons-item');
     this.modalGoToBookButton.classList.add('audioCall-modal__buttons-item');
+    this.modalPlayAgainButton.classList.add('modal-result_start');
+    this.modalGoToBookButton.classList.add('modal-result_to-book');
     this.modalPlayAgainButton.textContent = 'Сыграть еще раз';
     this.modalGoToBookButton.textContent = 'Перейти в учебник';
     this.modalButtonsContainer.append(this.modalPlayAgainButton, this.modalGoToBookButton);
@@ -142,6 +144,16 @@ export default class SprintResultModal {
 
     this.modalLeftTab.addEventListener('click', () => {
       this.drawResultWithChart();
+    });
+  }
+
+  addHandlersToSprintResultModal() {
+    this.modalPlayAgainButton.addEventListener('click', () => {
+      console.log('hello start');
+    });
+
+    this.modalGoToBookButton.addEventListener('click', () => {
+      console.log('hello book');
     });
   }
 

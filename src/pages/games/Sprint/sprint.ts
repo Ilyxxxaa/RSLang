@@ -4,7 +4,9 @@ import SprintView from './sprintView';
 import { baseLink } from '../../../const';
 import SprintModal from './sprintModal';
 import SprintResultModal from './sprintResultModal';
-import { requestGetAnonymous, requestGetAuth, requestPostWord } from './sprintRequests';
+import { requestGetAuth } from './sprintRequests';
+import getUserWords, { createUserWord, updateUserWord } from '../../../common/apiRequests';
+import { request } from '../../main/authorization/requests';
 
 class Sprint {
   state: State;
@@ -19,7 +21,9 @@ class Sprint {
   }
 
   async getWordsForGameAnonymous(page: number, level: number) {
-    const wordsForGame = requestGetAnonymous(`${baseLink}/words?page=${page}&group=${level}`);
+    const url = `words?page=${page}&group=${level}`;
+    const wordsForGame = request('GET', url);
+    // const wordsForGame = requestGetAnonymous(`${baseLink}/words?page=${page}&group=${level}`);
     return wordsForGame.then((result) => {
       this.state.sprint.wordsForGame = [];
       this.state.sprint.wordsForGame = [...result];
@@ -56,6 +60,7 @@ class Sprint {
     this.setCountdown();
     this.sprintView.drawSprintGameView();
     SprintModal.drawSprintInModal();
+    this.addHandlersToSprintModal();
     this.addHandlersToSprintButtons();
     this.showSprintModalWindow();
     this.closeSprintModalWindow();
@@ -82,6 +87,13 @@ class Sprint {
       sprintResultModal.drawResults();
       sprintResultModal.addListenerToTabs();
     }
+    if (this.state.game === 'sprint' && seconds > 0) {
+      console.log(this.state.game);
+      console.log(seconds);
+      document.querySelectorAll<HTMLButtonElement>('.menu__list-item')?.forEach((item) => item.setAttribute('disabled', 'disabled'));
+    } else {
+      document.querySelectorAll<HTMLButtonElement>('.menu__list-item')?.forEach((item) => item.removeAttribute('disabled'));
+    }
   };
 
   addHandlerToAudio() {
@@ -102,7 +114,6 @@ class Sprint {
         this.setPoints();
         this.scorePoints();
         this.setRandomWord();
-        this.showSprintResultsModal();
       }
     });
   };
@@ -136,7 +147,6 @@ class Sprint {
     wordEn.textContent = currentWord.word;
 
     console.log('cлова для игры:', this.state.sprint.wordsForGame);
-    console.log('currentWord', currentWord._id);
 
     const statusWordTranslate = words.length === 1 ? 1 : getRandomNumber(0, 1);
 
@@ -166,9 +176,10 @@ class Sprint {
     const increasePointsAudio = document.querySelector('.sprint-audio_points') as HTMLAudioElement;
 
     const checkbox = document.querySelectorAll<HTMLElement>('.checkbox__item');
+    const currentWord = this.state.sprint.gameCurrentWord;
 
     const wordRu = document.querySelector('.word_ru') as HTMLElement;
-    const rightAnswer = this.state.sprint.gameCurrentWord?.wordTranslate === wordRu.textContent;
+    const rightAnswer = currentWord?.wordTranslate === wordRu.textContent;
     const checkedUserAnswer = String(rightAnswer) === userAnswer;
 
     if (checkedUserAnswer) {
@@ -179,8 +190,8 @@ class Sprint {
       this.state.sprint.countRightAnswersInARow += 1;
       this.state.sprint.pointsScored += this.state.sprint.pointsPerWord;
 
-      if (this.state.sprint.gameCurrentWord) {
-        this.state.sprint.rightAnswers.push(this.state.sprint.gameCurrentWord);
+      if (currentWord) {
+        this.state.sprint.rightAnswers.push(currentWord);
       }
 
       checkbox?.forEach((item, index) => {
@@ -198,15 +209,27 @@ class Sprint {
       wrongAnswerAudio.pause();
       wrongAnswerAudio.currentTime = 0;
       wrongAnswerAudio.play();
+
       this.state.sprint.countRightAnswersInARow = 0;
       checkbox.forEach((item) => {
         item.classList.remove('hidden');
         item.classList.remove('checkbox__item_active');
       });
-      if (this.state.sprint.gameCurrentWord) {
-        this.state.sprint.wrongAnswers.push(this.state.sprint.gameCurrentWord);
+      if (currentWord) {
+        this.state.sprint.wrongAnswers.push(currentWord);
       }
     }
+
+    if (localStorage.getItem('token') && currentWord) {
+      if (currentWord.userWord) {
+        updateUserWord(currentWord, 'sprint', checkedUserAnswer);
+      } else {
+        createUserWord(currentWord, 'sprint', checkedUserAnswer);
+      }
+    }
+
+    console.log(this.state.gamePage);
+    console.log(this.state.gameLevel);
   };
 
   setPoints() {
@@ -234,15 +257,22 @@ class Sprint {
     const sprintResultModal = new SprintResultModal(this.state);
     sprintResultModal.drawResults();
     sprintResultModal.addListenerToTabs();
-    // this.addHandlersToStartNewGame();
+    sprintResultModal.addHandlersToSprintResultModal();
   }
 
-  // addHandlersToStartNewGame() {
-  //   document.querySelector('click', () => {
-  // const game = new Games(this.state);
-  // game.addHandlersToChooseLevel();
-  //   });
-  // }
+  addHandlersToSprintModal() {
+    document.querySelector('.sprint-modal__button_close')?.addEventListener('click', () => {
+      // localStorage.setItem('currentView', 'games');
+      // document.location.reload();
+    });
+
+    document.querySelector('.sprint-modal__button_continue')?.addEventListener('click', () => {
+      document.querySelector('.sprint-modal')?.classList.add('hidden');
+      (document.querySelector('body') as HTMLElement).style.overflow = 'visible';
+      this.setCountdown();
+    });
+  }
+
   addHandlersToMute = () => {
     document.querySelector('.sprint__unmute')?.addEventListener('click', (event: Event) => {
       (event.target as HTMLElement).classList.add('hidden');
@@ -267,6 +297,7 @@ class Sprint {
 
   endSprintGame() {
     document.querySelector('.sprint')?.classList.add('hidden');
+    // (document.querySelector('.page__content') as HTMLElement).textContent = 'ИГРА ЗАВРШЕНА';
     (document.querySelector('.page__content') as HTMLElement).textContent = 'ИГРА ЗАВРШЕНА';
   }
 
