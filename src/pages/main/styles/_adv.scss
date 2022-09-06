@@ -1,6 +1,6 @@
 .adv {
   background-color: white;
-  margin-top: 100px;
+  padding: 60px 0 60px 0;
   &__title {
     color: #9461e6;
     margin: 0 0 50px 0;
@@ -22,7 +22,7 @@
     justify-self: center;
     transition: all 0.3s;
     border-radius: 10px;
-    cursor: pointer;
+    cursor: default;
     &:hover {
       box-shadow: 1px 3px 4px rgb(0 0 0 / 20%);
       transform: scale(1.008);

@@ -18,6 +18,7 @@ export default interface State {
     rightAnswers: IWord[];
     wrongAnswers: IWord[];
   };
+  drawBook: () => void;
 }
 
 type View = 'main' | 'book' | 'games' | 'statistics' | string;
@@ -43,3 +44,5 @@ type AudioCallWordInfo = {
   translate: string | null;
   audio: string | null;
 };
+
+export type Render = () => void | undefined;

@@ -173,6 +173,7 @@ export default class SprintResultModal {
       document.querySelector('.menuItemBook')?.classList.add('menu__list-item--active');
       book.drawBook();
       games.addHandlersToStartGameFromBook();
+      this.state.view = 'book';
     });
   }
 

@@ -82,6 +82,16 @@ header {
       &:hover {
         border-bottom: 1px solid #fff;
       }
+      &-first {
+        cursor: default;
+        &:hover {
+          border-bottom: none;
+          cursor: default;
+        }
+      }
+    }
+    &-link-first {
+      font-weight: bold;
     }
     &-item + &-item {
       margin-left: 30px;
@@ -167,7 +177,7 @@ header {
       margin-bottom: 10px;
     }
   }
-} ;
+}
 
 .user {
   margin: 5px auto;

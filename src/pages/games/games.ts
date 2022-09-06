@@ -1,5 +1,10 @@
 /* eslint-disable import/no-cycle */
-import { audiocallDescription, sprintDescription, PAGE_COUNTS, stateSprintDefault } from '../../const';
+import {
+  audiocallDescription,
+  sprintDescription,
+  PAGE_COUNTS,
+  stateSprintDefault,
+} from '../../const';
 import GameCardView from './gameCardView';
 import GameLevels from './gameLevels';
 import State from '../../types/state';
@@ -104,6 +109,7 @@ export default class Games {
     document.querySelector('.button-to-sprint')?.addEventListener('click', () => {
       this.state.gameInit = 'book';
       this.state.game = 'sprint';
+      this.state.view = 'games';
       if (localStorage.getItem('currentBookLevel') && localStorage.getItem('currentBookPage')) {
         this.state.gameLevel = Number(localStorage.getItem('currentBookLevel'));
         this.state.gamePage = Number(localStorage.getItem('currentBookPage'));

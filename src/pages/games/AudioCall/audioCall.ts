@@ -6,7 +6,7 @@ import getUserWords, {
 } from '../../../common/apiRequests';
 import './audioCall.scss';
 import Utils from '../../../common/utils';
-import State, { AudioCallState } from '../../../types/state';
+import State, { AudioCallState, Render } from '../../../types/state';
 import AudioCallCreator from './audioCallCreator';
 import AudioCallModal from './audioCallModal';
 
@@ -31,13 +31,14 @@ export default class AudioCall {
       wrongWordsArray: [],
       rightNumber: -1,
     };
+
     this.audioCallCreator = new AudioCallCreator(this.audioState);
     this.audioCallModal = new AudioCallModal(this.audioState);
   }
 
   async drawAudioCall() {
-    console.log('Начинаем игру...');
     this.clearState();
+    this.removeListenerFromButtons();
     this.audioCallCreator.acceptButton.removeEventListener('click', this.listenerToAcceptButton);
     this.audioCallCreator.createAudioCallContainer();
     const words = await this.getWordsForGame();
@@ -81,6 +82,7 @@ export default class AudioCall {
 
       this.audioCallCreator.acceptButton.disabled = true;
       this.addListenerToWordContainer();
+      this.addListenerToButtons();
       this.removeListenerFromSpace();
     });
   }
@@ -119,13 +121,15 @@ export default class AudioCall {
     }
 
     this.wrongAnswerAudioPlay();
-
+    const token = localStorage.getItem('token');
     // eslint-disable-next-line prefer-destructuring
     const rightNumber = this.audioState.rightNumber;
     const rightItem = this.audioState.wordsArray[+rightNumber];
-    if (rightItem.userWord) {
-      await updateUserWord(rightItem, 'audioCall', false);
-    } else await createUserWord(rightItem, 'audioCall', false);
+    if (token) {
+      if (rightItem.userWord) {
+        await updateUserWord(rightItem, 'audioCall', false);
+      } else await createUserWord(rightItem, 'audioCall', false);
+    }
 
     this.audioState.wrongWordsArray.push(rightItem);
   };
@@ -134,13 +138,65 @@ export default class AudioCall {
     element.classList.add('audioCall__words-item--right');
 
     this.rightAnswerAudioPlay();
+    const token = localStorage.getItem('token');
     const rightItem = this.audioState.wordsArray[rightNumber];
-    if (rightItem.userWord) {
-      await updateUserWord(rightItem, 'audioCall', true);
-    } else await createUserWord(rightItem, 'audioCall', true);
+
+    if (token) {
+      if (rightItem.userWord) {
+        await updateUserWord(rightItem, 'audioCall', true);
+      } else await createUserWord(rightItem, 'audioCall', true);
+    }
+
     this.audioState.rightWordsArray.push(rightItem);
     this.audioState.rightWordsCount += 1;
   };
+
+  addListenerToButtons() {
+    window.addEventListener('keyup', this.listnerToButtons);
+  }
+
+  removeListenerFromButtons() {
+    window.removeEventListener('keyup', this.listnerToButtons);
+  }
+
+  listnerToButtons(e: KeyboardEvent) {
+    console.log(e.code);
+    if (e.code === 'Digit1') {
+      document.querySelectorAll('.audioCall__words-item').forEach((item, index) => {
+        const button = item as HTMLElement;
+        if (index === 0) button.click();
+      });
+    }
+    if (e.code === 'Digit2') {
+      document.querySelectorAll('.audioCall__words-item').forEach((item, index) => {
+        const button = item as HTMLElement;
+        if (index === 1) button.click();
+      });
+    }
+    if (e.code === 'Digit3') {
+      document.querySelectorAll('.audioCall__words-item').forEach((item, index) => {
+        const button = item as HTMLElement;
+        if (index === 2) button.click();
+      });
+    }
+    if (e.code === 'Digit4') {
+      document.querySelectorAll('.audioCall__words-item').forEach((item, index) => {
+        const button = item as HTMLElement;
+        if (index === 3) button.click();
+      });
+    }
+    if (e.code === 'Digit5') {
+      document.querySelectorAll('.audioCall__words-item').forEach((item, index) => {
+        const button = item as HTMLElement;
+        if (index === 4) button.click();
+      });
+    }
+
+    if (e.code === 'Space') {
+      const button = document.querySelector<HTMLButtonElement>('.audioCall__audio-btn');
+      button?.click();
+    }
+  }
 
   addListeners() {
     this.audioCallCreator.acceptButton.addEventListener('click', this.listenerToAcceptButton);
@@ -160,7 +216,7 @@ export default class AudioCall {
   }
 
   spaceHandler = (e: KeyboardEvent) => {
-    if (e.code === 'Space') {
+    if (e.code === 'Enter') {
       this.acceptButtonHandler();
     }
   };
@@ -184,7 +240,7 @@ export default class AudioCall {
   }
 
   acceptButtonHandler = async () => {
-    if (this.audioState.wordsCount + 1 < 20) {
+    if (this.audioState.wordsCount + 1 < 2) {
       await this.renderWords();
       this.audioState.wordsCount += 1;
       this.audioCallCreator.resultAllAnswers.textContent = `Всего слов: ${this.audioState.wordsCount}/20`;
@@ -195,10 +251,19 @@ export default class AudioCall {
       this.audioCallModal.addListenerToTabs();
       console.log(this.audioState);
       this.audioCallModal.modalPlayAgainButton.addEventListener('click', () => {
+        this.removeListenerFromButtons();
         this.drawAudioCall();
       });
       this.audioCallModal.modalGoToBookButton.addEventListener('click', () => {
-        // начать игру заново
+        this.removeListenerFromButtons();
+        this.state.drawBook();
+        this.state.view = 'book';
+        const menuButtons = document.querySelectorAll('.menu__list-item');
+        menuButtons.forEach((item) => item.classList.remove('menu__list-item--active'));
+        const bookButton = document.querySelector('.menuItemBook');
+        if (bookButton) {
+          bookButton.classList.add('menu__list-item--active');
+        }
       });
     }
   };
@@ -217,8 +282,9 @@ export default class AudioCall {
 
   async getWordsForGame() {
     const token = localStorage.getItem('token');
-    const group = this.state.gameLevel;
-    const page = this.state.gamePage;
+    const group = Number(localStorage.getItem('currentBookLevel')) || this.state.gameLevel;
+    const page = Number(localStorage.getItem('currentBookPage')) || this.state.gamePage;
+    console.log('group', group, 'page:', page);
     if (token) {
       if (this.state.view === 'games') {
         const words = await getUserWords(group, page);

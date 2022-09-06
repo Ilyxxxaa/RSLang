@@ -47,7 +47,7 @@ export default class MainPage {
           <div class="card__img"><img src="./assets/images/statistic.png" alt=""></div>
           <div class="card__title">Статистика</div>
           <div class="card__info">Отслеживай свой прогресс в индивидуальной статистике, ставь цели и вдохновляйся на
-            и достижение новых результатов каждый день!</div>
+          достижение новых результатов каждый день!</div>
         </div>
       </div>
     </div>
@@ -61,7 +61,7 @@ export default class MainPage {
       <div class="team__card">
       <div class="card__content">
         <div class="card__img">
-          <img src="./assets/images/ilya-avatar.jpg" alt="">
+          <img src="./assets/images/ilya-avatar-2.png" alt="">
         </div>
         <div class="card__name">
           <div class="card__name-name">Ilya</div>
@@ -107,7 +107,7 @@ export default class MainPage {
   <div class="team__card">
       <div class="card__content">
         <div class="card__img">
-          <img src="./assets/images/max-avatar.jpg" alt="">
+          <img src="./assets/images/max-avatar-2.png" alt="">
         </div>
         <div class="card__name">
           <div class="card__name-name">Max</div>
