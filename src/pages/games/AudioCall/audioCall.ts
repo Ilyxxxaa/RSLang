@@ -6,7 +6,7 @@ import getUserWords, {
 } from '../../../common/apiRequests';
 import './audioCall.scss';
 import Utils from '../../../common/utils';
-import State, { AudioCallState } from '../../../types/state';
+import State, { AudioCallState, Render } from '../../../types/state';
 import AudioCallCreator from './audioCallCreator';
 import AudioCallModal from './audioCallModal';
 
@@ -31,6 +31,7 @@ export default class AudioCall {
       wrongWordsArray: [],
       rightNumber: -1,
     };
+
     this.audioCallCreator = new AudioCallCreator(this.audioState);
     this.audioCallModal = new AudioCallModal(this.audioState);
   }
@@ -119,13 +120,15 @@ export default class AudioCall {
     }
 
     this.wrongAnswerAudioPlay();
-
+    const token = localStorage.getItem('token');
     // eslint-disable-next-line prefer-destructuring
     const rightNumber = this.audioState.rightNumber;
     const rightItem = this.audioState.wordsArray[+rightNumber];
-    if (rightItem.userWord) {
-      await updateUserWord(rightItem, 'audioCall', false);
-    } else await createUserWord(rightItem, 'audioCall', false);
+    if (token) {
+      if (rightItem.userWord) {
+        await updateUserWord(rightItem, 'audioCall', false);
+      } else await createUserWord(rightItem, 'audioCall', false);
+    }
 
     this.audioState.wrongWordsArray.push(rightItem);
   };
@@ -134,10 +137,15 @@ export default class AudioCall {
     element.classList.add('audioCall__words-item--right');
 
     this.rightAnswerAudioPlay();
+    const token = localStorage.getItem('token');
     const rightItem = this.audioState.wordsArray[rightNumber];
-    if (rightItem.userWord) {
-      await updateUserWord(rightItem, 'audioCall', true);
-    } else await createUserWord(rightItem, 'audioCall', true);
+
+    if (token) {
+      if (rightItem.userWord) {
+        await updateUserWord(rightItem, 'audioCall', true);
+      } else await createUserWord(rightItem, 'audioCall', true);
+    }
+
     this.audioState.rightWordsArray.push(rightItem);
     this.audioState.rightWordsCount += 1;
   };
@@ -184,7 +192,7 @@ export default class AudioCall {
   }
 
   acceptButtonHandler = async () => {
-    if (this.audioState.wordsCount + 1 < 20) {
+    if (this.audioState.wordsCount + 1 < 2) {
       await this.renderWords();
       this.audioState.wordsCount += 1;
       this.audioCallCreator.resultAllAnswers.textContent = `Всего слов: ${this.audioState.wordsCount}/20`;
@@ -198,7 +206,8 @@ export default class AudioCall {
         this.drawAudioCall();
       });
       this.audioCallModal.modalGoToBookButton.addEventListener('click', () => {
-        // начать игру заново
+        console.log('try to draw book from audiocall.ts');
+        this.state.drawBook();
       });
     }
   };
@@ -217,8 +226,9 @@ export default class AudioCall {
 
   async getWordsForGame() {
     const token = localStorage.getItem('token');
-    const group = this.state.gameLevel;
-    const page = this.state.gamePage;
+    const group = Number(localStorage.getItem('currentBookLevel')) || this.state.gameLevel;
+    const page = Number(localStorage.getItem('currentBookPage')) || this.state.gamePage;
+    console.log('group', group, 'page:', page);
     if (token) {
       if (this.state.view === 'games') {
         const words = await getUserWords(group, page);

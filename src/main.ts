@@ -49,6 +49,7 @@ class App {
         wrongAnswers: [],
         countRightAnswersInARow: 0,
       },
+      drawBook: () => console.log('sorry'),
     };
     this.menu = new Menu();
     this.header = new Header();
@@ -61,11 +62,14 @@ class App {
   }
 
   start() {
-    alert('Не успели доделать работу, пожалуйста, проверьте работу после 7 сентября. Спасибо)');
+    alert(
+      'Во время выполнения данного таска один из членов нашей команды заболел и на некоторое время выпал из работы. В связи с этим мы не успели до конца доделать работу. Дорогие проверяющие, пожалуйста, проверьте нашу работу 7 сентября вечером или позже, чтобы мы успели ее доделать. Спасибо огромное)',
+    );
     this.menu.drawMenu();
     this.addListenersToMenuButtons();
     this.header.drawHeader();
     addAuthHandlers();
+    this.state.drawBook = this.book.drawBook;
 
     if (this.state.view === 'main') this.renderMainPage();
     if (this.state.view === 'games') this.renderGamesPage();
@@ -169,7 +173,7 @@ class App {
     this.menu.menuItemStats.classList.add('menu__list-item--active');
   };
 
-  renderBookPage = () => {
+  renderBookPage() {
     this.menu.clearAllActiveButtons();
 
     const nav = document.querySelector('.nav');
@@ -180,7 +184,7 @@ class App {
     this.book.drawBook();
     this.footer.drawFooter();
     this.menu.menuItemBook.classList.add('menu__list-item--active');
-  };
+  }
 }
 
 const app = new App();

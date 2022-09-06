@@ -6,7 +6,12 @@ import { getWords } from './bookRequests';
 import { levelColors, createElement } from './utils';
 import { playSounds, stopAudio } from './audio';
 import { user } from './book';
-import getUserWords, { createHardWord, createLearnedWord, updateHardWord, updateLearnedWord } from '../../common/apiRequests';
+import getUserWords, {
+  createHardWord,
+  createLearnedWord,
+  updateHardWord,
+  updateLearnedWord,
+} from '../../common/apiRequests';
 import currentBookWords from './bookState';
 import drawDictionary from './dictionary';
 import { startLoader, stopLoader } from './loader';
@@ -42,7 +47,7 @@ function createCardWord(card: IWord, level: number, index: number, wordsContaine
       .querySelectorAll('.active-word')
       .forEach((el) => el.classList.remove('active-word'));
     cardWord.classList.add('active-word');
-    cardWord.style.background = (level >= 0) ? `${levelColors[level]}` : `${levelColors[7]}`;
+    cardWord.style.background = level >= 0 ? `${levelColors[level]}` : `${levelColors[7]}`;
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     updateCard(card);
   });
@@ -138,8 +143,11 @@ function createCard(cardData: IWord) {
     if (cardData.userWord && cardData.userWord.difficulty === 'hard') {
       cardContainer.classList.add('difficult-card');
     }
-    if (cardData.userWord && cardData.userWord.optional
-      && cardData.userWord.optional.learned === true) {
+    if (
+      cardData.userWord &&
+      cardData.userWord.optional &&
+      cardData.userWord.optional.learned === true
+    ) {
       cardContainer.classList.add('learned-card');
     }
 
@@ -149,15 +157,20 @@ function createCard(cardData: IWord) {
     buttonAddToLearned.classList.add('button-add-to-learned');
 
     buttonAddToDiff.innerText = '+ В СЛОЖНЫЕ СЛОВА';
-    if (cardData.userWord && cardData.userWord.difficulty === 'hard') buttonAddToDiff.innerText = '- ИЗ СЛОЖНЫХ';
+    if (cardData.userWord && cardData.userWord.difficulty === 'hard')
+      buttonAddToDiff.innerText = '- ИЗ СЛОЖНЫХ';
 
-    buttonAddToDiff.addEventListener('click', () => addWordDifficult(cardData, buttonAddToDiff, bookView));
+    buttonAddToDiff.addEventListener('click', () =>
+      addWordDifficult(cardData, buttonAddToDiff, bookView),
+    );
 
     buttonAddToLearned.innerText = 'ИЗУЧЕНО';
     if (cardData.userWord && cardData.userWord.optional.learned === true) {
       buttonAddToLearned.innerText = 'ИЗУЧАТЬ';
     }
-    buttonAddToLearned.addEventListener('click', () => addWordLearned(cardData, buttonAddToLearned, bookView));
+    buttonAddToLearned.addEventListener('click', () =>
+      addWordLearned(cardData, buttonAddToLearned, bookView),
+    );
 
     cardButtonsContainer.append(buttonAddToDiff, buttonAddToLearned);
 
@@ -217,12 +230,15 @@ export default async function updateCards(level: number, page: number, state?: S
   localStorage.setItem('currentBookPage', `${page}`);
   localStorage.setItem('currentBookLevel', `${level}`);
 
-  const arrayWords = user.userId ? await getUserWords(level, page)
-    : await getWords(level, page);
+  const arrayWords = user.userId ? await getUserWords(level, page) : await getWords(level, page);
   await drawCards(arrayWords, level);
 }
 
 function getGameResults(cardData: IWord, game: 'sprint' | 'audioCall') {
-  const result = cardData.userWord ? `${cardData.userWord.optional.games[game].right} / ${cardData.userWord.optional.games[game].right + cardData.userWord.optional.games.sprint.wrong}` : '0 / 0';
+  const result = cardData.userWord
+    ? `${cardData.userWord.optional.games[game].right} / ${
+        cardData.userWord.optional.games[game].right + cardData.userWord.optional.games.sprint.wrong
+      }`
+    : '0 / 0';
   return result;
 }

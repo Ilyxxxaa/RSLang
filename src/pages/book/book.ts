@@ -59,7 +59,7 @@ export default class Book {
     await updateCards(currentWords.currentLevel, currentWords.currentPage, this.state);
 
     bookContainer.append(drawPagination());
-    bookContainer.append(...drawGamesBlock());
+    bookContainer.append(...drawGamesBlock(this.state));
 
     const games = new Games(this.state);
     games.addHandlersToStartGameFromBook();
