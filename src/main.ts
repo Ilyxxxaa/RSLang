@@ -156,7 +156,9 @@ class App {
     this.games.clearPageContent();
     this.games.drawGamesCards();
     this.games.addHandlersToChooseGame();
-    (document.querySelector('.content') as HTMLElement).style.background = '#a198db';
+    (document.querySelector('.content') as HTMLElement).style.background = JSON.stringify(
+      'url("./assets/images/content-bg.png") no-repeat',
+    );
     this.menu.menuItemGames.classList.add('menu__list-item--active');
   };
 
