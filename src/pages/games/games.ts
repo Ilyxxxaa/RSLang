@@ -42,8 +42,8 @@ export default class Games {
     games.className = 'games';
     pageContent?.append(games);
 
-    GameCardView.drawGameCard('audiocall', 'Аудиовызов', audiocallDescription);
-    GameCardView.drawGameCard('sprint', 'Спринт', sprintDescription);
+    GameCardView.drawGameCard('audiocall', 'Аудиовызов', audiocallDescription, './assets/images/studying.png');
+    GameCardView.drawGameCard('sprint', 'Спринт', sprintDescription, './assets/images/test.png');
   }
 
   addHandlersToChooseGame() {

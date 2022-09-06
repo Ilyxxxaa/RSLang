@@ -100,8 +100,8 @@
   border-radius: 50%;
 
   &_active {
-    border: 2px solid rgb(160, 89, 218);
-    background: rgb(160, 89, 218);
+    border: 2px solid rgb(220, 50, 229);
+    background: rgb(220, 50, 229);
   }
 }
 
@@ -131,11 +131,11 @@
   cursor: pointer;
 
   &_true {
-    background-color: rgb(229, 151, 50);
+    background-color: rgb(220, 50, 229);
   }
 
   &_false {
-    background-color: rgb(120, 173, 217);
+    background-color: rgb(39, 144, 230);
   }
 
   @media screen and (max-width: 768px) {
