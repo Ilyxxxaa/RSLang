@@ -17,7 +17,12 @@ class GameLevels {
 
     const gameName = document.createElement('h1');
     gameName.className = 'game__name';
-    gameName.textContent = `${this.state.game}`;
+    if (this.state.game === 'sprint') {
+      gameName.textContent = 'Спринт';
+    }
+    if (this.state.game === 'audiocall') {
+      gameName.textContent = 'Аудиовызов';
+    }
 
     const gameLevelsContainer = document.createElement('div');
     gameLevelsContainer.className = 'levels';
@@ -35,12 +40,12 @@ class GameLevels {
 
     const buttonBack = document.createElement('button');
     buttonBack.className = 'game__button game__button_back';
-    buttonBack.textContent = 'назад';
+    buttonBack.textContent = 'Hазад';
 
     const buttonStart = document.createElement('button');
     buttonStart.className = 'game__button game__button_start';
     buttonStart.id = `${this.state.game}`;
-    buttonStart.textContent = 'начать';
+    buttonStart.textContent = 'Hачать';
     buttonStart.disabled = true;
 
     buttonContainer.append(buttonBack, buttonStart);
