@@ -240,7 +240,7 @@ export default class AudioCall {
   }
 
   acceptButtonHandler = async () => {
-    if (this.audioState.wordsCount + 1 < 2) {
+    if (this.audioState.wordsCount + 1 < 20) {
       await this.renderWords();
       this.audioState.wordsCount += 1;
       this.audioCallCreator.resultAllAnswers.textContent = `Всего слов: ${this.audioState.wordsCount}/20`;
