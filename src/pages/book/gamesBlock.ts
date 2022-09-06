@@ -1,6 +1,5 @@
 import currentWords from './bookState';
 import { createElement } from './utils';
-import { Game } from '../../types/state';
 
 export const drawGamesBlock = () => {
   const gameButtonsContainer = createElement('div', 'game-buttons-container');
@@ -10,9 +9,6 @@ export const drawGamesBlock = () => {
   const toAudioCall = createElement('button', 'button-to-audioCall');
   const toSprint = createElement('button', 'button-to-sprint');
   toAudioCall.addEventListener('click', () => console.log('Аудиовызов', currentWords));
-  // toSprint.addEventListener('click', () => {
-  //   console.log('спринт');
-  // });
   toAudioCall.innerText = 'Аудиовызов';
   toSprint.innerText = 'Спринт';
   gameButtonsContainer.append(toAudioCall, toSprint);

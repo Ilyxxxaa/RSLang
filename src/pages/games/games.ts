@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { audiocallDescription, sprintDescription, PAGE_COUNTS } from '../../const';
+import { audiocallDescription, sprintDescription, PAGE_COUNTS, stateSprintDefault } from '../../const';
 import GameCardView from './gameCardView';
 import GameLevels from './gameLevels';
 import State from '../../types/state';
@@ -104,10 +104,14 @@ export default class Games {
     document.querySelector('.button-to-sprint')?.addEventListener('click', () => {
       this.state.gameInit = 'book';
       this.state.game = 'sprint';
-      if (localStorage.getItem('currentLevel') && localStorage.getItem('currentPage')) {
-        // this.state.gameLevel = Number(localStorage.getItem('currentBookLevel'));
-        // this.state.gamePage = Number(localStorage.getItem('currentBookPage'));
+      if (localStorage.getItem('currentBookLevel') && localStorage.getItem('currentBookPage')) {
+        this.state.gameLevel = Number(localStorage.getItem('currentBookLevel'));
+        this.state.gamePage = Number(localStorage.getItem('currentBookPage'));
       }
+      document.querySelectorAll<HTMLButtonElement>('.menu__list-item')?.forEach((item) => {
+        item.classList.remove('menu__list-item--active');
+      });
+      document.querySelector('.menuItemGames')?.classList.add('menu__list-item--active');
       (document.querySelector('.page__content') as HTMLElement).innerHTML = '';
       this.drawGameSprint(this.state.gamePage, this.state.gameLevel);
     });
@@ -118,6 +122,10 @@ export default class Games {
   }
 
   async drawGameSprint(page: number, level: number) {
+    this.state.sprint = { ...stateSprintDefault };
+    this.state.sprint.rightAnswers = [];
+    this.state.sprint.wrongAnswers = [];
+    this.state.sprint.wordsForGame = [];
     this.sprint.helper(page, level).then(() => {
       this.sprint.drawSprintView();
       this.sprint.setRandomWord();

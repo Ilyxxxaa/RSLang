@@ -1,7 +1,7 @@
 const loaderDiv = document.createElement('div');
 
 export function loaderInit() {
-  console.log('init');
+  // console.log('init');
   loaderDiv.classList.add('lds-ring');
   loaderDiv.innerHTML = '<div></div><div></div><div></div><div></div>';
 }

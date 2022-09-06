@@ -8,6 +8,7 @@ export default interface State {
   gamePage: number;
   gameLevel: number;
   sprint: {
+    timerId?: ReturnType <typeof setInterval>;
     wordsForGame: IWord[];
     gameCurrentWord?: IWord;
     countRightAnswers: number;
