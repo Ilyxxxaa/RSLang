@@ -20,6 +20,7 @@
   margin: 1rem auto;
   gap: 1rem;
   min-height: 600px;
+  position: relative;
 }
 
 .words-container {
@@ -27,6 +28,18 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   align-content: baseline;
+}
+
+.learned-page::after {
+  content: "Все слова страницы изучены";
+  position: absolute;
+  color: #FFFFFF;
+  top: -2.5rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  background: #00ff5e;
+  border: 0.2rem solid transparent;
+  border-radius: 1rem;
 }
 
 .active-word {

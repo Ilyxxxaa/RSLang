@@ -5,7 +5,7 @@ import drawPagination from './pagination';
 import currentWords from './bookState';
 import { createElement } from './utils';
 import drawDictionary from './dictionary';
-import { drawGamesBlock } from './gamesBlock';
+import { drawGamesBlock, toggleActiveGamesButtons } from './gamesBlock';
 import Games from '../games/games';
 import State from '../../types/state';
 import { loaderInit } from './loader';
@@ -15,10 +15,6 @@ export const user = {
   token: localStorage.getItem('token'),
   refreshToken: localStorage.getItem('refreshToken'),
   userId: localStorage.getItem('userId'),
-};
-
-const obj = {
-  currentBookView: localStorage.getItem('currentBookView') || 'book',
 };
 
 export default class Book {
@@ -60,7 +56,9 @@ export default class Book {
 
     bookContainer.append(drawPagination());
     bookContainer.append(...drawGamesBlock(this.state));
-
+    if (currentWords.learnedPage) {
+      toggleActiveGamesButtons(true);
+    }
     const games = new Games(this.state);
     games.addHandlersToStartGameFromBook();
   }
