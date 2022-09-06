@@ -37,8 +37,8 @@ export default class AudioCall {
   }
 
   async drawAudioCall() {
-    console.log('Начинаем игру...');
     this.clearState();
+    this.removeListenerFromButtons();
     this.audioCallCreator.acceptButton.removeEventListener('click', this.listenerToAcceptButton);
     this.audioCallCreator.createAudioCallContainer();
     const words = await this.getWordsForGame();
@@ -82,6 +82,7 @@ export default class AudioCall {
 
       this.audioCallCreator.acceptButton.disabled = true;
       this.addListenerToWordContainer();
+      this.addListenerToButtons();
       this.removeListenerFromSpace();
     });
   }
@@ -150,6 +151,53 @@ export default class AudioCall {
     this.audioState.rightWordsCount += 1;
   };
 
+  addListenerToButtons() {
+    window.addEventListener('keyup', this.listnerToButtons);
+  }
+
+  removeListenerFromButtons() {
+    window.removeEventListener('keyup', this.listnerToButtons);
+  }
+
+  listnerToButtons(e: KeyboardEvent) {
+    console.log(e.code);
+    if (e.code === 'Digit1') {
+      document.querySelectorAll('.audioCall__words-item').forEach((item, index) => {
+        const button = item as HTMLElement;
+        if (index === 0) button.click();
+      });
+    }
+    if (e.code === 'Digit2') {
+      document.querySelectorAll('.audioCall__words-item').forEach((item, index) => {
+        const button = item as HTMLElement;
+        if (index === 1) button.click();
+      });
+    }
+    if (e.code === 'Digit3') {
+      document.querySelectorAll('.audioCall__words-item').forEach((item, index) => {
+        const button = item as HTMLElement;
+        if (index === 2) button.click();
+      });
+    }
+    if (e.code === 'Digit4') {
+      document.querySelectorAll('.audioCall__words-item').forEach((item, index) => {
+        const button = item as HTMLElement;
+        if (index === 3) button.click();
+      });
+    }
+    if (e.code === 'Digit5') {
+      document.querySelectorAll('.audioCall__words-item').forEach((item, index) => {
+        const button = item as HTMLElement;
+        if (index === 4) button.click();
+      });
+    }
+
+    if (e.code === 'Space') {
+      const button = document.querySelector<HTMLButtonElement>('.audioCall__audio-btn');
+      button?.click();
+    }
+  }
+
   addListeners() {
     this.audioCallCreator.acceptButton.addEventListener('click', this.listenerToAcceptButton);
     this.addListenerToWordContainer();
@@ -168,7 +216,7 @@ export default class AudioCall {
   }
 
   spaceHandler = (e: KeyboardEvent) => {
-    if (e.code === 'Space') {
+    if (e.code === 'Enter') {
       this.acceptButtonHandler();
     }
   };
@@ -203,11 +251,19 @@ export default class AudioCall {
       this.audioCallModal.addListenerToTabs();
       console.log(this.audioState);
       this.audioCallModal.modalPlayAgainButton.addEventListener('click', () => {
+        this.removeListenerFromButtons();
         this.drawAudioCall();
       });
       this.audioCallModal.modalGoToBookButton.addEventListener('click', () => {
-        console.log('try to draw book from audiocall.ts');
+        this.removeListenerFromButtons();
         this.state.drawBook();
+        this.state.view = 'book';
+        const menuButtons = document.querySelectorAll('.menu__list-item');
+        menuButtons.forEach((item) => item.classList.remove('menu__list-item--active'));
+        const bookButton = document.querySelector('.menuItemBook');
+        if (bookButton) {
+          bookButton.classList.add('menu__list-item--active');
+        }
       });
     }
   };

@@ -17,8 +17,8 @@ export default class Header {
         </div>
         <nav class="nav">
           <ul class="nav__list">
-            <li class="nav__list-item">
-              <a class="nav__list-link" href="#">
+            <li class="nav__list-item nav__list-item-first ">
+              <a class="nav__list-link nav__list-link-first" href="#">
                 О нас
               </a>
             </li>

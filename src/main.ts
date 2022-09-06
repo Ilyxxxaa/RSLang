@@ -69,6 +69,7 @@ class App {
     this.addListenersToMenuButtons();
     this.header.drawHeader();
     addAuthHandlers();
+    this.addListenerToLogo();
     this.state.drawBook = this.book.drawBook;
 
     if (this.state.view === 'main') this.renderMainPage();
@@ -186,6 +187,14 @@ class App {
     this.book.drawBook();
     this.footer.drawFooter();
     this.menu.menuItemBook.classList.add('menu__list-item--active');
+  }
+
+  addListenerToLogo() {
+    const logo = document.querySelector('.header__logo');
+    logo?.addEventListener('click', () => {
+      this.renderMainPage();
+      this.state.view = 'main';
+    });
   }
 }
 
