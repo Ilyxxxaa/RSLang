@@ -10,3 +10,13 @@ export const sprintDescription =
 
 export const PAGE_COUNTS = 30;
 export const WORDS_PER_PAGE = 20;
+
+export const stateSprintDefault = {
+  pointsScored: 0,
+  pointsPerWord: 10,
+  countRightAnswers: 0,
+  wordsForGame: [],
+  rightAnswers: [],
+  wrongAnswers: [],
+  countRightAnswersInARow: 0,
+};

@@ -155,7 +155,6 @@ export default class SprintResultModal {
     const book = new Book(this.state);
     const games = new Games(this.state);
     this.modalPlayAgainButton.addEventListener('click', () => {
-      document.querySelectorAll<HTMLButtonElement>('.menu__list-item')?.forEach((item) => item.removeAttribute('disabled'));
       games.clearPageContent();
       if (this.state.gameInit === 'menu') {
         games.levels.drawGameLevels();
@@ -166,30 +165,15 @@ export default class SprintResultModal {
       if (this.state.gameInit === 'book') {
         games.drawGameSprint(this.state.gamePage, this.state.gameLevel);
       }
-      this.state.sprint = {
-        pointsScored: 0,
-        pointsPerWord: 10,
-        countRightAnswers: 0,
-        wordsForGame: [],
-        rightAnswers: [],
-        wrongAnswers: [],
-        countRightAnswersInARow: 0,
-      };
     });
     this.modalGoToBookButton.addEventListener('click', () => {
-      document.querySelectorAll<HTMLButtonElement>('.menu__list-item')?.forEach((item) => item.removeAttribute('disabled'));
-      this.state.view = 'book';
-      this.state.sprint = {
-        pointsScored: 0,
-        pointsPerWord: 10,
-        countRightAnswers: 0,
-        wordsForGame: [],
-        rightAnswers: [],
-        wrongAnswers: [],
-        countRightAnswersInARow: 0,
-      };
+      document.querySelectorAll<HTMLButtonElement>('.menu__list-item')?.forEach((item) => {
+        item.classList.remove('menu__list-item--active');
+      });
+      document.querySelector('.menuItemBook')?.classList.add('menu__list-item--active');
       book.drawBook();
       games.addHandlersToStartGameFromBook();
+      this.state.view = 'book';
     });
   }
 

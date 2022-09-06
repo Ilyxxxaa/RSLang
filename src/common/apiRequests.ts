@@ -42,10 +42,10 @@ export default async function getUserWords(group: number, page: number) {
       token,
     );
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     return data[0].paginatedResults;
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return false;
   }
 }
@@ -62,10 +62,10 @@ export async function getNotLearedUserWords(group: number, page: number) {
       token,
     );
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     return data[0].paginatedResults;
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return false;
   }
 }
@@ -82,10 +82,10 @@ export async function getDifficultWords() {
       token,
     );
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     return data[0].paginatedResults;
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return false;
   }
 }
@@ -112,12 +112,12 @@ export async function createUserWord(word: IWord, game: string, isCorrect: boole
       body,
       token,
     );
-    console.log(response);
-    console.log('Слово создано');
+    // console.log(response);
+    // console.log('Слово создано');
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
 }
 
@@ -146,11 +146,11 @@ export async function updateUserWord(word: IWord, game: string, isCorrect: boole
 
   try {
     const response = await request('PUT', `${server}/users/${userId}/words/${wordId}`, body, token);
-    console.log('Слово обновлено');
+    // console.log('Слово обновлено');
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
 }
 
@@ -170,11 +170,11 @@ export async function updateHardWord(word: IWord, difficulty: string) {
 
   try {
     const response = await request('PUT', `${server}/users/${userId}/words/${wordId}`, body, token);
-    console.log('Слово теперь сложное');
+    // console.log('Слово теперь сложное');
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
 }
 
@@ -195,12 +195,12 @@ export async function createHardWord(word: IWord, difficulty: string) {
       body,
       token,
     );
-    console.log(response);
-    console.log('Слово создано и стало тяжёлым');
+    // console.log(response);
+    // console.log('Слово создано и стало тяжёлым');
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
 }
 
@@ -221,11 +221,11 @@ export async function updateLearnedWord(word: IWord, learned: boolean) {
 
   try {
     const response = await request('PUT', `${server}/users/${userId}/words/${wordId}`, body, token);
-    console.log('Слово теперь стало изученным');
+    // console.log('Слово теперь стало изученным');
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
 }
 
@@ -247,12 +247,12 @@ export async function createLearnedWord(word: IWord, learned: boolean) {
       body,
       token,
     );
-    console.log(response);
-    console.log('Слово создано и стало изученным');
+    // console.log(response);
+    // console.log('Слово создано и стало изученным');
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
 }
 // запрос для неавторизованных ниже
@@ -262,7 +262,7 @@ export async function getAllWords(group: number, page: number) {
     const data = await response.json();
     return data;
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
   return false;
 }

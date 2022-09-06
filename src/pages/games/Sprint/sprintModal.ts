@@ -8,7 +8,7 @@ class SprintModal {
     this.state = state;
   }
 
-  static drawSprintInModal() {
+  static drawSprintModal() {
     const sprintModalWindow = document.createElement('div');
     sprintModalWindow.className = 'sprint-modal hidden';
 
