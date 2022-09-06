@@ -6,7 +6,7 @@ import { baseLink } from '../../../const';
 import SprintModal from './sprintModal';
 import SprintResultModal from './sprintResultModal';
 import { requestGetAuth } from './sprintRequests';
-import getUserWords, { createUserWord, updateUserWord } from '../../../common/apiRequests';
+import { createUserWord, updateUserWord } from '../../../common/apiRequests';
 import { request } from '../../main/authorization/requests';
 
 class Sprint {
@@ -19,13 +19,13 @@ class Sprint {
   constructor(state: State) {
     this.state = state;
     this.sprintView = new SprintView(this.state);
+    SprintModal.drawSprintModal();
   }
 
   async getWordsForGameAnonymous(page: number, level: number) {
     const url = `words?page=${page}&group=${level}`;
     const wordsForGame = request('GET', url);
     return wordsForGame.then((result) => {
-      this.state.sprint.wordsForGame = [];
       this.state.sprint.wordsForGame = [...result];
     });
   }
@@ -33,7 +33,6 @@ class Sprint {
   async getWordsForGameAuth(url: string) {
     const wordsForGame = requestGetAuth(url);
     return wordsForGame.then((result) => {
-      this.state.sprint.wordsForGame = [];
       this.state.sprint.wordsForGame = [...result];
     });
   }
@@ -43,13 +42,13 @@ class Sprint {
       return this.getWordsForGameAnonymous(this.state.gamePage, this.state.gameLevel);
     }
     if (localStorage.getItem('token')) {
-      const userId = JSON.parse(localStorage.getItem('userId') ?? '');
+      const userId = localStorage.getItem('userId')?.slice(1, -1);
       if (this.state.gameInit === 'menu') {
         const urlAuthWords = `${baseLink}/users/${userId}/aggregatedWords?group=${level}&page=${page}&wordsPerPage=20`;
         return this.getWordsForGameAuth(urlAuthWords);
       }
       if (this.state.gameInit === 'book') {
-        const urlAuthUnlearnedWords = `${baseLink}/users/${userId}/aggregatedWords?group=${level}&page=${page}&wordsPerPage=20&filter={"$or":[{"userWord.optional.learned":"false"},{"userWord":null}]}`;
+        const urlAuthUnlearnedWords = `${baseLink}/users/${userId}/aggregatedWords?group=${level}&page=${page}&filter={"$or":[{"$and":[{"userWord.optional.learned":false}]},{"userWord":null}]}&wordsPerPage=20`;
         return this.getWordsForGameAuth(urlAuthUnlearnedWords);
       }
     }
@@ -59,20 +58,17 @@ class Sprint {
   drawSprintView() {
     this.setCountdown();
     this.sprintView.drawSprintGameView();
-    SprintModal.drawSprintInModal();
-    this.addHandlersToSprintModal();
     this.addHandlersToSprintButtons();
     this.showSprintModalWindow();
-    this.closeSprintModalWindow();
-    this.addHandlersFromKeyboard();
     this.addHandlerToAudio();
     this.addHandlersToMute();
     this.addHandlersToUnMute();
   }
 
-  setCountdown() {
+  setCountdown = () => {
     this.intervalId = setInterval(this.updateCountdown, 1000);
-  }
+    this.state.sprint.timerId = this.intervalId;
+  };
 
   updateCountdown = () => {
     const countdown = document.querySelector('.sprint__countdown') as HTMLElement;
@@ -83,15 +79,41 @@ class Sprint {
       countdown.textContent = seconds.toString();
     }
     if (!seconds) {
-      clearInterval(this.intervalId);
+      clearInterval(this.state.sprint.timerId);
       this.showSprintResultsModal();
     }
-    if (this.state.game === 'sprint' && seconds > 0) {
-      document.querySelectorAll<HTMLButtonElement>('.menu__list-item')?.forEach((item) => item.setAttribute('disabled', 'disabled'));
-    } else {
-      document.querySelectorAll<HTMLButtonElement>('.menu__list-item')?.forEach((item) => item.removeAttribute('disabled'));
-    }
   };
+
+  showSprintModalWindow() {
+    document.querySelector('.sprint__close')?.addEventListener('click', () => {
+      clearInterval(this.state.sprint.timerId);
+      document.querySelector('.sprint-modal')?.classList.remove('hidden');
+      (document.querySelector('body') as HTMLElement).style.overflow = 'hidden';
+    });
+  }
+
+  addHandlersToSprintModal() {
+    document.querySelector('.sprint-modal__button_close')?.addEventListener('click', () => {
+      document.querySelector('.sprint-modal')?.classList.add('hidden');
+      (document.querySelector('body') as HTMLElement).style.overflow = 'visible';
+      clearInterval(this.state.sprint.timerId);
+      this.showSprintResultsModal();
+    });
+
+    document.querySelector('.sprint-modal__button_continue')?.addEventListener('click', () => {
+      document.querySelector('.sprint-modal')?.classList.add('hidden');
+      (document.querySelector('body') as HTMLElement).style.overflow = 'visible';
+      this.setCountdown();
+    });
+  }
+
+  closeSprintModalWindow() {
+    document.querySelector('.sprint-modal__close')?.addEventListener('click', () => {
+      document.querySelector('.sprint-modal')?.classList.add('hidden');
+      (document.querySelector('body') as HTMLElement).style.overflow = 'visible';
+      this.setCountdown();
+    });
+  }
 
   addHandlerToAudio() {
     document.querySelector('.sprint__audio')?.addEventListener('click', () => {
@@ -129,7 +151,6 @@ class Sprint {
         this.setPoints();
         this.scorePoints();
         this.setRandomWord();
-        this.showSprintResultsModal();
       }
     });
   }
@@ -144,6 +165,7 @@ class Sprint {
     wordEn.textContent = currentWord.word;
 
     console.log('cлова для игры:', this.state.sprint.wordsForGame);
+    console.log('стейт:', this.state.sprint);
 
     const statusWordTranslate = words.length === 1 ? 1 : getRandomNumber(0, 1);
 
@@ -158,16 +180,20 @@ class Sprint {
 
     this.state.sprint.wordsForGame = words.filter((word) => word !== currentWord);
 
-    if (!this.state.sprint.wordsForGame.length) {
-      if (!this.state.gamePage) {
+    if (this.state.gamePage) {
+      if (!this.state.sprint.wordsForGame.length) {
+        this.state.gamePage -= 1;
+        this.helper(this.state.gamePage, this.state.gameLevel);
+      }
+    }
+    if (!this.state.gamePage) {
+      if (!this.state.sprint.wordsForGame.length) {
         this.endSprintGame();
       }
-      this.state.gamePage -= 1;
-      this.helper(this.state.gamePage, this.state.gameLevel);
     }
   }
 
-  checkAnswer = (userAnswer: string) => {
+  checkAnswer = async (userAnswer: string) => {
     const rightAnswerAudio = document.querySelector('.sprint-audio_right') as HTMLAudioElement;
     const wrongAnswerAudio = document.querySelector('.sprint-audio_wrong') as HTMLAudioElement;
     const increasePointsAudio = document.querySelector('.sprint-audio_points') as HTMLAudioElement;
@@ -203,6 +229,10 @@ class Sprint {
     }
 
     if (!checkedUserAnswer) {
+      if (currentWord) {
+        this.state.sprint.wrongAnswers.push(currentWord);
+      }
+
       wrongAnswerAudio.pause();
       wrongAnswerAudio.currentTime = 0;
       wrongAnswerAudio.play();
@@ -212,13 +242,10 @@ class Sprint {
         item.classList.remove('hidden');
         item.classList.remove('checkbox__item_active');
       });
-      if (currentWord) {
-        this.state.sprint.wrongAnswers.push(currentWord);
-      }
     }
 
     if (localStorage.getItem('token') && currentWord) {
-      if (currentWord.userWord) {
+      if (currentWord?.userWord) {
         updateUserWord(currentWord, 'sprint', checkedUserAnswer);
       } else {
         createUserWord(currentWord, 'sprint', checkedUserAnswer);
@@ -257,21 +284,6 @@ class Sprint {
     sprintResultModal.addHandlersToSprintResultModal();
   }
 
-  addHandlersToSprintModal() {
-    document.querySelector('.sprint-modal__button_close')?.addEventListener('click', () => {
-      document.querySelector('.sprint-modal')?.classList.add('hidden');
-      (document.querySelector('body') as HTMLElement).style.overflow = 'visible';
-      clearInterval(this.intervalId);
-      this.showSprintResultsModal();
-    });
-
-    document.querySelector('.sprint-modal__button_continue')?.addEventListener('click', () => {
-      document.querySelector('.sprint-modal')?.classList.add('hidden');
-      (document.querySelector('body') as HTMLElement).style.overflow = 'visible';
-      this.setCountdown();
-    });
-  }
-
   addHandlersToMute = () => {
     document.querySelector('.sprint__unmute')?.addEventListener('click', (event: Event) => {
       (event.target as HTMLElement).classList.add('hidden');
@@ -295,25 +307,10 @@ class Sprint {
   };
 
   endSprintGame() {
-    this.showSprintResultsModal();
-    document.querySelector('.sprint')?.classList.add('hidden');
     clearInterval(this.intervalId);
-  }
-
-  showSprintModalWindow() {
-    document.querySelector('.sprint__close')?.addEventListener('click', () => {
-      document.querySelector('.sprint-modal')?.classList.remove('hidden');
-      (document.querySelector('body') as HTMLElement).style.overflow = 'hidden';
-      clearInterval(this.intervalId);
-    });
-  }
-
-  closeSprintModalWindow() {
-    document.querySelector('.sprint-modal__close')?.addEventListener('click', () => {
-      document.querySelector('.sprint-modal')?.classList.add('hidden');
-      (document.querySelector('body') as HTMLElement).style.overflow = 'visible';
-      this.setCountdown();
-    });
+    const sprintResultModal = new SprintResultModal(this.state);
+    this.showSprintResultsModal();
+    console.log('игра окончена');
   }
 }
 

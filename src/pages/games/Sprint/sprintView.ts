@@ -16,6 +16,7 @@ class SprintView {
     const wrongAnswerAudio = document.createElement('audio');
     wrongAnswerAudio.className = 'sprint-audio_wrong';
     wrongAnswerAudio.src = './assets/images/sounds/wrongAnswerAudio.mp3';
+    wrongAnswerAudio.volume = 0.4;
 
     const increasePointsAudio = document.createElement('audio');
     increasePointsAudio.className = 'sprint-audio_points';
@@ -34,7 +35,7 @@ class SprintView {
 
     const countDown = document.createElement('div');
     countDown.className = 'sprint__countdown';
-    countDown.textContent = '60';
+    countDown.textContent = '20';
 
     const sprintClose = document.createElement('img');
     sprintClose.className = 'sprint__close';

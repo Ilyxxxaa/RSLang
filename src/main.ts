@@ -13,6 +13,8 @@ import Utils from './common/utils';
 import { createHardWord } from './common/apiRequests';
 
 import AudioCall from './pages/games/AudioCall/audioCall';
+import Sprint from './pages/games/Sprint/sprint';
+import SprintModal from './pages/games/Sprint/sprintModal';
 
 class App {
   state: State;
@@ -33,11 +35,13 @@ class App {
 
   audioCall: AudioCall;
 
+  sprint: Sprint;
+
   constructor() {
     this.state = {
       view: localStorage.getItem('currentView') || 'main',
       game: '',
-      gameInit: 'menu',
+      gameInit: '',
       gamePage: 0,
       gameLevel: 0,
       sprint: {
@@ -58,10 +62,13 @@ class App {
     this.book = new Book(this.state);
     this.footer = new Footer();
     this.audioCall = new AudioCall(this.state);
+    this.sprint = new Sprint(this.state);
+    this.sprint.addHandlersFromKeyboard();
+    this.sprint.addHandlersToSprintModal();
+    this.sprint.closeSprintModalWindow();
   }
 
   start() {
-    alert('Не успели доделать работу, пожалуйста, проверьте работу после 7 сентября. Спасибо)');
     this.menu.drawMenu();
     this.addListenersToMenuButtons();
     this.header.drawHeader();
@@ -82,6 +89,9 @@ class App {
         this.renderMainPage();
         this.menu.closeMenu();
       }
+      if (this.state.sprint.timerId) {
+        clearInterval(this.state.sprint.timerId);
+      }
     });
 
     this.menu.menuItemGames.addEventListener('click', () => {
@@ -91,6 +101,9 @@ class App {
 
         this.renderGamesPage();
         this.menu.closeMenu();
+      }
+      if (this.state.sprint.timerId) {
+        clearInterval(this.state.sprint.timerId);
       }
     });
 
@@ -102,6 +115,10 @@ class App {
         this.renderStatisticsPage();
         this.menu.closeMenu();
       }
+
+      if (this.state.sprint.timerId) {
+        clearInterval(this.state.sprint.timerId);
+      }
     });
 
     this.menu.menuItemBook.addEventListener('click', () => {
@@ -111,6 +128,10 @@ class App {
 
         this.renderBookPage();
         this.menu.closeMenu();
+      }
+
+      if (this.state.sprint.timerId) {
+        clearInterval(this.state.sprint.timerId);
       }
     });
   }
