@@ -42,7 +42,6 @@ export default class AudioCall {
     this.audioCallCreator.acceptButton.removeEventListener('click', this.listenerToAcceptButton);
     this.audioCallCreator.createAudioCallContainer();
     const words = await this.getWordsForGame();
-    console.log(words);
     this.audioState.wordsArray = [...words];
     this.prepareArray();
     await this.renderWords();
@@ -160,7 +159,6 @@ export default class AudioCall {
   }
 
   listnerToButtons(e: KeyboardEvent) {
-    console.log(e.code);
     if (e.code === 'Digit1') {
       document.querySelectorAll('.audioCall__words-item').forEach((item, index) => {
         const button = item as HTMLElement;
@@ -249,7 +247,6 @@ export default class AudioCall {
     } else {
       this.audioCallModal.drawResults();
       this.audioCallModal.addListenerToTabs();
-      console.log(this.audioState);
       this.audioCallModal.modalPlayAgainButton.addEventListener('click', () => {
         this.removeListenerFromButtons();
         this.drawAudioCall();
@@ -284,28 +281,40 @@ export default class AudioCall {
     const token = localStorage.getItem('token');
     const group = Number(localStorage.getItem('currentBookLevel')) || this.state.gameLevel;
     const page = Number(localStorage.getItem('currentBookPage')) || this.state.gamePage;
-    console.log('group', group, 'page:', page);
     if (token) {
-      if (this.state.view === 'games') {
-        const words = await getUserWords(group, page);
-        console.log('return aggregated');
+      if (this.state.view === 'book') {
+        this.state.view = 'games';
+        const words = await getNotLearedUserWords(group, page);
         return words;
         // eslint-disable-next-line no-else-return
       } else {
-        const words = await getNotLearedUserWords(group, page);
+        this.state.view = 'games';
+        const group1 = this.state.gameLevel;
+        const page1 = this.state.gamePage;
+        const words = await getUserWords(group1, page1);
         return words;
       }
       // eslint-disable-next-line no-else-return
     } else {
-      const words = await getAllWords(group, page);
-      return words;
+      // eslint-disable-next-line no-lonely-if
+      if (this.state.view === 'book') {
+        this.state.view = 'games';
+        const words = await getAllWords(group, page);
+        return words;
+        // eslint-disable-next-line no-else-return
+      } else {
+        const group1 = this.state.gameLevel;
+        const page1 = this.state.gamePage;
+        this.state.view = 'games';
+        const words = await getAllWords(group1, page1);
+        return words;
+      }
     }
   }
 
   prepareArray() {
     // использовать только один раз при старте игры
     const array = Utils.createRandomArray(20);
-    console.log(array);
     this.audioState.arrayOfRestIndexes = [...array]; // определяет порядок угадывания слов
   }
 
@@ -320,7 +329,6 @@ export default class AudioCall {
       set.add(Utils.randomInteger(0, 19));
     }
     this.audioState.wordsOrderArray = Array.from(set);
-    console.log(this.audioState);
   };
 
   clearState() {

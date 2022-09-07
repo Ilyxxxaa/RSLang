@@ -42,7 +42,12 @@ export default class Games {
     games.className = 'games';
     pageContent?.append(games);
 
-    GameCardView.drawGameCard('audiocall', 'Аудиовызов', audiocallDescription, './assets/images/studying.png');
+    GameCardView.drawGameCard(
+      'audiocall',
+      'Аудиовызов',
+      audiocallDescription,
+      './assets/images/studying.png',
+    );
     GameCardView.drawGameCard('sprint', 'Спринт', sprintDescription, './assets/images/test.png');
   }
 
@@ -77,8 +82,6 @@ export default class Games {
 
         this.state.gameLevel = index;
         this.state.gamePage = getRandomNumber(0, PAGE_COUNTS - 1);
-        console.log('level:', this.state.gameLevel);
-        console.log('page:', this.state.gamePage);
       });
     });
   }

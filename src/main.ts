@@ -54,6 +54,7 @@ class App {
         countRightAnswersInARow: 0,
       },
       drawBook: () => console.log('sorry'),
+      drawAudioCall: () => console.log('sorry'),
     };
     this.menu = new Menu();
     this.header = new Header();

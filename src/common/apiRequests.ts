@@ -5,9 +5,9 @@ import request from './request';
 const deepClone = require('rfdc/default');
 
 const server = 'https://serverforrslang.herokuapp.com';
-const notLearnedFilter = JSON.stringify(
-  '{"$or":[{"$and":[{"userWord.optional.learned":false}]},{"userWord":null}]}',
-);
+const notLearnedFilter =
+  '{"$or":[{"$and":[{"userWord.optional.learned":false}]},{"userWord":null}]}';
+
 const difficultyFilter = '{"$or":[{"userWord.difficulty":"hard"}]}';
 const standardBody: IBody = {
   difficulty: 'string',
@@ -42,10 +42,9 @@ export default async function getUserWords(group: number, page: number) {
       token,
     );
     const data = await response.json();
-    // console.log(data);
+
     return data[0].paginatedResults;
   } catch (err) {
-    // console.log(err);
     return false;
   }
 }
@@ -62,10 +61,8 @@ export async function getNotLearedUserWords(group: number, page: number) {
       token,
     );
     const data = await response.json();
-    // console.log(data);
     return data[0].paginatedResults;
   } catch (err) {
-    // console.log(err);
     return false;
   }
 }
@@ -82,10 +79,9 @@ export async function getDifficultWords() {
       token,
     );
     const data = await response.json();
-    // console.log(data);
+
     return data[0].paginatedResults;
   } catch (err) {
-    // console.log(err);
     return false;
   }
 }
@@ -112,8 +108,7 @@ export async function createUserWord(word: IWord, game: string, isCorrect: boole
       body,
       token,
     );
-    // console.log(response);
-    // console.log('Слово создано');
+
     const data = await response.json();
     // console.log(data);
   } catch (err) {

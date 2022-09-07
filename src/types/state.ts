@@ -8,7 +8,7 @@ export default interface State {
   gamePage: number;
   gameLevel: number;
   sprint: {
-    timerId?: ReturnType <typeof setInterval>;
+    timerId?: ReturnType<typeof setInterval>;
     wordsForGame: IWord[];
     gameCurrentWord?: IWord;
     countRightAnswers: number;
@@ -19,6 +19,7 @@ export default interface State {
     wrongAnswers: IWord[];
   };
   drawBook: () => void;
+  drawAudioCall: () => void;
 }
 
 type View = 'main' | 'book' | 'games' | 'statistics' | string;
