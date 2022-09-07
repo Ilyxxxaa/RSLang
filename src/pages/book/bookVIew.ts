@@ -16,6 +16,7 @@ import currentBookWords from './bookState';
 import drawDictionary from './dictionary';
 import { startLoader, stopLoader } from './loader';
 import State from '../../types/state';
+import { toggleActiveGamesButtons } from './gamesBlock';
 
 const noBgColor = '#FFFFFF';
 let currentActiveWord: IWord | null = null;
@@ -66,7 +67,6 @@ async function addWordDifficult(cardData: IWord, button: HTMLButtonElement, book
     await createHardWord(cardData, 'hard');
   }
   currentActiveWord = cardData;
-  console.log(currentActiveWord);
 
   if (bookView && bookView === 'dictionary') {
     await drawDictionary();
@@ -144,9 +144,9 @@ function createCard(cardData: IWord) {
       cardContainer.classList.add('difficult-card');
     }
     if (
-      cardData.userWord &&
-      cardData.userWord.optional &&
-      cardData.userWord.optional.learned === true
+      cardData.userWord
+      && cardData.userWord.optional
+      && cardData.userWord.optional.learned === true
     ) {
       cardContainer.classList.add('learned-card');
     }
@@ -157,20 +157,15 @@ function createCard(cardData: IWord) {
     buttonAddToLearned.classList.add('button-add-to-learned');
 
     buttonAddToDiff.innerText = '+ В СЛОЖНЫЕ СЛОВА';
-    if (cardData.userWord && cardData.userWord.difficulty === 'hard')
-      buttonAddToDiff.innerText = '- ИЗ СЛОЖНЫХ';
+    if (cardData.userWord && cardData.userWord.difficulty === 'hard') buttonAddToDiff.innerText = '- ИЗ СЛОЖНЫХ';
 
-    buttonAddToDiff.addEventListener('click', () =>
-      addWordDifficult(cardData, buttonAddToDiff, bookView),
-    );
+    buttonAddToDiff.addEventListener('click', () => addWordDifficult(cardData, buttonAddToDiff, bookView));
 
     buttonAddToLearned.innerText = 'ИЗУЧЕНО';
     if (cardData.userWord && cardData.userWord.optional.learned === true) {
       buttonAddToLearned.innerText = 'ИЗУЧАТЬ';
     }
-    buttonAddToLearned.addEventListener('click', () =>
-      addWordLearned(cardData, buttonAddToLearned, bookView),
-    );
+    buttonAddToLearned.addEventListener('click', () => addWordLearned(cardData, buttonAddToLearned, bookView));
 
     cardButtonsContainer.append(buttonAddToDiff, buttonAddToLearned);
 
@@ -219,6 +214,13 @@ export function drawCards(array: IWord[], level: number) {
   const wordsContainer = createElement('div', 'words-container');
   array.forEach((card, i) => wordsContainer.append(createCardWord(card, level, i, wordsContainer)));
   cardsContainer.append(wordsContainer);
+  if (checkLeanrnedPage(wordsContainer)) {
+    currentBookWords.learnedPage = true;
+    toggleActiveGamesButtons(true);
+  } else {
+    currentBookWords.learnedPage = false;
+    toggleActiveGamesButtons(false);
+  }
   cardsContainer.append(createCard(array[0]));
 }
 
@@ -236,9 +238,16 @@ export default async function updateCards(level: number, page: number, state?: S
 
 function getGameResults(cardData: IWord, game: 'sprint' | 'audioCall') {
   const result = cardData.userWord
-    ? `${cardData.userWord.optional.games[game].right} / ${
-        cardData.userWord.optional.games[game].right + cardData.userWord.optional.games.sprint.wrong
-      }`
+    ? `${cardData.userWord.optional.games[game].right} / ${cardData.userWord.optional.games[game].right + cardData.userWord.optional.games.sprint.wrong
+    }`
     : '0 / 0';
   return result;
+}
+
+function checkLeanrnedPage(wordContainer: HTMLElement) {
+  const array = Array.from(wordContainer.children);
+  const diff = 'difficult-card-word';
+  const learn = 'learned-card-word';
+  return array
+    .every((button) => button.classList.contains(diff) || button.classList.contains(learn));
 }
