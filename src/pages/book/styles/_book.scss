@@ -34,7 +34,7 @@
   content: "Все слова страницы изучены";
   position: absolute;
   color: #FFFFFF;
-  top: -2.5rem;
+  bottom: -1rem;
   font-size: 1.3rem;
   font-weight: 600;
   background: #00ff5e;
@@ -259,7 +259,54 @@
 }
 
 @media (max-width: 760px) {
+  .cards-container {
+    flex-wrap: wrap-reverse;
+    justify-content: center;
+  }
+
   .card-container {
     flex-direction: column;
+
   }
+
+  .words-container {
+    justify-content: center;
+  }
+
+  .card {
+    min-width: auto;
+    min-height: auto;
+    width: auto;
+  }
+
+  .card-img-container {
+    max-width: 100%;
+    display: block;
+    min-width: 100px;
+  }
+
+  .game-buttons-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .book-main-title {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-buttons-container {
+    display: block;
+  }
+
+
+}
+
+
+@media (max-width: 500px) {
+
+  .footer__inner {
+    flex-direction: column;
+  }
+
 }
