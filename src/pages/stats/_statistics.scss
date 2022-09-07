@@ -87,58 +87,67 @@
       margin-bottom: 30px;
     }
   }
+  &__resultsContainer {
+    background-color: rgba(41, 41, 41, 0.2);
+    border-radius: 10px;
+  }
 
   &__wordsResultContainer {
     display: flex;
     justify-content: space-between;
-    height: 500px;
+    height: 250px;
     width: 1000px;
-    background-color: rgba(41, 41, 41, 0.2);
-    border-radius: 10px;
     padding: 20px;
   }
-  &__learnedWordsContainer {
+  &__wordsContainer {
     display: flex;
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    width: 100px;
+    width: 200px;
     height: 200px;
     text-align: center;
-    font-size: 20px;
+    font-size: 25px;
+    color: #fff;
   }
-  &__learnedWords {
+  &__resultWordsNumber {
     font-size: 100px;
     font-weight: 900;
   }
-}
+  &__gamesResultContainer {
+    display: flex;
+    justify-content: space-around;
+    height: 250px;
+    width: 1000px;
+    padding: 20px;
+  }
 
-.stat__card-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 40px;
-  width: 100%;
-}
-
-.stat__card {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  width: 500px;
-  height: 300px;
-  padding: 30px;
-  font-size: 20px;
-  font-weight: 400;
-  background: white;
-  border-radius: 5px;
-  box-shadow: 0px 2px 10px 3px rgb(0 0 0 / 50%);
-
-  @media screen and (max-width: 668px) {
-    width: 90%;
+  &__gameContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+    background-color: rgba(255, 0, 214, 0.4);
+    box-shadow: 4px 5px 8px 0px rgba(34, 60, 80, 0.2);
+  }
+  &__gameResultBox {
+    text-align: center;
+    width: 320px;
+  }
+  &__gameTitle {
+    margin-top: 15px;
+    font-size: 30px;
+    color: #fff;
+    font-weight: 900;
+    margin-bottom: 20px;
+  }
+  &__gameResultBox {
+    font-size: 20px;
+    font-weight: 500;
+    color: #fff;
+    & div {
+      margin-bottom: 5px;
+    }
   }
 }
 
