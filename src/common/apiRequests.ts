@@ -5,10 +5,15 @@ import request from './request';
 const deepClone = require('rfdc/default');
 
 const server = 'https://serverforrslang.herokuapp.com';
-const notLearnedFilter = JSON.stringify(
-  '{"$or":[{"$and":[{"userWord.optional.learned":false}]},{"userWord":null}]}',
-);
+const notLearnedFilter =
+  '{"$or":[{"$and":[{"userWord.optional.learned":false}]},{"userWord":null}]}';
+
 const difficultyFilter = '{"$or":[{"userWord.difficulty":"hard"}]}';
+
+const learnedWordsFilter = '{"$or":[{"userWord.optional.learned":true}]}';
+
+const newWordsFilter = '{"$or":[{"userWord.optional.isNew":false}]}';
+
 const standardBody: IBody = {
   difficulty: 'string',
   optional: {
@@ -19,10 +24,16 @@ const standardBody: IBody = {
       sprint: {
         right: 0,
         wrong: 0,
+        learned: 0,
+        inRow: 0,
+        inRowMax: 0,
       },
       audioCall: {
         right: 0,
         wrong: 0,
+        learned: 0,
+        inRow: 0,
+        inRowMax: 0,
       },
     },
     inRow: 0,
@@ -42,10 +53,9 @@ export default async function getUserWords(group: number, page: number) {
       token,
     );
     const data = await response.json();
-    // console.log(data);
+
     return data[0].paginatedResults;
   } catch (err) {
-    // console.log(err);
     return false;
   }
 }
@@ -62,10 +72,8 @@ export async function getNotLearedUserWords(group: number, page: number) {
       token,
     );
     const data = await response.json();
-    // console.log(data);
     return data[0].paginatedResults;
   } catch (err) {
-    // console.log(err);
     return false;
   }
 }
@@ -82,10 +90,9 @@ export async function getDifficultWords() {
       token,
     );
     const data = await response.json();
-    // console.log(data);
+
     return data[0].paginatedResults;
   } catch (err) {
-    // console.log(err);
     return false;
   }
 }
@@ -98,9 +105,14 @@ export async function createUserWord(word: IWord, game: string, isCorrect: boole
   if (isCorrect) {
     body.optional.games[game].right += 1;
     body.optional.inRow += 1;
+    body.optional.games[game].inRow += 1;
+    if (body.optional.games[game].inRow > body.optional.games[game].inRowMax) {
+      body.optional.games[game].inRowMax = body.optional.games[game].inRow;
+    }
   } else {
     body.optional.games[game].wrong += 1;
     body.optional.inRow = 0;
+    body.optional.games[game].inRow = 0;
   }
   body.optional.tryCount += 1;
   body.optional.date = new Date();
@@ -112,8 +124,7 @@ export async function createUserWord(word: IWord, game: string, isCorrect: boole
       body,
       token,
     );
-    // console.log(response);
-    // console.log('Слово создано');
+
     const data = await response.json();
     // console.log(data);
   } catch (err) {
@@ -134,12 +145,19 @@ export async function updateUserWord(word: IWord, game: string, isCorrect: boole
     if (body.optional.inRow >= 3) {
       body.difficulty = 'string';
       body.optional.learned = true;
+      body.optional.games[game].learned += 1;
+    }
+    body.optional.games[game].inRow += 1;
+    if (body.optional.games[game].inRow > body.optional.games[game].inRowMax) {
+      body.optional.games[game].inRowMax = body.optional.games[game].inRow;
     }
   } else {
     body.optional.games[game].wrong += 1;
     body.optional.inRow = 0;
+    body.optional.games[game].inRow = 0;
     if (body.optional.learned === true) {
       body.optional.learned = false;
+      body.optional.games[game].learned -= 1;
     }
   }
   body.optional.tryCount += 1;
@@ -266,3 +284,41 @@ export async function getAllWords(group: number, page: number) {
   }
   return false;
 }
+
+export async function getLearnedUserWords() {
+  const token = localStorage.getItem('token')?.slice(1, -1);
+  const userId = localStorage.getItem('userId')?.slice(1, -1);
+
+  try {
+    const response = await request(
+      'GET',
+      `${server}/users/${userId}/aggregatedWords?wordsPerPage=100&filter=${learnedWordsFilter}`,
+      false,
+      token,
+    );
+    const data = await response.json();
+    return data[0].paginatedResults;
+  } catch (err) {
+    return false;
+  }
+}
+
+export async function getNewUserWords() {
+  const token = localStorage.getItem('token')?.slice(1, -1);
+  const userId = localStorage.getItem('userId')?.slice(1, -1);
+
+  try {
+    const response = await request(
+      'GET',
+      `${server}/users/${userId}/aggregatedWords?wordsPerPage=1000&filter=${newWordsFilter}`,
+      false,
+      token,
+    );
+    const data = await response.json();
+    return data[0].paginatedResults;
+  } catch (err) {
+    return false;
+  }
+}
+
+// group=${group}&page=${page}&wordsPerPage=20&

@@ -8,8 +8,6 @@ export function loaderInit() {
 
 export function startLoader() {
   const content = document.querySelector('.book_container');
-  console.log('start');
-  console.log(content);
   content?.append(loaderDiv);
 }
 

@@ -8,10 +8,16 @@ export interface IBody {
       sprint: {
         right: number;
         wrong: number;
+        learned: number;
+        inRow: number;
+        inRowMax: number;
       };
       audioCall: {
         right: number;
         wrong: number;
+        learned: number;
+        inRow: number;
+        inRowMax: number;
       };
     };
     tryCount: number;

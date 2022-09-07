@@ -16,6 +16,24 @@ export default class StatisticsView {
 
   learnedWords = document.createElement('div');
 
+  rightWords = document.createElement('div');
+
+  newWords = document.createElement('div');
+
+  gamesResultsContainer = document.createElement('div');
+
+  sprintNewWords = document.createElement('div');
+
+  audioNewWords = document.createElement('div');
+
+  sprintRightWords = document.createElement('div');
+
+  audioRightWords = document.createElement('div');
+
+  sprintRightSeries = document.createElement('div');
+
+  audioRightSeries = document.createElement('div');
+
   drawStatContainer() {
     this.statContainer.classList.add('stat__container');
     this.createStatContainer();
@@ -82,25 +100,85 @@ export default class StatisticsView {
     title.textContent = 'Статистика за сегодня ';
     title.classList.add('stat__today-title');
 
-    this.createWordResultsContainer();
+    const resultsContainer = document.createElement('div');
+    resultsContainer.classList.add('stat__resultsContainer');
 
-    this.statTodayContainer.append(title, this.wordsResultsContainer);
+    this.createWordResultsContainer();
+    this.createGameResultsContainer();
+
+    resultsContainer.append(this.wordsResultsContainer, this.gamesResultsContainer);
+
+    this.statTodayContainer.append(title, resultsContainer);
   }
 
   createWordResultsContainer() {
     this.wordsResultsContainer.classList.add('stat__wordsResultContainer');
 
+    this.wordsResultsContainer.innerHTML = '';
+
     const learnedWordsContainer = document.createElement('div');
-    learnedWordsContainer.classList.add('stat__learnedWordsContainer');
-    const text = document.createElement('div');
-    text.textContent = 'слов изучено';
-
-    this.learnedWords.classList.add('stat__learnedWords');
+    learnedWordsContainer.classList.add('stat__learnedWordsContainer', 'stat__wordsContainer');
+    const textLearned = document.createElement('div');
+    textLearned.textContent = 'Слов изучено';
+    this.learnedWords.classList.add('stat__learnedWords', 'stat__resultWordsNumber');
     this.learnedWords.textContent = '0';
+    learnedWordsContainer.append(this.learnedWords, textLearned);
 
-    learnedWordsContainer.append(this.learnedWords, text);
+    const rightWordsContainer = document.createElement('div');
+    rightWordsContainer.classList.add('stat__rightWordsContainer', 'stat__wordsContainer');
+    const textRight = document.createElement('div');
+    textRight.textContent = 'Правильных ответов';
+    this.rightWords.classList.add('stat__rightWords', 'stat__resultWordsNumber');
+    this.rightWords.textContent = '0 %';
+    rightWordsContainer.append(this.rightWords, textRight);
 
-    this.wordsResultsContainer.append(learnedWordsContainer);
+    const newWordsContainer = document.createElement('div');
+    newWordsContainer.classList.add('stat__learnedWordsContainer', 'stat__wordsContainer');
+    const textNew = document.createElement('div');
+    textNew.textContent = 'Новых слов';
+    this.newWords.classList.add('stat__newWords', 'stat__resultWordsNumber');
+    this.newWords.textContent = '0';
+    newWordsContainer.append(this.newWords, textNew);
+
+    this.wordsResultsContainer.append(
+      learnedWordsContainer,
+      rightWordsContainer,
+      newWordsContainer,
+    );
+  }
+
+  createGameResultsContainer() {
+    this.gamesResultsContainer.innerHTML = '';
+
+    this.gamesResultsContainer.classList.add('stat__gamesResultContainer');
+
+    const sprintContainer = document.createElement('div');
+    sprintContainer.classList.add('stat__gameContainer');
+    const sprintTitle = document.createElement('div');
+    sprintTitle.classList.add('stat__gameTitle');
+    sprintTitle.textContent = 'Спринт';
+    const sprintResultBox = document.createElement('div');
+    sprintResultBox.classList.add('stat__gameResultBox');
+    this.sprintNewWords.textContent = 'Изучено: 0 слов';
+    this.sprintRightWords.textContent = 'Правильных ответов: 0%';
+    this.sprintRightSeries.textContent = 'Самая длинная серия правильных ответов: 0';
+    sprintResultBox.append(this.sprintNewWords, this.sprintRightWords, this.sprintRightSeries);
+    sprintContainer.append(sprintTitle, sprintResultBox);
+
+    const audioContainer = document.createElement('div');
+    audioContainer.classList.add('stat__gameContainer');
+    const audioTitle = document.createElement('div');
+    audioTitle.classList.add('stat__gameTitle');
+    audioTitle.textContent = 'Аудиовызов';
+    const audioResultBox = document.createElement('div');
+    audioResultBox.classList.add('stat__gameResultBox');
+    this.audioNewWords.textContent = 'Изучено: 0 слов';
+    this.audioRightWords.textContent = 'Правильных ответов: 0%';
+    this.audioRightSeries.textContent = 'Самая длинная серия правильных ответов: 0';
+    audioResultBox.append(this.audioNewWords, this.audioRightWords, this.audioRightSeries);
+    audioContainer.append(audioTitle, audioResultBox);
+
+    this.gamesResultsContainer.append(sprintContainer, audioContainer);
   }
 }
 

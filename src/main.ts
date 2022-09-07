@@ -54,6 +54,7 @@ class App {
         countRightAnswersInARow: 0,
       },
       drawBook: () => console.log('sorry'),
+      drawAudioCall: () => console.log('sorry'),
     };
     this.menu = new Menu();
     this.header = new Header();
@@ -70,12 +71,6 @@ class App {
   }
 
   start() {
-    // alert(
-    // 'Во время выполнения данного таска
-    // один из членов нашей команды заболел и на некоторое время выпал из работы.
-    // В связи с этим мы не успели до конца доделать работу.
-    // Дорогие проверяющие, пожалуйста, проверьте нашу работу
-    //  7 сентября вечером или позже, чтобы мы успели ее доделать. Спасибо огромное)',);
     this.menu.drawMenu();
     this.addListenersToMenuButtons();
     this.header.drawHeader();
