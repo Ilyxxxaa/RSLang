@@ -25,5 +25,21 @@ export const drawGamesBlock = (state: State) => {
   toAudioCall.innerText = 'Аудиовызов';
   toSprint.innerText = 'Спринт';
   gameButtonsContainer.append(toAudioCall, toSprint);
+
   return [gameContainerTitle, gameButtonsContainer];
 };
+
+export function toggleActiveGamesButtons(state: boolean) {
+  const buttonAudio: HTMLButtonElement | null = document.querySelector('.button-to-audioCall');
+  const buttonSprint: HTMLButtonElement | null = document.querySelector('.button-to-sprint');
+  const cardsContainer: HTMLButtonElement | null = document.querySelector('.cards-container');
+  if (state && buttonAudio && buttonSprint) {
+    buttonAudio.disabled = true;
+    buttonSprint.disabled = true;
+    cardsContainer?.classList.add('learned-page');
+  } else if (buttonAudio && buttonSprint) {
+    buttonAudio.disabled = false;
+    buttonSprint.disabled = false;
+    cardsContainer?.classList.remove('learned-page');
+  }
+}
