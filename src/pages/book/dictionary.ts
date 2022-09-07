@@ -7,7 +7,8 @@ const dictionaryGroupNumber = 7;
 
 export async function drawDictionaryCards() {
   const arrayWords = await getDifficultWords();
-  drawCards(arrayWords, dictionaryGroupNumber);
+  const dictionary: boolean = true;
+  drawCards(arrayWords, dictionaryGroupNumber, dictionary);
 }
 
 export default function drawDictionary() {

@@ -201,7 +201,7 @@ function updateCard(cardData: IWord) {
   }
 }
 
-export function drawCards(array: IWord[], level: number) {
+export function drawCards(array: IWord[], level: number, dictionary?: boolean) {
   let cardsContainer = document.querySelector('.cards-container');
   if (cardsContainer) {
     cardsContainer.innerHTML = '';
@@ -214,7 +214,7 @@ export function drawCards(array: IWord[], level: number) {
   const wordsContainer = createElement('div', 'words-container');
   array.forEach((card, i) => wordsContainer.append(createCardWord(card, level, i, wordsContainer)));
   cardsContainer.append(wordsContainer);
-  if (checkLeanrnedPage(wordsContainer)) {
+  if (checkLeanrnedPage(wordsContainer) && !dictionary) {
     currentBookWords.learnedPage = true;
     toggleActiveGamesButtons(true);
   } else {
