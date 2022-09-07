@@ -144,7 +144,8 @@ class App {
     this.menu.clearAllActiveButtons();
 
     const content: HTMLDivElement | null = document.querySelector('.content');
-    if (content) content.style.background = 'url("./assets/images/content-bg.png") no-repeat center';
+    if (content)
+      content.style.background = 'url("./assets/images/content-bg.png") no-repeat center';
 
     const nav = document.querySelector('.nav');
     if (nav) {

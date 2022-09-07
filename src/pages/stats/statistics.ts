@@ -17,8 +17,12 @@ export default class Statistics {
 
   async drawStatistics() {
     this.statView.drawStatContainer();
-    this.refreshLearnedWords();
-    this.refreshNewWords();
+
+    const token = localStorage.getItem('token');
+    if (token) {
+      this.refreshLearnedWords();
+      this.refreshNewWords();
+    }
   }
 
   refreshLearnedWords = async () => {
