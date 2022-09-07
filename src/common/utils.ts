@@ -4,7 +4,6 @@ export default class Utils {
     const wordsPath = `${serverAdress}/words`;
     const response = await fetch(`${wordsPath}/?group=${group}&page=${page}`);
     const words = await response.json();
-    console.log(`group: ${group},page: ${page}`);
     return words;
   };
 

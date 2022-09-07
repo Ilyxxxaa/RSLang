@@ -14,7 +14,7 @@ class Sprint {
 
   sprintView: SprintView;
 
-  intervalId?: ReturnType <typeof setInterval>;
+  intervalId?: ReturnType<typeof setInterval>;
 
   constructor(state: State) {
     this.state = state;
@@ -164,9 +164,6 @@ class Sprint {
     this.state.sprint.gameCurrentWord = currentWord;
     wordEn.textContent = currentWord.word;
 
-    console.log('cлова для игры:', this.state.sprint.wordsForGame);
-    console.log('стейт:', this.state.sprint);
-
     const statusWordTranslate = words.length === 1 ? 1 : getRandomNumber(0, 1);
 
     if (statusWordTranslate) {
@@ -251,9 +248,6 @@ class Sprint {
         createUserWord(currentWord, 'sprint', checkedUserAnswer);
       }
     }
-
-    console.log(this.state.gamePage);
-    console.log(this.state.gameLevel);
   };
 
   setPoints() {
@@ -272,7 +266,9 @@ class Sprint {
   }
 
   scorePoints() {
-    (document.querySelector('.sprint__points') as HTMLElement).textContent = `+${this.state.sprint.pointsPerWord} очков за слово`;
+    (document.querySelector(
+      '.sprint__points',
+    ) as HTMLElement).textContent = `+${this.state.sprint.pointsPerWord} очков за слово`;
     const score = document.querySelector('.sprint__score') as HTMLElement;
     score.textContent = this.state.sprint.pointsScored.toString();
   }
@@ -310,7 +306,6 @@ class Sprint {
     clearInterval(this.intervalId);
     const sprintResultModal = new SprintResultModal(this.state);
     this.showSprintResultsModal();
-    console.log('игра окончена');
   }
 }
 

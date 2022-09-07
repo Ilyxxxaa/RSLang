@@ -66,7 +66,6 @@ async function addWordDifficult(cardData: IWord, button: HTMLButtonElement, book
     await createHardWord(cardData, 'hard');
   }
   currentActiveWord = cardData;
-  console.log(currentActiveWord);
 
   if (bookView && bookView === 'dictionary') {
     await drawDictionary();

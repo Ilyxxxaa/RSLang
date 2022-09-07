@@ -104,7 +104,7 @@
     flex-direction: column;
     justify-content: start;
     align-items: center;
-    width: 200px;
+    width: 300px;
     height: 200px;
     text-align: center;
     font-size: 25px;
@@ -112,7 +112,8 @@
   }
   &__resultWordsNumber {
     font-size: 100px;
-    font-weight: 900;
+    font-weight: 500;
+    height: 120px;
   }
   &__gamesResultContainer {
     display: flex;
