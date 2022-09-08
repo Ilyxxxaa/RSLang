@@ -1,5 +1,6 @@
 import { stat } from 'fs';
 import { fixOverlay, showAuthModal, signUp } from '../main/authorization/authFunc';
+import StatChart from './statChart';
 
 export default class StatisticsView {
   constructror() {}
@@ -33,6 +34,12 @@ export default class StatisticsView {
   sprintRightSeries = document.createElement('div');
 
   audioRightSeries = document.createElement('div');
+
+  statLongTimeTitle = document.createElement('div');
+
+  statLongTimeContainer = document.createElement('div');
+
+  statLongTimeChart = document.createElement('div');
 
   drawStatContainer() {
     this.statContainer.classList.add('stat__container');
@@ -88,8 +95,31 @@ export default class StatisticsView {
     // title.classList.add('stat__block-title');
 
     this.createStatToday();
+    this.createStatLongTimeContainer();
 
-    this.statBlock.append(this.statTodayContainer);
+    this.statBlock.append(
+      this.statTodayContainer,
+      this.statLongTimeTitle,
+      this.statLongTimeContainer,
+    );
+  }
+
+  createStatLongTimeContainer() {
+    this.statLongTimeContainer.innerHTML = '';
+    this.statLongTimeContainer.classList.add('stat__longTimeContainer');
+
+    this.statLongTimeChart.classList.add('stat__longTimeChart');
+    this.statLongTimeChart.innerHTML = '';
+
+    const chart = document.createElement('canvas');
+    chart.setAttribute('id', 'statChart');
+
+    this.statLongTimeChart.append(chart);
+
+    this.statLongTimeTitle.classList.add('stat__today-title');
+    this.statLongTimeTitle.textContent = 'Долгосрочная статистика';
+
+    this.statLongTimeContainer.append(this.statLongTimeChart);
   }
 
   createStatToday() {

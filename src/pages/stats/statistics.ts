@@ -5,14 +5,18 @@ import {
   getNewUserWords,
 } from '../../common/apiRequests';
 import { IWord } from '../../types/dictionaryTypes';
+import StatChart from './statChart';
 import StatisticsView from './statisticsView';
 import './_statistics.scss';
 
 export default class Statistics {
   statView: StatisticsView;
 
+  statChart: StatChart;
+
   constructor() {
     this.statView = new StatisticsView();
+    this.statChart = new StatChart();
   }
 
   async drawStatistics() {
@@ -30,6 +34,7 @@ export default class Statistics {
     if (words.length !== undefined && words.length !== null) {
       const learnedWords = words.length;
       this.statView.learnedWords.textContent = `${learnedWords}`;
+      StatChart.createChart(learnedWords);
     }
   };
 

@@ -7,7 +7,6 @@
   align-items: center;
   gap: 60px;
   width: 100%;
-  height: 100%;
 }
 
 .stat__noAuthBlock {
@@ -59,11 +58,10 @@
 .stat {
   &__block {
     border-radius: 20px;
-    width: 60%;
     display: flex;
     flex-direction: column;
-    height: 80vh;
     align-items: center;
+
     &-title {
       color: #fff;
       padding: 10px;
@@ -76,6 +74,7 @@
   &__today {
     display: flex;
     flex-direction: column;
+    margin-bottom: 50px;
 
     &-title {
       color: #fff;
@@ -149,6 +148,20 @@
     & div {
       margin-bottom: 5px;
     }
+  }
+  &__longTimeContainer {
+    width: 100%;
+    background-color: rgba(41, 41, 41, 0.2);
+    border-radius: 10px;
+    margin-bottom: 50px;
+  }
+  &__longTimeChart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 500px;
+    width: 100%;
+    padding: 50px;
   }
 }
 
