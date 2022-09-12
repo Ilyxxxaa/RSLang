@@ -1,0 +1,32 @@
+@import '../../../common/reset.scss';
+@import 'menu';
+
+body {
+  position: relative;
+  display: flex;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.content {
+  width: 100%;
+  min-height: 100vh;
+  background-image: url('../../../assets/images/content-bg.png');
+  background-position: top center;
+  background-repeat: repeat;
+}
+
+.container {
+  max-width: 1160px;
+  margin: 0 auto;
+}
+
+.hide {
+  display: none;
+}
+
+@import 'header';
+@import 'about';
+@import 'example';
+@import 'adv';
+@import 'team';
+@import 'footer';

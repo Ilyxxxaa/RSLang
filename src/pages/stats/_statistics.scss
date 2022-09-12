@@ -1,0 +1,248 @@
+.stat__container {
+  min-height: calc(100vh - 97px - 65px);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: start;
+  align-items: center;
+  gap: 60px;
+  width: 100%;
+  height: 100%;
+}
+
+.stat__noAuthBlock {
+  width: 500px;
+  height: 300px;
+  margin-top: 150px;
+  text-align: center;
+  background-color: rgba(41, 41, 41, 0.2);
+  box-shadow: 4px 5px 8px 0px rgba(34, 60, 80, 0.2);
+  border-radius: 10px;
+  &-title {
+    color: #fff;
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 25px;
+    font-weight: 900;
+    margin-bottom: 50px;
+  }
+  &-text {
+    color: #fff;
+    font-weight: 900;
+    margin: 10px;
+    margin-bottom: 45px;
+  }
+  &-button {
+    background-color: #fff;
+    color: #ff00d6;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    width: 70%;
+    padding: 10px;
+    transition: 0.5s;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 29px;
+    text-align: center;
+    &:hover {
+      background-color: #ff00d6;
+      color: #fff;
+    }
+    &:active {
+      scale: 1.05;
+    }
+  }
+}
+
+.stat {
+  &__block {
+    border-radius: 20px;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    height: 80vh;
+    align-items: center;
+    &-title {
+      color: #fff;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 25px;
+      font-weight: 900;
+    }
+  }
+
+  &__today {
+    display: flex;
+    flex-direction: column;
+
+    &-title {
+      color: #fff;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 35px;
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+  }
+  &__resultsContainer {
+    background-color: rgba(41, 41, 41, 0.2);
+    border-radius: 10px;
+  }
+
+  &__wordsResultContainer {
+    display: flex;
+    justify-content: space-between;
+    height: 250px;
+    width: 1000px;
+    padding: 20px;
+  }
+  &__wordsContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    width: 300px;
+    height: 200px;
+    text-align: center;
+    font-size: 25px;
+    color: #fff;
+  }
+  &__resultWordsNumber {
+    font-size: 100px;
+    font-weight: 500;
+    height: 120px;
+  }
+  &__gamesResultContainer {
+    display: flex;
+    justify-content: space-around;
+    height: 250px;
+    width: 1000px;
+    padding: 20px;
+  }
+
+  &__gameContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+    background-color: rgba(255, 0, 214, 0.4);
+    box-shadow: 4px 5px 8px 0px rgba(34, 60, 80, 0.2);
+  }
+  &__gameResultBox {
+    text-align: center;
+    width: 320px;
+  }
+  &__gameTitle {
+    margin-top: 15px;
+    font-size: 30px;
+    color: #fff;
+    font-weight: 900;
+    margin-bottom: 20px;
+  }
+  &__gameResultBox {
+    font-size: 20px;
+    font-weight: 500;
+    color: #fff;
+    & div {
+      margin-bottom: 5px;
+    }
+  }
+}
+
+// .game__button {
+//   width: 150px;
+//   height: 50px;
+//   border: none;
+//   border-radius: 5px;
+//   font-size: 22px;
+//   color: white;
+//   cursor: pointer;
+//   transition: all 0.3s;
+
+//   &_audiocall {
+//     background: rgb(114, 184, 208);
+
+//     &:hover {
+//       background: rgb(135, 199, 220);
+//     }
+//   }
+
+//   &_sprint {
+//     background: rgb(144, 215, 116);
+
+//     &:hover {
+//       background: rgb(148, 213, 122);
+//     }
+//   }
+
+//   &_back {
+//     background: #ddb96c;
+
+//     &:hover {
+//       background: #deb660;
+//     }
+//   }
+
+//   &_start {
+//     background: #e17f3d;
+
+//     &:disabled {
+//       background: #dd8e5a;
+//       cursor: auto;
+//     }
+
+//     &:hover {
+//       background: #dd8e5a;
+//     }
+//   }
+// }
+
+// .description {
+//   text-align: center;
+//   font-size: 16px;
+//   color: black;
+// }
+
+// .levels__container {
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   align-items: center;
+//   gap: 60px;
+//   margin-top: 120px;
+// }
+
+// .levels {
+//   display: flex;
+//   flex-wrap: wrap;
+//   justify-content: center;
+//   align-items: center;
+//   gap: 40px;
+//   color: white;
+// }
+
+// .level {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   width: 60px;
+//   height: 60px;
+//   border: 3px solid white;
+//   border-radius: 50%;
+//   cursor: pointer;
+
+//   &_active {
+//     border: 3px solid #e17f3d;
+//     background-color: #e17f3d;
+//   }
+// }
+
+// .level__buttons {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   gap: 30px;
+// }

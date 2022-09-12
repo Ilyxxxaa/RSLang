@@ -1,0 +1,47 @@
+.levels-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 0;
+  min-height: 82px;
+}
+
+.level-button {
+  height: 50px;
+  width: 170px;
+
+  background-color: #FFFFFF;
+  border-radius: 0.5rem;
+  color: #2c2647;
+  font-size: 0.8rem;
+
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem;
+  position: relative;
+  align-items: center;
+  border: none;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.level-button-right {
+  z-index: 2;
+}
+
+.unactive-level,
+.unactive-level .level-circle {
+  background-color: rgba(255 255 255 / 50%) !important;
+}
+
+.level-circle {
+  border-radius: 60px;
+  height: 110px;
+  width: 110px;
+  position: absolute;
+  top: 0rem;
+  right: -3.5rem;
+}

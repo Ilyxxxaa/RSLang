@@ -1,0 +1,54 @@
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin: 1rem;
+  color: #FFFFFF;
+  font-weight: 600;
+  padding: 1rem;
+}
+
+.pagination-page-counter {
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3;
+  border-radius: 5px;
+
+}
+
+.paginationButton {
+  border: none;
+  background: none;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.paginationButton:hover {
+  filter: drop-shadow(1.2);
+  filter: invert(0.5);
+}
+
+.paginationButton:active {
+  filter: drop-shadow(2);
+  filter: invert(1);
+}
+
+.paginationButton_doubleLeft {
+  background-image: url(../../../assets/images/book/pagination/doubleLeft.svg);
+}
+
+.paginationButton_left {
+  background-image: url(../../../assets/images/book/pagination/left.svg);
+}
+
+.paginationButton_right {
+  background-image: url(../../../assets/images/book/pagination/right.svg);
+}
+
+.paginationButton_doubleRight {
+  background-image: url(../../../assets/images/book/pagination/doubleRight.svg);
+}
